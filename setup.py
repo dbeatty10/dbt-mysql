@@ -14,11 +14,15 @@ setup(
     author="Doug Beatty",
     author_email="doug.beatty@gmail.com",
     url="https://github.com/dbeatty10/dbt-mysql",
-    packages=find_packages(),
+    packages=[
+        'dbt.adapters.mysql',
+        'dbt.include.mysql',
+    ],
     package_data={
-        'dbt': [
-            'include/mysql/macros/*.sql',
-            'include/mysql/dbt_project.yml',
+        'dbt.include.mysql': [
+            'macros/*.sql',
+            'dbt_project.yml',
+            'sample_profiles.yml',
         ]
     },
     install_requires=[
