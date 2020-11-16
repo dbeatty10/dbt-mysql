@@ -1,8 +1,3 @@
-{% macro ref(model_name) %}
-
-  {% do return(builtins.ref(model_name).include(database=false)) %}
-
-{% endmacro %}
 
 {% macro mysql__list_schemas(database) %}
     {% call statement('list_schemas', fetch_result=True, auto_begin=False) -%}
@@ -11,12 +6,6 @@
     {%- endcall %}
 
     {{ return(load_result('list_schemas').table) }}
-{% endmacro %}
-
-{% macro mysql__create_schema(relation) %}
-    {% call statement('create_schema') -%}
-        create schema if not exists {{ relation.without_identifier().include(database=False) }}
-    {%- endcall %}
 {% endmacro %}
 
 {% macro mysql__create_table_as(temporary, relation, sql) -%}
@@ -32,28 +21,6 @@
 
 {% endmacro %}
 
-{% macro mysql__create_view_as(relation, sql) -%}
-  {%- set sql_header = config.get('sql_header', none) -%}
-
-  {{ sql_header if sql_header is not none }}
-  create view {{ relation.include(database=False) }} as (
-    {{ sql }}
-  );
-{% endmacro %}
-
-{% macro mysql__drop_relation(relation) -%}
-  {% call statement('drop_relation', auto_begin=False) -%}
-    drop {{ relation.type }} if exists {{ relation.include(database=False) }} cascade
-  {%- endcall %}
-{% endmacro %}
-
-{% macro mysql__drop_relation_script(relation) -%}
-    {# pyodbc does not allow multiple statements #}
-    begin
-    drop {{ relation.type }} if exists {{ relation.include(database=False) }} cascade
-    end
-{% endmacro %}
-
 {% macro mysql__rename_relation(from_relation, to_relation) -%}
   {#
     MySQL rename fails when the relation already exists, so a 2-step process is needed:
@@ -61,10 +28,10 @@
     2. Rename the new relation to existing relation
   #}
   {% call statement('drop_relation') %}
-    drop {{ to_relation.type }} if exists {{ to_relation.include(database=False) }} cascade
+    drop {{ to_relation.type }} if exists {{ to_relation }} cascade
   {% endcall %}
   {% call statement('rename_relation') %}
-    rename table {{ from_relation.include(database=False) }} to {{ to_relation.include(database=False) }}
+    rename table {{ from_relation }} to {{ to_relation }}
   {% endcall %}
 {% endmacro %}
 
