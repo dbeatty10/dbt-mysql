@@ -41,8 +41,6 @@ class MySQLAdapter(SQLAdapter):
     def list_relations_without_caching(
         self, schema_relation: MySQLRelation
     ) -> List[MySQLRelation]:
-
-        logger.info("Start list_relations_without_caching")
         kwargs = {'schema_relation': schema_relation}
         try:
             results = self.execute_macro(
@@ -71,7 +69,6 @@ class MySQLAdapter(SQLAdapter):
                 identifier=name,
                 type=relation_type
             )
-            logger.info(f"Adding relation {relation}")
             relations.append(relation)
 
         return relations
