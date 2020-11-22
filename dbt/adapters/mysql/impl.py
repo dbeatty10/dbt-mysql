@@ -587,30 +587,3 @@ class MySQLAdapter(SQLAdapter):
         print("logger: end get_rows_different_sql()")
 
         return sql
-
-def catch_as_completed(
-    futures  # typing: List[Future[agate.Table]]
-) -> Tuple[agate.Table, List[Exception]]:
-
-    # catalogs: agate.Table = agate.Table(rows=[])
-    tables: List[agate.Table] = []
-    exceptions: List[Exception] = []
-
-    for future in as_completed(futures):
-        exc = future.exception()
-        # we want to re-raise on ctrl+c and BaseException
-        if exc is None:
-            catalog = future.result()
-            tables.append(catalog)
-        elif (
-            isinstance(exc, KeyboardInterrupt) or
-            not isinstance(exc, Exception)
-        ):
-            raise exc
-        else:
-            warn_or_error(
-                f'Encountered an error while generating catalog: {str(exc)}'
-            )
-            # exc is not None, derives from Exception, and isn't ctrl+c
-            exceptions.append(exc)
-    return merge_tables(tables), exceptions
