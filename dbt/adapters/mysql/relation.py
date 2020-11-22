@@ -3,16 +3,6 @@ from dataclasses import dataclass
 from dbt.adapters.base.relation import BaseRelation, Policy
 from dbt.exceptions import RuntimeException
 
-#----Remove when done troubleshooting
-from dbt.contracts.relation import (
-    RelationType, ComponentName, HasQuoting, FakeAPIObject, Policy, Path
-)
-from typing import (
-    Optional
-)
-from dbt.utils import filter_null_values
-#----Remove when done troubleshooting
-
 
 @dataclass
 class MySQLQuotePolicy(Policy):
@@ -45,38 +35,3 @@ class MySQLRelation(BaseRelation):
                 "include, but only one can be set"
             )
         return super().render()
-
-    def matches(
-        self,
-        database: Optional[str] = None,
-        schema: Optional[str] = None,
-        identifier: Optional[str] = None,
-    ) -> bool:
-        search = filter_null_values({
-            ComponentName.Database: database,
-            ComponentName.Schema: schema,
-            ComponentName.Identifier: identifier
-        })
-
-        if not search:
-            # nothing was passed in
-            raise dbt.exceptions.RuntimeException(
-                "Tried to match relation, but no search path was passed!")
-
-        exact_match = True
-        approximate_match = True
-
-        for k, v in search.items():
-            if not self._is_exactish_match(k, v):
-                exact_match = False
-
-            if self.path.get_lowered_part(k) != v.lower():
-                approximate_match = False
-
-        if approximate_match and not exact_match:
-            target = self.create(
-                database=database, schema=schema, identifier=identifier
-            )
-            dbt.exceptions.approximate_relation_match(target, self)
-
-        return exact_match
