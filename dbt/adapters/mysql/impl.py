@@ -246,142 +246,99 @@ class MySQLAdapter(SQLAdapter):
             dtype=column.dtype,
         ) for idx, column in enumerate(raw_rows)]
 
-    def list_relations(
-        self, database: Optional[str], schema: str
-    ) -> List[BaseRelation]:
+    # def _make_match_kwargs(
+    #     self, database: str, schema: str, identifier: str
+    # ) -> Dict[str, str]:
+    #     quoting = self.config.quoting
+    #     if identifier is not None and quoting['identifier'] is False:
+    #         identifier = identifier.lower()
+    #
+    #     if schema is not None and quoting['schema'] is False:
+    #         schema = schema.lower()
+    #
+    #     if database is not None and quoting['database'] is False:
+    #         database = database.lower()
+    #
+    #     # def filter_null_values(input: Dict[K_T, Optional[V_T]]) -> Dict[K_T, V_T]:
+    #     #     return {k: v for k, v in input.items() if v is not None}
+    #     #
+    #     # return filter_null_values({
+    #     #     'database': database,
+    #     #     'identifier': identifier,
+    #     #     'schema': schema,
+    #     # })
+    #
+    #     return {
+    #         'database': database,
+    #         'identifier': identifier,
+    #         'schema': schema,
+    #     }
+    #
+    # def _make_match(
+    #     self,
+    #     relations_list: List[BaseRelation],
+    #     database: str,
+    #     schema: str,
+    #     identifier: str,
+    # ) -> List[BaseRelation]:
+    #
+    #     logger.info(f"Start _make_match({database}, {schema}, {identifier})")
+    #     matches = []
+    #
+    #     search = self._make_match_kwargs(database, schema, identifier)
+    #
+    #     logger.info(f"Try to match search {search}")
+    #     logger.info(f"relations_list: {relations_list}")
+    #
+    #     for relation in relations_list:
+    #         logger.info(f"{relation}.matches(**{search}) = {relation.matches(**search)}")
+    #
+    #         if relation.matches(**search):
+    #             matches.append(relation)
+    #
+    #     return matches
+    #
+    # # from dbt.adapters.base.meta import available
+    # # @available.parse_none
+    # def get_relation(
+    #     self, database: str, schema: str, identifier: str
+    # ) -> Optional[BaseRelation]:
+    #     print("Start get_relation")
+    #     logger.info(f"Start get_relation({database}, {schema}, {identifier})")
+    #
+    #     relations_list = self.list_relations(database, schema)
+    #
+    #     print(f"relations_list: {relations_list}")
+    #     logger.info(f"relations_list: {relations_list}")
+    #
+    #     matches = self._make_match(relations_list, database, schema,
+    #                                identifier)
+    #
+    #     print(f"matches: {matches}")
+    #     logger.info(f"matches: {matches}")
+    #
+    #     if len(matches) > 1:
+    #         kwargs = {
+    #             'identifier': identifier,
+    #             'schema': schema,
+    #             'database': database,
+    #         }
+    #         get_relation_returned_multiple_results(
+    #             kwargs, matches
+    #         )
+    #
+    #     elif matches:
+    #         return matches[0]
+    #
+    #     return None
 
-        import difflib
-
-        logger.info("Start list_relations")
-        if self._schema_is_cached(database, schema):
-            logger.info("_schema_is_cached")
-            logger.info(f"self.cache.get_relations({database}, {schema}) = {self.cache.get_relations(database, schema)}")
-            logger.info(f"self.cache.relations.values() = {[(r.database, r.schema) for r in self.cache.relations.values()]}")
-
-            for r in self.cache.relations.values():
-                logger.info(f"Compare {lowercase(r.schema)} to {schema}")
-                logger.info(lowercase(r.schema) == schema)
-                # logger.info(difflib.ndiff(lowercase(r.schema), schema))
-
-                # for i,s in enumerate(difflib.ndiff(lowercase(r.schema), schema)):
-                #     if s[0]==' ': continue
-                #     elif s[0]=='-':
-                #         print(u'Delete "{}" from position {}'.format(s[-1],i))
-                #     elif s[0]=='+':
-                #         print(u'Add "{}" to position {}'.format(s[-1],i))
-
-            results = [
-                r.inner for r in self.cache.relations.values()
-                # if (lowercase(r.schema) == schema)
-                if (lowercase(r.schema) == schema and
-                    lowercase(r.database) == database)
-            ]
-            logger.info(f"results: {results}")
-
-            return self.cache.get_relations(database, schema)
-
-        schema_relation = self.Relation.create(
-            database=database,
-            schema=schema,
-            identifier='',
-            quote_policy=self.config.quoting
-        ).without_identifier()
-
-        # we can't build the relations cache because we don't have a
-        # manifest so we can't run any operations.
-        relations = self.list_relations_without_caching(
-            schema_relation
-        )
-
-        logger.info('with database={}, schema={}, relations={}'
-                     .format(database, schema, relations))
-        return relations
-
-    def _make_match_kwargs(
-        self, database: str, schema: str, identifier: str
-    ) -> Dict[str, str]:
-        quoting = self.config.quoting
-        if identifier is not None and quoting['identifier'] is False:
-            identifier = identifier.lower()
-
-        if schema is not None and quoting['schema'] is False:
-            schema = schema.lower()
-
-        if database is not None and quoting['database'] is False:
-            database = database.lower()
-
-        # def filter_null_values(input: Dict[K_T, Optional[V_T]]) -> Dict[K_T, V_T]:
-        #     return {k: v for k, v in input.items() if v is not None}
-        #
-        # return filter_null_values({
-        #     'database': database,
-        #     'identifier': identifier,
-        #     'schema': schema,
-        # })
-
-        return {
-            'database': database,
-            'identifier': identifier,
-            'schema': schema,
-        }
-
-    def _make_match(
-        self,
-        relations_list: List[BaseRelation],
-        database: str,
-        schema: str,
-        identifier: str,
-    ) -> List[BaseRelation]:
-
-        logger.info(f"Start _make_match({database}, {schema}, {identifier})")
-        matches = []
-
-        search = self._make_match_kwargs(database, schema, identifier)
-
-        logger.info(f"Try to match search {search}")
-        logger.info(f"relations_list: {relations_list}")
-
-        for relation in relations_list:
-            logger.info(f"{relation}.matches(**{search}) = {relation.matches(**search)}")
-
-            if relation.matches(**search):
-                matches.append(relation)
-
-        return matches
-
-    # from dbt.adapters.base.meta import available
-    # @available.parse_none
     def get_relation(
         self, database: str, schema: str, identifier: str
     ) -> Optional[BaseRelation]:
-        print("Start get_relation")
-        logger.info(f"Start get_relation({database}, {schema}, {identifier})")
+        if not self.Relation.include_policy.database:
+            database = None
 
-        relations_list = self.list_relations(database, schema)
-
-        print(f"relations_list: {relations_list}")
-        logger.info(f"relations_list: {relations_list}")
-
-        matches = self._make_match(relations_list, database, schema,
-                                   identifier)
-
-        print(f"matches: {matches}")
-        logger.info(f"matches: {matches}")
-
-        if len(matches) > 1:
-            kwargs = {
-                'identifier': identifier,
-                'schema': schema,
-                'database': database,
-            }
-            get_relation_returned_multiple_results(
-                kwargs, matches
-            )
-
-        elif matches:
-            return matches[0]
-
-        return None
+        return super().get_relation(database, schema, identifier)
 
     def check_schema_exists(self, database: str, schema: str) -> bool:
         print("logger: start/end check_schema_exists()")
