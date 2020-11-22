@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 package_name = "dbt-mysql"
-package_version = "0.0.1"
+package_version = "0.18.0rc1"
 description = """The MySQL adapter plugin for dbt (data build tool)"""
 
 setup(
