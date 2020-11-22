@@ -89,6 +89,16 @@ class MySQLConnectionManager(SQLConnectionManager):
             connection.handle = pyodbc.connect(
                 connection.credentials.connection_string(), autocommit=True,
             )
+
+            # MySQL tends to use a single encoding and does not differentiate
+            # between "SQL_CHAR" and "SQL_WCHAR". Therefore when using its ODBC
+            # drivers we must configure the connection to encode Unicode data
+            # as UTF-8 and to decode both C buffer types using UTF-8.
+            # See: https://github.com/mkleehammer/pyodbc/wiki/Unicode#mysql-and-postgresql
+            connection.handle.setdecoding(pyodbc.SQL_CHAR, encoding='utf-8')
+            connection.handle.setdecoding(pyodbc.SQL_WCHAR, encoding='utf-8')
+            connection.handle.setencoding(encoding='utf-8')
+
             connection.state = ConnectionState.OPEN
         except pyodbc.OperationalError as e:
             logger.debug(
