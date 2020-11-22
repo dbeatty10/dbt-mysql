@@ -1,12 +1,10 @@
 
 {% macro mysql__get_catalog(information_schema, schemas) -%}
-    {{ log("logger: start mysql__get_catalog", info=True) }}
     {%- call statement('catalog', fetch_result=True) -%}
     with tables as (
 
         select
             null as "table_database",
-            -- table_catalog as "table_database",
             table_schema as "table_schema",
             table_name as "table_name",
             case when table_type = 'BASE TABLE' then 'table'
@@ -23,7 +21,6 @@
 
         select
             null as "table_database",
-            -- table_catalog as "table_database",
             table_schema as "table_schema",
             table_name as "table_name",
             null as "table_comment",
@@ -38,7 +35,6 @@
     )
 
     select
-        -- null as table_database,
         columns.table_database,
         columns.table_schema,
         columns.table_name,
@@ -50,7 +46,6 @@
         columns.column_type,
         columns.column_comment
     from tables
-    -- join columns using (table_database, table_schema, table_name)
     join columns using (table_schema, table_name)
     where table_schema not in ('information_schema', 'performance_schema', 'mysql', 'sys')
     and (
