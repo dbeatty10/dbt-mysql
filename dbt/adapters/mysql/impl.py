@@ -113,16 +113,6 @@ class MySQLAdapter(SQLAdapter):
     def quote(self, identifier):
         return '`{}`'.format(identifier)
 
-    # def list_schemas(self, database: str) -> List[str]:
-    #     """
-    #     Schemas in MySQL are called databases
-    #     """
-    #     results = self.connections.execute("show databases", fetch=True)
-    #
-    #     schemas = [row[0] for row in results]
-    #
-    #     return schemas
-
     def list_relations_without_caching(
         self, schema_relation: MySQLRelation
     ) -> List[MySQLRelation]:
@@ -151,7 +141,6 @@ class MySQLAdapter(SQLAdapter):
                     f'got {len(row)} values, expected 4'
                 )
             _, name, _schema, information = row
-            # rel_type = ('view' if 'Type: VIEW' in information else 'table')
             rel_type = information
             relation = self.Relation.create(
                 schema=_schema,
@@ -162,52 +151,6 @@ class MySQLAdapter(SQLAdapter):
             relations.append(relation)
 
         return relations
-
-    from dbt.adapters.base.meta import available
-    @available.parse_list
-    def get_missing_columns(
-        self, from_relation: BaseRelation, to_relation: BaseRelation
-    ) -> List[BaseColumn]:
-        """Returns a list of Columns in from_relation that are missing from
-        to_relation.
-        """
-        logger.info(f"Start get_missing_columns({from_relation}, {to_relation})")
-        if not isinstance(from_relation, self.Relation):
-            invalid_type_error(
-                method_name='get_missing_columns',
-                arg_name='from_relation',
-                got_value=from_relation,
-                expected_type=self.Relation)
-
-        if not isinstance(to_relation, self.Relation):
-            invalid_type_error(
-                method_name='get_missing_columns',
-                arg_name='to_relation',
-                got_value=to_relation,
-                expected_type=self.Relation)
-
-        from_columns = {
-            col.name: col for col in
-            self.get_columns_in_relation(from_relation)
-        }
-
-        to_columns = {
-            col.name: col for col in
-            self.get_columns_in_relation(to_relation)
-        }
-
-        # (from_columns, to_columns) = (
-        #    {},
-        #    {'id': <MySQLColumn id (int)>, 'name': <MySQLColumn name (character varying(256))>, 'some_date': <MySQLColumn some_date (timestamp)>, 'dbt_scd_id': <MySQLColumn dbt_scd_id (character varying(32))>, 'dbt_updated_at': <MySQLColumn dbt_updated_at (timestamp)>, 'dbt_valid_from': <MySQLColumn dbt_valid_from (timestamp)>, 'dbt_valid_to': <MySQLColumn dbt_valid_to (character varying(19))>}
-        # )
-        logger.info(f"get_missing_columns: (from_columns, to_columns) = ({from_columns}, {to_columns})")
-
-        missing_columns = set(from_columns.keys()) - set(to_columns.keys())
-
-        return [
-            col for (col_name, col) in from_columns.items()
-            if col_name in missing_columns
-        ]
 
     def get_columns_in_relation(self, relation: Relation) -> List[MySQLColumn]:
         rows: List[agate.Row] = super().get_columns_in_relation(relation)
@@ -231,10 +174,8 @@ class MySQLAdapter(SQLAdapter):
             table_type=relation.type,
             table_owner=None,
             table_stats=None,
-            # column=column['Field'],
             column=column.column,
             column_index=idx,
-            # dtype=column['Type'],
             dtype=column.dtype,
         ) for idx, column in enumerate(raw_rows)]
 
