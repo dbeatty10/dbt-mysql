@@ -206,18 +206,13 @@ class MySQLAdapter(SQLAdapter):
         relation_b: MySQLRelation,
         column_names: Optional[List[str]] = None,
     ) -> str:
-
-        print("logger: start get_rows_different_sql()")
-
         # This method only really exists for test reasons
         names: List[str]
         if column_names is None:
             columns = self.get_columns_in_relation(relation_a)
-            # names = sorted((self.quote(c.name) for c in columns))
-            names = sorted((c.name for c in columns))
+            names = sorted((self.quote(c.name) for c in columns))
         else:
-            # names = sorted((self.quote(n) for n in column_names))
-            names = sorted((n for n in column_names))
+            names = sorted((self.quote(n) for n in column_names))
 
         alias_a = "A"
         alias_b = "B"
@@ -232,18 +227,18 @@ class MySQLAdapter(SQLAdapter):
         a_except_b as (
             SELECT
                 {columns_a}
-            FROM {relation_a} as A
-            LEFT OUTER JOIN {relation_b} as B
+            FROM {relation_a} as {alias_a}
+            LEFT OUTER JOIN {relation_b} as {alias_b}
                 ON {join_condition}
-            WHERE B.{first_column} is null
+            WHERE {alias_b}.{first_column} is null
         ),
         b_except_a as (
             SELECT
                 {columns_b}
-            FROM {relation_b} as B
-            LEFT OUTER JOIN {relation_a} as A
+            FROM {relation_b} as {alias_b}
+            LEFT OUTER JOIN {relation_a} as {alias_a}
                 ON {join_condition}
-            WHERE A.{first_column} is null
+            WHERE {alias_a}.{first_column} is null
         ),
         diff_count as (
             SELECT
@@ -252,7 +247,7 @@ class MySQLAdapter(SQLAdapter):
                     SELECT * FROM a_except_b
                     UNION ALL
                     SELECT * FROM b_except_a
-                ) as a
+                ) as missing
         ),
         table_a as (
             SELECT COUNT(*) as num_rows FROM {relation_a}
@@ -274,8 +269,8 @@ class MySQLAdapter(SQLAdapter):
         '''.strip()
 
         sql = COLUMNS_EQUAL_SQL.format(
-            # alias_a=alias_a,
-            # alias_b=alias_b,
+            alias_a=alias_a,
+            alias_b=alias_b,
             first_column=first_column,
             columns_a=columns_csv_a,
             columns_b=columns_csv_b,
@@ -283,16 +278,5 @@ class MySQLAdapter(SQLAdapter):
             relation_a=str(relation_a),
             relation_b=str(relation_b),
         )
-
-        # logger.debug("Doug was HERE")
-        # logger.info("Doug was here")
-        # logger.warning("I'm warning you...")
-
-        # @TODO
-        # Temporality force a trivial query to help troubleshoot
-        sql = "SELECT 0 as row_count_difference, 0 as num_mismatched FROM DUAL"
-
-        print(sql)
-        print("logger: end get_rows_different_sql()")
 
         return sql
