@@ -8,7 +8,6 @@ default:
       username: [username]
       password: [password]
       driver: MySQL ODBC 8.0 ANSI Driver
-      database: [database name]
     prod:
       type: mysql
       server: [server/host]
@@ -16,4 +15,3 @@ default:
       username: [username]
       password: [password]
       driver: MySQL ODBC 8.0 ANSI Driver
-      database: [database name]

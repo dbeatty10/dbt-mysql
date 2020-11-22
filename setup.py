@@ -21,6 +21,7 @@ setup(
     package_data={
         'dbt.include.mysql': [
             'macros/*.sql',
+            'macros/materializations/**/*.sql',
             'dbt_project.yml',
             'sample_profiles.yml',
         ]
