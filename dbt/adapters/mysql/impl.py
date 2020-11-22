@@ -18,6 +18,7 @@ from typing import (
 
 import agate
 
+from dbt.adapters.base.impl import catch_as_completed
 from dbt.adapters.sql import SQLAdapter
 from dbt.adapters.base import BaseRelation
 # from dbt.adapters.base import BaseColumn
@@ -31,6 +32,8 @@ from dbt.clients.agate_helper import table_from_rows
 
 from dbt.clients.agate_helper import empty_table, merge_tables, table_from_rows
 from dbt.contracts.graph.manifest import Manifest
+
+from dbt.clients.agate_helper import DEFAULT_TYPE_TESTER
 from dbt.logger import GLOBAL_LOGGER as logger
 # from dbt.utils import filter_null_values, executor
 from dbt.utils import executor
@@ -39,60 +42,12 @@ from dbt.utils import executor
 from dbt.adapters.base.relation import InformationSchema
 
 
+LIST_SCHEMAS_MACRO_NAME = 'list_schemas'
 GET_CATALOG_MACRO_NAME = 'get_catalog'
 LIST_RELATIONS_MACRO_NAME = 'list_relations_without_caching'
+# FETCH_TBL_PROPERTIES_MACRO_NAME = 'fetch_tbl_properties'
 
-
-def _expect_row_value(key: str, row: agate.Row):
-    if key not in row.keys():
-        raise InternalException(
-            'Got a row without "{}" column, columns: {}'
-            .format(key, row.keys())
-        )
-    return row[key]
-
-
-def _catalog_filter_schemas(manifest: Manifest) -> Callable[[agate.Row], bool]:
-    """Return a function that takes a row and decides if the row should be
-    included in the catalog output.
-
-    In MySQL, Databases and schemas are the same thing.
-    """
-
-    # get_used_schemas:
-    # frozenset({(None, 'dbt_test_201117231308844744382177')})
-    # _catalog_filter_schemas schemas:
-    # frozenset({'dbt_test_201117231308844744382177'})
-    # test table_schema: dbt_test_201117231308844744382177
-    # table_schema.lower(): dbt_test_201117231308844744382177
-    # in schemas?: False
-
-
-    print("get_used_schemas:")
-    print(manifest.get_used_schemas())
-
-    schemas = frozenset(s.lower()
-                        for d, s in manifest.get_used_schemas())
-
-    print("_catalog_filter_schemas schemas:")
-    print(schemas)
-
-    def test(row: agate.Row) -> bool:
-        table_schema = _expect_row_value('table_schema', row)
-
-        print(f"test table_schema: {table_schema}")
-        print(f"table_schema.lower(): {table_schema.lower()}")
-        print(f"in schemas?: {table_schema.lower() in schemas}")
-
-        # the schema may be present but None, which is not an error and should
-        # be filtered out
-        if table_schema is None:
-            return False
-
-        # @TODO temporary for troubleshooting
-        # return table_schema.lower() in schemas
-        return True
-    return test
+# KEY_TABLE_OWNER = 'Owner'
 
 
 class MySQLAdapter(SQLAdapter):
@@ -113,6 +68,8 @@ class MySQLAdapter(SQLAdapter):
     def quote(self, identifier):
         return '`{}`'.format(identifier)
 
+    # @TODO remove comment
+    # This similar to adapters/spark/impl.py
     def list_relations_without_caching(
         self, schema_relation: MySQLRelation
     ) -> List[MySQLRelation]:
@@ -137,25 +94,66 @@ class MySQLAdapter(SQLAdapter):
         for row in results:
             if len(row) != 4:
                 raise dbt.exceptions.RuntimeException(
-                    f'Invalid value from "mysql__list_relations_without_caching ...", '
+                    f'Invalid value from "mysql__list_relations_without_caching({kwargs})", '
                     f'got {len(row)} values, expected 4'
                 )
-            _, name, _schema, information = row
-            rel_type = information
+            _, name, _schema, relation_type = row
             relation = self.Relation.create(
                 schema=_schema,
                 identifier=name,
-                type=rel_type
+                type=relation_type
             )
             logger.info(f"Adding relation {relation}")
             relations.append(relation)
 
         return relations
 
+    # @TODO remove comment
+    # This similar to adapters/spark/impl.py
     def get_columns_in_relation(self, relation: Relation) -> List[MySQLColumn]:
         rows: List[agate.Row] = super().get_columns_in_relation(relation)
         return self.parse_show_columns(relation, rows)
 
+    # @TODO remove comment
+    # This similar to adapters/spark/impl.py
+    def _get_columns_for_catalog(
+        self, relation: MySQLRelation
+    ) -> Iterable[Dict[str, Any]]:
+        # properties = self.get_properties(relation)
+        columns = self.get_columns_in_relation(relation)
+        # owner = properties.get(KEY_TABLE_OWNER)
+
+        for column in columns:
+            # if owner:
+            #     column.table_owner = owner
+            # convert MySQLColumns into catalog dicts
+            as_dict = column.to_dict()
+            as_dict['column_name'] = as_dict.pop('column', None)
+            as_dict['column_type'] = as_dict.pop('dtype')
+            as_dict['table_database'] = None
+            yield as_dict
+
+    # # @TODO remove comment
+    # # This the same as adapters/spark/impl.py
+    # def get_properties(self, relation: Relation) -> Dict[str, str]:
+    #     properties = self.execute_macro(
+    #         FETCH_TBL_PROPERTIES_MACRO_NAME,
+    #         kwargs={'relation': relation}
+    #     )
+    #     return dict(properties)
+
+    # @TODO remove comment
+    # This is the same as adapters/spark/impl.py
+    def get_relation(
+        self, database: str, schema: str, identifier: str
+    ) -> Optional[BaseRelation]:
+        if not self.Relation.include_policy.database:
+            database = None
+
+        return super().get_relation(database, schema, identifier)
+
+    # @TODO remove comment
+    # This is similar to parse_describe_extended() in adapters/spark/impl.py
     def parse_show_columns(
             self,
             relation: Relation,
@@ -179,77 +177,102 @@ class MySQLAdapter(SQLAdapter):
             dtype=column.dtype,
         ) for idx, column in enumerate(raw_rows)]
 
-    def get_relation(
-        self, database: str, schema: str, identifier: str
-    ) -> Optional[BaseRelation]:
-        if not self.Relation.include_policy.database:
-            database = None
+    # @TODO remove comment
+    # This is the same as adapters/spark/impl.py
+    def get_catalog(self, manifest):
+        schema_map = self._get_catalog_schemas(manifest)
+        if len(schema_map) > 1:
+            dbt.exceptions.raise_compiler_error(
+                f'Expected only one database in get_catalog, found '
+                f'{list(schema_map)}'
+            )
 
-        return super().get_relation(database, schema, identifier)
+        with executor(self.config) as tpe:
+            futures: List[Future[agate.Table]] = []
+            for info, schemas in schema_map.items():
+                for schema in schemas:
+                    futures.append(tpe.submit_connected(
+                        self, schema,
+                        self._get_one_catalog, info, [schema], manifest
+                    ))
+            catalogs, exceptions = catch_as_completed(futures)
+        return catalogs, exceptions
 
-    def check_schema_exists(self, database: str, schema: str) -> bool:
-        print("logger: start/end check_schema_exists()")
-        return schema in self.list_schemas(database)
-
-    @classmethod
-    def _catalog_filter_table(
-        cls, table: agate.Table, manifest: Manifest
-    ) -> agate.Table:
-        """Filter the table as appropriate for catalog entries. Subclasses can
-        override this to change filtering rules on a per-adapter basis.
-        """
-        # force database + schema to be strings
-        table = table_from_rows(
-            table.rows,
-            table.column_names,
-            text_only_columns=['table_database', 'table_schema', 'table_name']
-        )
-
-        print("Unfiltered table:")
-        # print(table)
-        print(table.print_table())
-
-        filtered_table = table.where(_catalog_filter_schemas(manifest))
-
-        print("Filtered table:")
-        # print(filtered_table)
-        print(filtered_table.print_table())
-
-        return filtered_table
-
+    # @TODO remove comment
+    # This is the same as adapters/spark/impl.py
     def _get_one_catalog(
-        self,
-        information_schema: InformationSchema,
-        schemas: Set[str],
-        manifest: Manifest,
+        self, information_schema, schemas, manifest,
     ) -> agate.Table:
+        if len(schemas) != 1:
+            dbt.exceptions.raise_compiler_error(
+                f'Expected only one schema in mysql _get_one_catalog, found '
+                f'{schemas}'
+            )
 
-        kwargs = {
-            'information_schema': information_schema,
-            'schemas': schemas
-        }
-        table = self.execute_macro(
-            GET_CATALOG_MACRO_NAME,
-            kwargs=kwargs,
-            # pass in the full manifest so we get any local project
-            # overrides
-            manifest=manifest,
+        database = information_schema.database
+        schema = list(schemas)[0]
+
+        columns: List[Dict[str, Any]] = []
+        for relation in self.list_relations(database, schema):
+            logger.debug("Getting table schema for relation {}", relation)
+            columns.extend(self._get_columns_for_catalog(relation))
+        return agate.Table.from_object(
+            columns, column_types=DEFAULT_TYPE_TESTER
         )
 
-        print("_get_one_catalog table:")
-        # print(table)
-        print(table.print_table())
+    # # @TODO remove comment
+    # # This is DIFFERENT from adapters/spark/impl.py
+    # # This is the same as adapters/base/impl.py
+    # def _get_one_catalog(
+    #     self,
+    #     information_schema: InformationSchema,
+    #     schemas: Set[str],
+    #     manifest: Manifest,
+    # ) -> agate.Table:
+    #
+    #     kwargs = {
+    #         'information_schema': information_schema,
+    #         'schemas': schemas
+    #     }
+    #     table = self.execute_macro(
+    #         GET_CATALOG_MACRO_NAME,
+    #         kwargs=kwargs,
+    #         # pass in the full manifest so we get any local project
+    #         # overrides
+    #         manifest=manifest,
+    #     )
+    #
+    #     print("_get_one_catalog table:")
+    #     # print(table)
+    #     print(table.print_table())
+    #
+    #     results = self._catalog_filter_table(table, manifest)
+    #
+    #     # @TODO this is a hack just for troubleshooting
+    #     # results = table
+    #
+    #     print("_get_one_catalog results:")
+    #     # print(results)
+    #     print(results.print_table())
+    #
+    #     return results
 
-        results = self._catalog_filter_table(table, manifest)
+    # @TODO remove comment
+    # This is the same as adapters/spark/impl.py
+    def check_schema_exists(self, database, schema):
+        results = self.execute_macro(
+            LIST_SCHEMAS_MACRO_NAME,
+            kwargs={'database': database}
+        )
 
-        # @TODO this is a hack just for troubleshooting
-        # results = table
+        exists = True if schema in [row[0] for row in results] else False
+        return exists
 
-        print("_get_one_catalog results:")
-        # print(results)
-        print(results.print_table())
-
-        return results
+    # # @TODO remove comment
+    # # This is supposed to be similar to adapters/spark/impl.py
+    # def check_schema_exists(self, database: str, schema: str) -> bool:
+    #     print("logger: start/end check_schema_exists()")
+    #     return schema in self.list_schemas(database)
 
     # Methods used in adapter tests
     def update_column_sql(
