@@ -33,7 +33,3 @@
     {# Return SQL so we can render it out into the compiled files #}
     {{ return(statements[0]) }}
 {% endmacro %}
-
-{% macro mysql__load_csv_rows(model, agate_table) %}
-  {{ return(basic_load_csv_rows(model, 10000, agate_table) )}}
-{% endmacro %}
