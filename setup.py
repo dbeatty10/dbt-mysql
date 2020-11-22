@@ -14,7 +14,7 @@ setup(
     author="Doug Beatty",
     author_email="doug.beatty@gmail.com",
     url="https://github.com/dbeatty10/dbt-mysql",
-    download_url = 'https://github.com/dbeatty10/dbt-mysql/archive/v0.18.0rc1.tar.gz'
+    download_url = 'https://github.com/dbeatty10/dbt-mysql/archive/v0.18.0rc1.tar.gz',
     packages=[
         'dbt.adapters.mysql',
         'dbt.include.mysql',
