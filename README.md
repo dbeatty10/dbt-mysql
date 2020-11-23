@@ -79,6 +79,18 @@ This is as a cross-walk between each concept:
 | table/view         | table/view                       |  relation                    |
 | column             | column                           |  column                      |
 
+### Running Tests
+
+1. Modify `test/mysql.dbtspec` with your `server`, `username`, and `password`
+1. Install the `pytest-dbt-adapter` package
+1. Run the test specs in this repository
+
+```
+pip install pytest-dbt-adapter
+
+pytest test/mysql.dbtspec
+```
+
 ### Reporting bugs and contributing code
 
 -   Want to report a bug or request a feature? See the [contributing guidelines](https://github.com/dbeatty10/dbt-mysql/blob/main/CONTRIBUTING.rst#contributing), or open [an issue](https://github.com/dbeatty10/dbt-mysql/issues/new).
