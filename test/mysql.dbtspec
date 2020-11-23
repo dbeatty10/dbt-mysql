@@ -1,0 +1,22 @@
+
+target:
+  type: mysql
+  server: localhost
+  schema: dbt_test_{{ var('_dbt_random_suffix') }}
+  username: your_username
+  password: your_password
+  driver: MySQL ODBC 8.0 ANSI Driver
+sequences:
+
+  # List of sequences:
+  # https://github.com/fishtown-analytics/dbt-adapter-tests/tree/master/pytest_dbt_adapter/sequences
+
+  test_dbt_empty: empty
+  test_dbt_base: base
+  test_dbt_ephemeral: ephemeral
+  test_dbt_incremental: incremental
+  test_dbt_snapshot_strategy_timestamp: snapshot_strategy_timestamp
+  test_dbt_snapshot_strategy_check_cols: snapshot_strategy_check_cols
+  test_dbt_data_test: data_test
+  test_dbt_schema_test: schema_test
+  test_dbt_ephemeral_data_tests: data_test_ephemeral_models
