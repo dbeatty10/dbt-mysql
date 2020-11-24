@@ -64,20 +64,38 @@ your_profile_name:
 ```
 
 ### Notes
-MySQL also has two-part relation names (similar to SQLite and Spark) whereas many database management systems have three-part relation names.
 
-MySQL, dbt, and the ANSI-standard `information_schema` use different terminology for analagous concepts. Note that MySQL does not implement the top-level concept of the information_schema "catalog" (which dbt calls a "database").
+The following often use conflicting terminology:
+- dbt
+- Database management systems (DBMS) like MySQL, Postgres, and Snowflake
+- metadata in the ANSI-standard `information_schema`
 
-This adapter handles the two-part relation names in MySQL similarly to the [dbt-spark](https://github.com/fishtown-analytics/dbt-spark) and [dbt-sqlite](https://github.com/codeforkjeff/dbt-sqlite) adapters.
+The conflicts include both:
+- the same word meaning different things
+- different words meaning the same thing
 
-This is as a cross-walk between each concept:
+For example, a "database" in MySQL is not the same as a "database" in dbt, but it is equivalent to a "schema" in Postgres 🤯.
 
-| information_schema | MySQL                            | dbt                          |
-| ------------------ | -------------------------------- | ---------------------------- |
-| catalog            | _undefined / not implemented_    |  database                    |
-| schema             | database                         |  schema                      |
-| table/view         | table/view                       |  relation                    |
-| column             | column                           |  column                      |
+dbt-mysql uses the dbt terms. The native MySQL verbiage is restricted to SQL statements.
+
+This cross-walk aligns the terminology:
+
+| information_schema    | dbt (and Postgres)           | MySQL                            |
+| --------------------- | ---------------------------- | -------------------------------- |
+| catalog               |  database                    | _undefined / not implemented_    |
+| schema                |  schema                      | database                         |
+| relation (table/view) |  relation (table/view)       | relation (table/view)            |
+| column                |  column                      | column                           |
+
+Additionally, many DBMS have relation names with three parts whereas MySQL has only two. E.g., a fully-qualified table name in Postgres is `database.schema.table` versus `database.table` in MySQL. The missing part in MySQL is the `information_schema` "catalog".
+
+| DBMS               | Fully-qualified relation name | Parts      |
+| ------------------ | ----------------------------- | ---------- |
+| Postgres           |  `database.schema.table`      | 3          |
+| MySQL              |  `database.table`             | 2          |
+
+
+dbt-mysql borrows from [dbt-spark](https://github.com/fishtown-analytics/dbt-spark) and [dbt-sqlite](https://github.com/codeforkjeff/dbt-sqlite) since Spark and SQLite also use two-part relation names.
 
 ### Running Tests
 
