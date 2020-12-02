@@ -220,49 +220,40 @@ class MySQLAdapter(SQLAdapter):
 
         # MySQL doesn't have an EXCEPT or MINUS operator, so we need to simulate it
         COLUMNS_EQUAL_SQL = '''
-        WITH
-        a_except_b as (
-            SELECT
-                {columns_a}
-            FROM {relation_a} as {alias_a}
-            LEFT OUTER JOIN {relation_b} as {alias_b}
-                ON {join_condition}
-            WHERE {alias_b}.{first_column} is null
-        ),
-        b_except_a as (
-            SELECT
-                {columns_b}
-            FROM {relation_b} as {alias_b}
-            LEFT OUTER JOIN {relation_a} as {alias_a}
-                ON {join_condition}
-            WHERE {alias_a}.{first_column} is null
-        ),
-        diff_count as (
-            SELECT
-                1 as id,
-                COUNT(*) as num_missing FROM (
-                    SELECT * FROM a_except_b
-                    UNION ALL
-                    SELECT * FROM b_except_a
-                ) as missing
-        ),
-        table_a as (
-            SELECT COUNT(*) as num_rows FROM {relation_a}
-        ),
-        table_b as (
-            SELECT COUNT(*) as num_rows FROM {relation_b}
-        ),
-        row_count_diff as (
-            SELECT
-                1 as id,
-                table_a.num_rows - table_b.num_rows as difference
-            FROM table_a, table_b
-        )
         SELECT
             row_count_diff.difference as row_count_difference,
             diff_count.num_missing as num_mismatched
-        FROM row_count_diff
-        INNER JOIN diff_count ON row_count_diff.id = diff_count.id
+        FROM (
+            SELECT
+                1 as id,
+                table_a.num_rows - table_b.num_rows as difference
+            FROM
+                (SELECT COUNT(*) as num_rows FROM {relation_a}) as table_a,
+                (SELECT COUNT(*) as num_rows FROM {relation_b}) as table_b
+            ) as row_count_diff
+        INNER JOIN (
+            SELECT
+                1 as id,
+                COUNT(*) as num_missing FROM (
+
+                    SELECT
+                        {columns_a}
+                    FROM {relation_a} as {alias_a}
+                    LEFT OUTER JOIN {relation_b} as {alias_b}
+                        ON {join_condition}
+                    WHERE {alias_b}.{first_column} is null
+
+                    UNION ALL
+
+                    SELECT
+                        {columns_b}
+                    FROM {relation_b} as {alias_b}
+                    LEFT OUTER JOIN {relation_a} as {alias_a}
+                        ON {join_condition}
+                    WHERE {alias_a}.{first_column} is null
+
+                ) as missing
+            ) as diff_count ON row_count_diff.id = diff_count.id
         '''.strip()
 
         sql = COLUMNS_EQUAL_SQL.format(
