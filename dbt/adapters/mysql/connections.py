@@ -18,6 +18,7 @@ from dbt.logger import GLOBAL_LOGGER as logger
 class MySQLCredentials(Credentials):
     driver: str
     server: str
+    port: Optional[int]
     database: Optional[str]
     schema: str
     username: Optional[str]
@@ -54,6 +55,10 @@ class MySQLCredentials(Credentials):
         parts.append(f"DRIVER={{{self.driver}}}")
         parts.append(f"SERVER={self.server}")
         parts.append(f"UID={self.username}")
+
+        if self.port:
+            parts.append(f"PORT={self.port}")
+
         if mask:
             parts.append("PWD=*********")
         else:
@@ -70,6 +75,7 @@ class MySQLCredentials(Credentials):
         """
         return (
             "server",
+            "port",
             "database",
             "schema",
             "user",
