@@ -7,8 +7,8 @@ from dbt.exceptions import RuntimeException
 @dataclass
 class MySQLQuotePolicy(Policy):
     database: bool = False
-    schema: bool = False
-    identifier: bool = False
+    schema: bool = True
+    identifier: bool = True
 
 
 @dataclass
