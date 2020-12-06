@@ -11,7 +11,7 @@
         - Patch releases: `--new-version 0.10.2.1 patch`
         - Minor releases: `--new-version 0.11.0.1 minor`
         - Major releases: `--new-version 1.0.0.1 major`
-    1. Actually modify the files: `bumpversion --commit --no-tag --new-version <desired-version> <part>`
+    1. Actually modify the files: `bumpversion --no-tag --new-version <desired-version> <part>`
     1. Check the diff with `git diff`
     1. Add the files that were changed with `git add --update`
     1. Copy and paste the commit message from the dry run `git commit -m 'COPY_PASTE_HERE'`
