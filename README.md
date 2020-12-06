@@ -3,7 +3,8 @@
 This plugin ports [dbt](https://getdbt.com) functionality to MySQL 8.0.
 
 This is an experimental plugin:
-- We have not tested it against older versions of MySQL or storage engines other than the default of InnoDB
+- We have not tested it extensively or with storage engines other than the default of InnoDB
+- MariaDB compatibility is untested
 - Compatiblity with other [dbt packages](https://hub.getdbt.com/) (like [dbt_utils](https://hub.getdbt.com/fishtown-analytics/dbt_utils/latest/)) is also untested
 
 Please read these docs carefully and use at your own risk. [Issues](https://github.com/dbeatty10/dbt-mysql/issues/new) and [PRs](https://github.com/dbeatty10/dbt-mysql/blob/main/CONTRIBUTING.rst#contributing) welcome!
@@ -19,7 +20,7 @@ dbt-mysql creates connections via an ODBC driver that requires [`pyodbc`](https:
 
 See https://github.com/mkleehammer/pyodbc/wiki/Install for more info about installing `pyodbc`.
 
-### Supported features
+### Supported features for MySQL 8.0
 
 | Supported? | Feature                           |
 | ---------- | --------------------------------- |
@@ -32,6 +33,23 @@ See https://github.com/mkleehammer/pyodbc/wiki/Install for more info about insta
 | ✅         | Custom data tests                 |
 | ✅         | Docs generate                     |
 | ✅         | Snapshots                         |
+
+### Supported features for MySQL 5.6 and 5.7
+
+| Supported? | Feature                           |
+| ---------- | --------------------------------- |
+| ✅         | Table materialization             |
+| ✅         | View materialization              |
+| ✅         | Incremental materialization       |
+| ❌         | Ephemeral materialization         |
+| ✅         | Seeds                             |
+| ✅         | Sources                           |
+| ✅         | Custom data tests                 |
+| ✅         | Docs generate                     |
+| ✅         | Snapshots                         |
+
+Ephemeral materializations rely upon Common Table Expressions (CTE), which is
+not supported until MySQL 8.0
 
 ### Configuring your profile
 
