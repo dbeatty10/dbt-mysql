@@ -1,12 +1,29 @@
 # dbt-mysql
 
-This plugin ports [dbt](https://getdbt.com) functionality to MySQL 8.0.
+This plugin ports [dbt](https://getdbt.com) functionality to MySQL.
 
 This is an experimental plugin:
-- We have not tested it against older versions of MySQL or storage engines other than the default of InnoDB
+- We have not tested it extensively
+- Storage engines other than the default of InnoDB are untested
+- MariaDB compatibility is untested
+- Only tested with [dbt-adapter-tests](https://github.com/fishtown-analytics/dbt-adapter-tests) with MySQL 5.6, 5.7, and 8.0
 - Compatiblity with other [dbt packages](https://hub.getdbt.com/) (like [dbt_utils](https://hub.getdbt.com/fishtown-analytics/dbt_utils/latest/)) is also untested
 
 Please read these docs carefully and use at your own risk. [Issues](https://github.com/dbeatty10/dbt-mysql/issues/new) and [PRs](https://github.com/dbeatty10/dbt-mysql/blob/main/CONTRIBUTING.rst#contributing) welcome!
+
+Table of Contents
+=================
+
+   * [Installation](#installation)
+   * [Supported features](#supported-features)
+      * [MySQL 8.0](#supported-features)
+      * [MySQL 5.6 and 5.7](#supported-features)
+         * [MySQL 5.6 configuration gotchas](#supported-features)
+         * [MySQL 5.7 configuration gotchas](#supported-features)
+   * [Configuring your profile](#configuring-your-profile)
+   * [Notes](#notes)
+   * [Running Tests](#running-tests)
+   * [Reporting bugs and contributing code](#reporting-bugs-and-contributing-code)
 
 ### Installation
 This plugin can be installed via pip:
@@ -21,6 +38,8 @@ See https://github.com/mkleehammer/pyodbc/wiki/Install for more info about insta
 
 ### Supported features
 
+#### MySQL 8.0
+
 | Supported? | Feature                           |
 | ---------- | --------------------------------- |
 | ✅         | Table materialization             |
@@ -32,6 +51,53 @@ See https://github.com/mkleehammer/pyodbc/wiki/Install for more info about insta
 | ✅         | Custom data tests                 |
 | ✅         | Docs generate                     |
 | ✅         | Snapshots                         |
+
+#### MySQL 5.6 and 5.7
+
+| Supported? | Feature                           |
+| ---------- | --------------------------------- |
+| ✅         | Table materialization             |
+| ✅         | View materialization              |
+| ✅         | Incremental materialization       |
+| ❌         | Ephemeral materialization         |
+| ✅         | Seeds                             |
+| ✅         | Sources                           |
+| ✅         | Custom data tests                 |
+| ✅         | Docs generate                     |
+| 🤷         | Snapshots                         |
+
+Notes:
+- Ephemeral materializations rely upon Common Table Expressions (CTE), which is
+not supported until MySQL 8.0
+- MySQL 5.6 and 5.7 have some configuration gotchas that affect snapshots (see below).
+
+##### MySQL 5.6 configuration gotchas
+
+dbt snapshots might not work properly due to [automatic initialization and updating for `TIMESTAMP`](https://dev.mysql.com/doc/refman/5.6/en/timestamp-initialization.html) if:
+- the output of `SHOW VARIABLES LIKE 'sql_mode'` includes `NO_ZERO_DATE`
+- the output of `SHOW GLOBAL VARIABLES LIKE 'explicit_defaults_for_timestamp'` has a value of `OFF`
+
+A solution is to include the following in a `*.cnf` file:
+Configuration to include in a `*.cnf` file:
+```
+[mysqld]
+explicit_defaults_for_timestamp = true
+```
+
+##### MySQL 5.7 configuration gotchas
+
+dbt snapshots might not work properly due to [automatic initialization and updating for `TIMESTAMP`](https://dev.mysql.com/doc/refman/5.7/en/timestamp-initialization.html) if:
+dbt snapshots might not work properly if:
+- the output of `SHOW VARIABLES LIKE 'sql_mode'` includes `NO_ZERO_DATE`
+
+A solution is to include the following in a `*.cnf` file:
+Configuration to include in a `*.cnf` file:
+```
+[mysqld]
+explicit_defaults_for_timestamp = true
+sql_mode = "ALLOW_INVALID_DATES,{other_sql_modes}"
+```
+where `{other_sql_modes}` is the rest of the modes from the `SHOW VARIABLES LIKE 'sql_mode'` output.
 
 ### Configuring your profile
 
@@ -96,7 +162,7 @@ dbt-mysql borrows from [dbt-spark](https://github.com/fishtown-analytics/dbt-spa
 
 ### Running Tests
 
-1. Modify `test/mysql.dbtspec` with your `server`, `username`, and `password`
+1. Modify `test/mysql.dbtspec` with your `server`, `username`, `password`, and (optionally) `port`
 1. Install the `pytest-dbt-adapter` package
 1. Run the test specs in this repository
 

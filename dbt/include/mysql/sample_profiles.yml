@@ -4,6 +4,7 @@ default:
     dev:
       type: mysql
       server: [server/host]
+      port: [port]  # optional
       schema: [schema]
       username: [username]
       password: [password]
@@ -11,6 +12,7 @@ default:
     prod:
       type: mysql
       server: [server/host]
+      port: [port]  # optional
       schema: [schema]
       username: [username]
       password: [password]
