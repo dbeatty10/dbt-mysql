@@ -137,3 +137,77 @@
     {%- endfor -%}
     {{ return([ns.column_added, intersection]) }}
 {%- endmacro %}
+
+{% macro snapshot_staging_table(strategy, source_sql, target_relation) -%}
+
+    select
+        'insert' as dbt_change_type,
+        source_data.*
+
+    from (
+
+        select
+            *,
+            {{ strategy.unique_key }} as dbt_unique_key,
+            {{ strategy.updated_at }} as dbt_updated_at,
+            {{ strategy.updated_at }} as dbt_valid_from,
+            nullif({{ strategy.updated_at }}, {{ strategy.updated_at }}) as dbt_valid_to,
+            {{ strategy.scd_id }} as dbt_scd_id
+
+        from (
+            {{ source_sql }}
+        ) as snapshot_query
+
+    ) as source_data
+    left outer join (
+
+        select *,
+            {{ strategy.unique_key }} as dbt_unique_key
+
+        from {{ target_relation }}
+
+    ) as snapshotted_data on snapshotted_data.dbt_unique_key = source_data.dbt_unique_key
+    where snapshotted_data.dbt_unique_key is null
+       or (
+            snapshotted_data.dbt_unique_key is not null
+        and snapshotted_data.dbt_valid_to is null
+        and (
+            {{ strategy.row_changed }}
+        )
+    )
+
+    union all
+
+    select
+        'update' as dbt_change_type,
+        source_data.*,
+        snapshotted_data.dbt_scd_id
+
+    from (
+
+        select
+            *,
+            {{ strategy.unique_key }} as dbt_unique_key,
+            {{ strategy.updated_at }} as dbt_updated_at,
+            {{ strategy.updated_at }} as dbt_valid_from,
+            {{ strategy.updated_at }} as dbt_valid_to
+
+        from (
+            {{ source_sql }}
+        ) as snapshot_query
+
+    ) as source_data
+    join (
+
+        select *,
+            {{ strategy.unique_key }} as dbt_unique_key
+
+        from {{ target_relation }}
+
+    ) as snapshotted_data on snapshotted_data.dbt_unique_key = source_data.dbt_unique_key
+    where snapshotted_data.dbt_valid_to is null
+    and (
+        {{ strategy.row_changed }}
+    )
+
+{%- endmacro %}
