@@ -17,7 +17,7 @@ with open(os.path.join(this_directory, 'README.md')) as f:
 
 
 package_name = "dbt-mysql"
-package_version = "0.18.0rc3"
+package_version = "0.18.0"
 description = """The MySQL adapter plugin for dbt (data build tool)"""
 
 
