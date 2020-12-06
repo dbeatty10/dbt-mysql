@@ -16,8 +16,8 @@ Table of Contents
 
    * [Installation](#installation)
    * [Supported features](#supported-features)
-         * [MySQL 8.0](#supported-features)
-         * [MySQL 5.6 and 5.7](#supported-features)
+      * [MySQL 8.0](#supported-features)
+      * [MySQL 5.6 and 5.7](#supported-features)
          * [MySQL 5.6 configuration gotchas](#supported-features)
          * [MySQL 5.7 configuration gotchas](#supported-features)
    * [Configuring your profile](#configuring-your-profile)
