@@ -1,6 +1,6 @@
 ### Release Procedure
 
-#### PyPI
+#### Bump version
 
 1. Open a branch for the release
 1. Update CHANGELOG.md with the most recent changes
@@ -16,6 +16,9 @@
     1. Add the files that were changed with `git add --update`
     1. Copy and paste the commit message from the dry run `git commit -m 'COPY_PASTE_HERE'`
 1. Merge to `main`
+
+#### PyPI
+
 1. Build source distribution
     - `python setup.py sdist bdist_wheel`
 1. Deploy to Test PyPi
