@@ -1,4 +1,4 @@
-## dbt-mysql 0.18.1 (Release TBD)
+## dbt-mysql 0.18.1 (December 6, 2020)
 
 ## dbt-mysql 0.18.0 (December 6, 2020)
 

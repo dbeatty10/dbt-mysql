@@ -14,7 +14,7 @@
     1. Actually modify the files: `bumpversion --no-tag --new-version <desired-version> <part>`
     1. Check the diff with `git diff`
     1. Add the files that were changed with `git add --update`
-    1. Copy and paste the commit message from the dry run `git commit -m 'COPY_PASTE_HERE'`
+    1. Commit with message `Release dbt-mysql v<desired-version>`
 1. Merge to `main`
 
 #### PyPI
