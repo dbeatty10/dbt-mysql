@@ -32,10 +32,6 @@ This plugin can be installed via pip:
 $ pip install dbt-mysql
 ```
 
-dbt-mysql creates connections via an ODBC driver that requires [`pyodbc`](https://github.com/mkleehammer/pyodbc).
-
-See https://github.com/mkleehammer/pyodbc/wiki/Install for more info about installing `pyodbc`.
-
 ### Supported features
 
 #### MySQL 8.0
