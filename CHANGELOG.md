@@ -1,4 +1,4 @@
-## dbt-mysql 0.18.0.1 (Release TBD)
+## dbt-mysql 0.18.1.1 (Release TBD)
 
 ### Under the hood
 - Manage MySQL connections via a self-contained DB API 2.0 compliant Python driver (instead of ODBC) ([#41](https://github.com/dbeatty10/dbt-mysql/pull/41))
