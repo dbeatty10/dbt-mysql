@@ -17,7 +17,7 @@ with open(os.path.join(this_directory, 'README.md')) as f:
 
 
 package_name = "dbt-mysql"
-package_version = "0.18.1"
+package_version = "0.18.0"
 description = """The MySQL adapter plugin for dbt (data build tool)"""
 
 
@@ -45,8 +45,8 @@ setup(
         ]
     },
     install_requires=[
-        "dbt-core~=0.18.0",
-        "pyodbc",
+        "dbt-core==0.18.1",
+        "mysql-connector-python~=8.0.22",
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',

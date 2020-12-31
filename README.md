@@ -16,10 +16,10 @@ Table of Contents
 
    * [Installation](#installation)
    * [Supported features](#supported-features)
-      * [MySQL 8.0](#mysql-80)
-      * [MySQL 5.6 and 5.7](#mysql-56-and-57)
-         * [MySQL 5.6 configuration gotchas](#mysql-56-configuration-gotchas)
-         * [MySQL 5.7 configuration gotchas](#mysql-57-configuration-gotchas)
+      * [MySQL 8.0](#supported-features)
+      * [MySQL 5.6 and 5.7](#supported-features)
+         * [MySQL 5.6 configuration gotchas](#supported-features)
+         * [MySQL 5.7 configuration gotchas](#supported-features)
    * [Configuring your profile](#configuring-your-profile)
    * [Notes](#notes)
    * [Running Tests](#running-tests)
@@ -31,10 +31,6 @@ This plugin can be installed via pip:
 ```bash
 $ pip install dbt-mysql
 ```
-
-dbt-mysql creates connections via an ODBC driver that requires [`pyodbc`](https://github.com/mkleehammer/pyodbc).
-
-See https://github.com/mkleehammer/pyodbc/wiki/Install for more info about installing `pyodbc`.
 
 ### Supported features
 
