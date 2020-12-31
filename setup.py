@@ -46,7 +46,7 @@ setup(
     },
     install_requires=[
         "dbt-core~=0.18.0",
-        "pyodbc",
+        "mysql-connector-python~=8.0.22",
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
