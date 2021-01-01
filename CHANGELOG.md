@@ -2,6 +2,7 @@
 
 ### Under the hood
 - Manage MySQL connections via a self-contained DB API 2.0 compliant Python driver (instead of ODBC) ([#41](https://github.com/dbeatty10/dbt-mysql/pull/41))
+- Split into two separate adapters for MySQL 5.x and 8.x ([#44](https://github.com/dbeatty10/dbt-mysql/pull/44))
 
 ## Bugfixes
 - Pin to dbt-core version 0.18.1 ([#41](https://github.com/dbeatty10/dbt-mysql/pull/41))
