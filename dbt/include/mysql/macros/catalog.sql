@@ -1,19 +1,8 @@
 
 {% macro mysql__get_catalog(information_schema, schemas) -%}
     {%- call statement('catalog', fetch_result=True) -%}
-    select
-        columns.table_database,
-        columns.table_schema,
-        columns.table_name,
-        tables.table_type,
-        columns.table_comment,
-        tables.table_owner,
-        columns.column_name,
-        columns.column_index,
-        columns.column_type,
-        columns.column_comment
-    from
-    (
+    with tables as (
+
         select
             null as "table_database",
             table_schema as "table_schema",
@@ -24,11 +13,12 @@
             end as "table_type",
             null as "table_owner"
 
-        from information_schema.tables
-    )
-    as tables
-    join
-    (
+        from {{ information_schema }}.tables
+
+    ),
+
+    columns as (
+
         select
             null as "table_database",
             table_schema as "table_schema",
@@ -40,9 +30,23 @@
             data_type as "column_type",
             null as "column_comment"
 
-        from information_schema.columns
+        from {{ information_schema }}.columns
+
     )
-    as columns using (table_schema, table_name)
+
+    select
+        columns.table_database,
+        columns.table_schema,
+        columns.table_name,
+        tables.table_type,
+        columns.table_comment,
+        tables.table_owner,
+        columns.column_name,
+        columns.column_index,
+        columns.column_type,
+        columns.column_comment
+    from tables
+    join columns using (table_schema, table_name)
     where table_schema not in ('information_schema', 'performance_schema', 'mysql', 'sys')
     and (
     {%- for schema in schemas -%}
