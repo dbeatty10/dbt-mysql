@@ -1,10 +1,11 @@
 
 target:
   type: mysql
+  port: 3307
+  schema: dbt_test_{{ var('_dbt_random_suffix') }}
   server: "{{ env_var('DBT_MYSQL_SERVER_NAME', 'localhost') }}"
   username: "{{ env_var('DBT_MYSQL_USERNAME', 'dbt_username') }}"
   password: "{{ env_var('DBT_MYSQL_PASSWORD', 'dbt_password') }}"
-  schema: dbt_test_{{ var('_dbt_random_suffix') }}
 
 sequences:
 
@@ -13,10 +14,12 @@ sequences:
 
   test_dbt_empty: empty
   test_dbt_base: base
-  test_dbt_ephemeral: ephemeral
+  # Ephemeral materializations not supported for MySQL 5.7
+  # test_dbt_ephemeral: ephemeral
   test_dbt_incremental: incremental
   test_dbt_snapshot_strategy_timestamp: snapshot_strategy_timestamp
   test_dbt_snapshot_strategy_check_cols: snapshot_strategy_check_cols
   test_dbt_data_test: data_test
   test_dbt_schema_test: schema_test
-  test_dbt_ephemeral_data_tests: data_test_ephemeral_models
+  # Ephemeral materializations not supported for MySQL 5.7
+  # test_dbt_ephemeral_data_tests: data_test_ephemeral_models

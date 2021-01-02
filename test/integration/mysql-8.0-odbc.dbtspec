@@ -1,10 +1,11 @@
 
 target:
   type: mysql
+  port: 3306
+  schema: dbt_test_{{ var('_dbt_random_suffix') }}
   server: "{{ env_var('DBT_MYSQL_SERVER_NAME', 'localhost') }}"
   username: "{{ env_var('DBT_MYSQL_USERNAME', 'dbt_username') }}"
   password: "{{ env_var('DBT_MYSQL_PASSWORD', 'dbt_password') }}"
-  schema: dbt_test_{{ var('_dbt_random_suffix') }}
 
 sequences:
 
