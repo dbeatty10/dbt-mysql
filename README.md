@@ -157,20 +157,14 @@ Additionally, many DBMS have relation names with three parts whereas MySQL has o
 | Postgres           |  `database.schema.table`      | 3          |
 | MySQL              |  `database.table`             | 2          |
 
-
-dbt-mysql borrows from [dbt-spark](https://github.com/fishtown-analytics/dbt-spark) and [dbt-sqlite](https://github.com/codeforkjeff/dbt-sqlite) since Spark and SQLite also use two-part relation names.
-
 ### Running Tests
 
-1. Modify `test/mysql.dbtspec` with your `server`, `username`, `password`, and (optionally) `port`
-1. Install the `pytest-dbt-adapter` package
-1. Run the test specs in this repository
-
-```bash
-$ pip install pytest-dbt-adapter
-$ pytest test/mysql.dbtspec
-```
+See [test/README.md](test/README.md) for details on running the integration tests.
 
 ### Reporting bugs and contributing code
 
 -   Want to report a bug or request a feature? See the [contributing guidelines](https://github.com/dbeatty10/dbt-mysql/blob/main/CONTRIBUTING.rst#contributing), or open [an issue](https://github.com/dbeatty10/dbt-mysql/issues/new).
+
+### Credits
+
+dbt-mysql borrows from [dbt-spark](https://github.com/fishtown-analytics/dbt-spark) and [dbt-sqlite](https://github.com/codeforkjeff/dbt-sqlite) since Spark and SQLite also use two-part relation names.
