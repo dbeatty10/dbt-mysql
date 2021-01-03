@@ -78,7 +78,7 @@ sql_mode = "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ALLOW_INVALID
 
 Run the test specs in this repository:
 ```
-pytest -v test/integration/mysql-5.6-odbc.dbtspec && \
-pytest -v test/integration/mysql-5.7-odbc.dbtspec && \
-pytest -v test/integration/mysql-8.0-odbc.dbtspec
+pytest -v test/integration/mysql-5.6.dbtspec && \
+pytest -v test/integration/mysql-5.7.dbtspec && \
+pytest -v test/integration/mysql-8.0.dbtspec
 ```
