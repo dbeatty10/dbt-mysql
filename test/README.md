@@ -25,10 +25,11 @@ This fork (and branch) contains the necessary changes: https://github.com/dbeatt
 
 #### Install via SSH
 
-`pip install git+git@github.com:dbeatty10/dbt-adapter-tests.git@mysql`
+`pip install git+ssh://git@github.com/dbeatty10/dbt-adapter-tests.git@dbt-mysql-0.19.0#egg=pytest-dbt-adapter`
 
 #### Install via HTTPS
-`pip install git+https://github.com/dbeatty10/dbt-adapter-tests.git@mysql`
+
+`pip install git+https://github.com/dbeatty10/dbt-adapter-tests.git@dbt-mysql-0.19.0#egg=pytest-dbt-adapter`
 
 ### Environment variables
 
