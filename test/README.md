@@ -21,7 +21,7 @@ pytest test/mysql.dbtspec
 
 The official `pytest-dbt-adapter` package from Fishtown Analytics uses some SQL syntax not supported by MySQL.
 
-This fork (and branch) contains the necessary changes: https://github.com/dbeatty10/dbt-adapter-tests/tree/mysql
+This fork (and branch) contains the necessary changes: https://github.com/dbeatty10/dbt-adapter-tests/tree/dbt-mysql-0.19.0
 
 #### Install via SSH
 
