@@ -16,10 +16,10 @@ Table of Contents
 
    * [Installation](#installation)
    * [Supported features](#supported-features)
-      * [MySQL 8.0](#supported-features)
-      * [MySQL 5.6 and 5.7](#supported-features)
-         * [MySQL 5.6 configuration gotchas](#supported-features)
-         * [MySQL 5.7 configuration gotchas](#supported-features)
+      * [MySQL 8.0](#mysql-80)
+      * [MySQL 5.6 and 5.7](#mysql-56-and-57)
+         * [MySQL 5.6 configuration gotchas](#mysql-56-configuration-gotchas)
+         * [MySQL 5.7 configuration gotchas](#mysql-57-configuration-gotchas)
    * [Configuring your profile](#configuring-your-profile)
    * [Notes](#notes)
    * [Running Tests](#running-tests)
@@ -97,7 +97,9 @@ where `{other_sql_modes}` is the rest of the modes from the `SHOW VARIABLES LIKE
 
 ### Configuring your profile
 
-A dbt profile can be configured to run against MySQL using the following configuration:
+A dbt profile can be configured to run against MySQL using the following configuration example:
+
+Use `type: mysql` for MySQL 8.x and `type: mysql5` for MySQL 5.x
 
 **Example entry for profiles.yml:**
 
@@ -108,19 +110,20 @@ your_profile_name:
     dev:
       type: mysql
       server: localhost
+      port: 3306
       schema: analytics
       username: your_mysql_username
       password: your_mysql_password
-      driver: MySQL ODBC 8.0 ANSI Driver
 ```
 
 | Option          | Description                                                                         | Required?                                                          | Example                                        |
 | --------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------- |
+| type            | The specific adapter to use                                                         | Required                                                           | `mysql` or `mysql5`                            |
 | server          | The server (hostname) to connect to                                                 | Required                                                           | `yourorg.mysqlhost.com`                        |
+| port            | The port to use                                                                     | Optional                                                           | `3306`                                         |
 | schema          | Specify the schema (database) to build models into                                  | Required                                                           | `analytics`                                    |
 | username        | The username to use to connect to the server                                        | Required                                                           | `dbt_admin`                                    |
 | password        | The password to use for authenticating to the server                                | Required                                                           | `correct-horse-battery-staple`                 |
-| driver          | ODBC DSN configured                                                                 | Required                                                           | `MySQL ODBC 8.0 ANSI Driver`                   |
 
 ### Notes
 
@@ -153,20 +156,14 @@ Additionally, many DBMS have relation names with three parts whereas MySQL has o
 | Postgres           |  `database.schema.table`      | 3          |
 | MySQL              |  `database.table`             | 2          |
 
-
-dbt-mysql borrows from [dbt-spark](https://github.com/fishtown-analytics/dbt-spark) and [dbt-sqlite](https://github.com/codeforkjeff/dbt-sqlite) since Spark and SQLite also use two-part relation names.
-
 ### Running Tests
 
-1. Modify `test/mysql.dbtspec` with your `server`, `username`, `password`, and (optionally) `port`
-1. Install the `pytest-dbt-adapter` package
-1. Run the test specs in this repository
-
-```bash
-$ pip install pytest-dbt-adapter
-$ pytest test/mysql.dbtspec
-```
+See [test/README.md](test/README.md) for details on running the integration tests.
 
 ### Reporting bugs and contributing code
 
 -   Want to report a bug or request a feature? See the [contributing guidelines](https://github.com/dbeatty10/dbt-mysql/blob/main/CONTRIBUTING.rst#contributing), or open [an issue](https://github.com/dbeatty10/dbt-mysql/issues/new).
+
+### Credits
+
+dbt-mysql borrows from [dbt-spark](https://github.com/fishtown-analytics/dbt-spark) and [dbt-sqlite](https://github.com/codeforkjeff/dbt-sqlite) since Spark and SQLite also use two-part relation names.
