@@ -1,6 +1,6 @@
 
 target:
-  type: mysql
+  type: mysql5
   port: 3308
   schema: dbt_test_{{ var('_dbt_random_suffix') }}
   server: "{{ env_var('DBT_MYSQL_SERVER_NAME', 'localhost') }}"

@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+twine = "*"
+bump2version = "*"
+pytest = "~=6.0"
+tox = "~=3.2"
+pytest-dbt-adapter = {ref = "dbt-mysql-0.19.0", git = "ssh://git@github.com/dbeatty10/dbt-adapter-tests.git"}
+dbt-mysql = {editable = true, path = "."}
+
+[packages]
+mysql-connector-python = "*"
+dbt-core = "==0.19.0rc1"
+
+[requires]
+python_version = ">=3.6.2"
+
+[pipenv]
+allow_prereleases = true

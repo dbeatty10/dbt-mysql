@@ -32,10 +32,6 @@ This plugin can be installed via pip:
 $ pip install dbt-mysql
 ```
 
-dbt-mysql creates connections via an ODBC driver that requires [`pyodbc`](https://github.com/mkleehammer/pyodbc).
-
-See https://github.com/mkleehammer/pyodbc/wiki/Install for more info about installing `pyodbc`.
-
 ### Supported features
 
 #### MySQL 8.0
@@ -101,7 +97,9 @@ where `{other_sql_modes}` is the rest of the modes from the `SHOW VARIABLES LIKE
 
 ### Configuring your profile
 
-A dbt profile can be configured to run against MySQL using the following configuration:
+A dbt profile can be configured to run against MySQL using the following configuration example:
+
+Use `type: mysql` for MySQL 8.x and `type: mysql5` for MySQL 5.x
 
 **Example entry for profiles.yml:**
 
@@ -112,19 +110,20 @@ your_profile_name:
     dev:
       type: mysql
       server: localhost
+      port: 3306
       schema: analytics
       username: your_mysql_username
       password: your_mysql_password
-      driver: MySQL ODBC 8.0 ANSI Driver
 ```
 
 | Option          | Description                                                                         | Required?                                                          | Example                                        |
 | --------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------- |
+| type            | The specific adapter to use                                                         | Required                                                           | `mysql` or `mysql5`                            |
 | server          | The server (hostname) to connect to                                                 | Required                                                           | `yourorg.mysqlhost.com`                        |
+| port            | The port to use                                                                     | Optional                                                           | `3306`                                         |
 | schema          | Specify the schema (database) to build models into                                  | Required                                                           | `analytics`                                    |
 | username        | The username to use to connect to the server                                        | Required                                                           | `dbt_admin`                                    |
 | password        | The password to use for authenticating to the server                                | Required                                                           | `correct-horse-battery-staple`                 |
-| driver          | ODBC DSN configured                                                                 | Required                                                           | `MySQL ODBC 8.0 ANSI Driver`                   |
 
 ### Notes
 

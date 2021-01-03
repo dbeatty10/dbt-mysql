@@ -1,0 +1,19 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: mysql5
+      server: [server/host]
+      port: [port]  # optional
+      schema: [schema]
+      username: [username]
+      password: [password]
+      driver: MySQL ODBC 8.0 ANSI Driver
+    prod:
+      type: mysql5
+      server: [server/host]
+      port: [port]  # optional
+      schema: [schema]
+      username: [username]
+      password: [password]
+      driver: MySQL ODBC 8.0 ANSI Driver

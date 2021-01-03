@@ -35,6 +35,8 @@ setup(
     packages=[
         'dbt.adapters.mysql',
         'dbt.include.mysql',
+        'dbt.adapters.mysql5',
+        'dbt.include.mysql5',
     ],
     package_data={
         'dbt.include.mysql': [
@@ -42,7 +44,13 @@ setup(
             'macros/materializations/**/*.sql',
             'dbt_project.yml',
             'sample_profiles.yml',
-        ]
+        ],
+        'dbt.include.mysql5': [
+            'macros/*.sql',
+            'macros/materializations/**/*.sql',
+            'dbt_project.yml',
+            'sample_profiles.yml',
+        ],
     },
     install_requires=[
         "dbt-core==0.19.0rc1",
