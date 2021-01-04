@@ -3,7 +3,8 @@
 #### Bump version
 
 1. Open a branch for the release
-1. Update CHANGELOG.md with the most recent changes
+    - `git checkout -b releases/0.19.0rc1`
+1. Update [`CHANGELOG.md`](CHANGELOG.md) with the most recent changes
 1. Bump the version using [`bump2version`](https://github.com/c4urself/bump2version/#bump2version):
     1. Dry run first by running `bumpversion --dry-run --verbose --new-version <desired-version> <part>`. Some examples:
         - Release candidates: `--new-version 0.10.2rc1 num`
@@ -15,7 +16,6 @@
     1. Check the diff with `git diff`
     1. Add the files that were changed with `git add --update`
     1. Commit with message `Release dbt-mysql v<desired-version>`
-1. Merge to `main`
 
 #### PyPI
 
