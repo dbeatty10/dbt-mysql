@@ -34,37 +34,20 @@ $ pip install dbt-mysql
 
 ### Supported features
 
-#### MySQL 8.0
-
-| Supported? | Feature                           |
-| ---------- | --------------------------------- |
-| ✅         | Table materialization             |
-| ✅         | View materialization              |
-| ✅         | Incremental materialization       |
-| ✅         | Ephemeral materialization         |
-| ✅         | Seeds                             |
-| ✅         | Sources                           |
-| ✅         | Custom data tests                 |
-| ✅         | Docs generate                     |
-| ✅         | Snapshots                         |
-
-#### MySQL 5.6 and 5.7
-
-| Supported? | Feature                           |
-| ---------- | --------------------------------- |
-| ✅         | Table materialization             |
-| ✅         | View materialization              |
-| ✅         | Incremental materialization       |
-| ❌         | Ephemeral materialization         |
-| ✅         | Seeds                             |
-| ✅         | Sources                           |
-| ✅         | Custom data tests                 |
-| ✅         | Docs generate                     |
-| 🤷         | Snapshots                         |
+| 5.6 / 5.7 | 8.0 | Feature                     |
+|:---------:|:---:|-----------------------------|
+|     ✅     |  ✅  | Table materialization       |
+|     ✅     |  ✅  | View materialization        |
+|     ✅     |  ✅  | Incremental materialization |
+|     ❌     |  ✅  | Ephemeral materialization   |
+|     ✅     |  ✅  | Seeds                       |
+|     ✅     |  ✅  | Sources                     |
+|     ✅     |  ✅  | Custom data tests           |
+|     ✅     |  ✅  | Docs generate               |
+|     🤷     |  ✅  | Snapshots                   |
 
 Notes:
-- Ephemeral materializations rely upon Common Table Expressions (CTE), which is
-not supported until MySQL 8.0
+- Ephemeral materializations rely upon [Common Table Expressions](https://en.wikipedia.org/wiki/Hierarchical_and_recursive_queries_in_SQL) (CTEs), which are not supported until MySQL 8.0
 - MySQL 5.6 and 5.7 have some configuration gotchas that affect snapshots (see below).
 
 ##### MySQL 5.6 configuration gotchas
