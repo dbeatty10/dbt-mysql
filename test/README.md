@@ -3,7 +3,6 @@
 ## Overview
 
 Here are the steps to run the integration tests:
-1. Install the pytest-dbt-adapter package
 1. Set environment variables
 1. Run Docker containers (optional)
 1. Run tests
@@ -17,19 +16,8 @@ pytest test/mysql.dbtspec
 
 ## Full example
 
-### Install the pytest-dbt-adapter package
-
-The official `pytest-dbt-adapter` package from Fishtown Analytics uses some SQL syntax not supported by MySQL.
-
-This fork (and branch) contains the necessary changes: https://github.com/dbeatty10/dbt-adapter-tests/tree/dbt-mysql-0.19.0
-
-#### Install via SSH
-
-`pip install git+ssh://git@github.com/dbeatty10/dbt-adapter-tests.git@dbt-mysql-0.19.0#egg=pytest-dbt-adapter`
-
-#### Install via HTTPS
-
-`pip install git+https://github.com/dbeatty10/dbt-adapter-tests.git@dbt-mysql-0.19.0#egg=pytest-dbt-adapter`
+### Prerequisites
+- [`pytest-dbt-adapter`](https://github.com/fishtown-analytics/dbt-adapter-tests) package
 
 ### Environment variables
 
