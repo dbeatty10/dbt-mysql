@@ -8,12 +8,12 @@ twine = "*"
 bump2version = "*"
 pytest = "~=6.0"
 tox = "~=3.2"
-pytest-dbt-adapter = {ref = "dbt-mysql-0.19.0", git = "ssh://git@github.com/dbeatty10/dbt-adapter-tests.git"}
+pytest-dbt-adapter = "~=0.4.0"
 dbt-mysql = {editable = true, path = "."}
 
 [packages]
 mysql-connector-python = "*"
-dbt-core = "==0.19.0rc1"
+dbt-core = "==0.19.0"
 
 [requires]
 python_version = ">=3.6.2"

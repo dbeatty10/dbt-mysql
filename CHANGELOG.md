@@ -1,4 +1,7 @@
 ## dbt-mysql 0.19.0 (TBD)
+- Latest versions of dbt (0.19.0) and dbt-adapter-tests (4.0) ([#53](https://github.com/dbeatty10/dbt-mysql/pull/53))
+
+## dbt-mysql 0.19.0rc1 (January 3, 2021)
 
 - Manage MySQL connections via a self-contained DB API 2.0 compliant Python driver (instead of ODBC) ([#38](https://github.com/dbeatty10/dbt-mysql/pull/38))
 - Integration tests via (custom) dbt-adapter-tests ([#45](https://github.com/dbeatty10/dbt-mysql/pull/45))
