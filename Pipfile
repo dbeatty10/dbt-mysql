@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 twine = "*"
+bleach = ">=3.3.0"
 bump2version = "*"
 pytest = "~=6.0"
 tox = "~=3.2"
