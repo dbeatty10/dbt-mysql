@@ -1,4 +1,4 @@
-## dbt-mysql 0.19.0 (TBD)
+## dbt-mysql 0.19.0 (February 3, 2021)
 - Latest versions of dbt (0.19.0) and dbt-adapter-tests (4.0) ([#53](https://github.com/dbeatty10/dbt-mysql/pull/53))
 
 ## dbt-mysql 0.19.0rc1 (January 3, 2021)
