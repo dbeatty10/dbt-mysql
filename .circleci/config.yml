@@ -1,0 +1,28 @@
+version: 2.1
+
+jobs:
+  unit:
+    environment:
+      DBT_INVOCATION_ENV: circle
+    docker:
+      - image: fishtownanalytics/test-container:9
+    steps:
+      - checkout
+
+  integration:
+    environment:
+      DBT_INVOCATION_ENV: circle
+    docker:
+      - image: fishtownanalytics/test-container:9
+    steps:
+      - checkout
+
+workflows:
+  version: 2
+  test-everything:
+    jobs:
+      - unit
+      - integration:
+          requires:
+            - unit
+
