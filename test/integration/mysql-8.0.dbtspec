@@ -4,15 +4,15 @@ target:
   port: 3306
   schema: dbt_test_{{ var('_dbt_random_suffix') }}
   server: "{{ env_var('DBT_MYSQL_SERVER_NAME', 'localhost') }}"
-  username: "{{ env_var('DBT_MYSQL_USERNAME', 'dbt_username') }}"
-  password: "{{ env_var('DBT_MYSQL_PASSWORD', 'dbt_password') }}"
+  username: "{{ env_var('DBT_MYSQL_USERNAME', 'root') }}"
+  password: "{{ env_var('DBT_MYSQL_PASSWORD', 'dbt') }}"
 
 sequences:
 
   # List of sequences:
   # https://github.com/fishtown-analytics/dbt-adapter-tests/tree/master/pytest_dbt_adapter/sequences
 
-  test_dbt_empty: empty
+  # test_dbt_empty: empty
   test_dbt_base: base
   test_dbt_ephemeral: ephemeral
   test_dbt_incremental: incremental
