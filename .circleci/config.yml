@@ -12,15 +12,24 @@ jobs:
   integration:
     environment:
       DBT_INVOCATION_ENV: circle
-      DBT_MYSQL_SERVER_NAME: mysql
+      DBT_MYSQL_SERVER_NAME: mysql_server
     docker:
       - image: fishtownanalytics/test-container:9
       - image: mysql:8.0
         environment:
           MYSQL_ROOT_PASSWORD: dbt
-        name: mysql
+        name: mysql_server
     steps:
       - checkout
+      - run:
+          name: Wait for MySQL
+          command: dockerize -wait tcp://mysql_server:8080 -timeout 5m -wait-retry-interval 5s
+      - run:
+          name: Run integration tests
+          command: tox -e integration-mysql
+          no_output_timeout: 1h
+      - store_artifacts:
+          path: ./logs
 
 workflows:
   version: 2
