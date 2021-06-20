@@ -23,7 +23,7 @@ jobs:
       - checkout
       - run:
           name: Wait for MySQL
-          command: dockerize -wait tcp://mysql_server:8080 -timeout 5m -wait-retry-interval 5s
+          command: dockerize -wait tcp://mysql_server:3306 -timeout 5m -wait-retry-interval 5s
       - run:
           name: Run integration tests
           command: tox -e integration-mysql
