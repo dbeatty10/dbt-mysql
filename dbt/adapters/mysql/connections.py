@@ -75,6 +75,7 @@ class MySQLConnectionManager(SQLConnectionManager):
         kwargs["host"] = credentials.server
         kwargs["user"] = credentials.username
         kwargs["passwd"] = credentials.password
+        kwargs["database"] = credentials.schema
 
         if credentials.port:
             kwargs["port"] = credentials.port
