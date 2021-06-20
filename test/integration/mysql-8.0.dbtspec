@@ -2,6 +2,7 @@
 target:
   type: mysql
   port: 3306
+  database: dbt_test_{{ var('_dbt_random_suffix') }}
   schema: dbt_test_{{ var('_dbt_random_suffix') }}
   server: "{{ env_var('DBT_MYSQL_SERVER_NAME', 'localhost') }}"
   username: "{{ env_var('DBT_MYSQL_USERNAME', 'root') }}"
