@@ -75,7 +75,6 @@ class MySQLConnectionManager(SQLConnectionManager):
         kwargs["host"] = credentials.server
         kwargs["user"] = credentials.username
         kwargs["passwd"] = credentials.password
-        kwargs["database"] = credentials.schema
 
         if credentials.port:
             kwargs["port"] = credentials.port
@@ -86,6 +85,9 @@ class MySQLConnectionManager(SQLConnectionManager):
         except mysql.connector.Error as e:
 
             try:
+                logger.debug("Failed connection without supplying the `database`. "
+                             "Trying again with `database` included.")
+
                 # Try again with the database included
                 kwargs["database"] = credentials.schema
 
