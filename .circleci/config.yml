@@ -8,6 +8,7 @@ jobs:
       - image: fishtownanalytics/test-container:9
     steps:
       - checkout
+      - run: tox -e flake8
 
   integration:
     environment:
