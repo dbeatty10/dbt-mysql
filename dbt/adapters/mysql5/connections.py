@@ -82,7 +82,7 @@ class MySQLConnectionManager(SQLConnectionManager):
         try:
             connection.handle = mysql.connector.connect(**kwargs)
             connection.state = 'open'
-        except mysql.connector.Error as e:
+        except mysql.connector.Error:
 
             try:
                 logger.debug("Failed connection without supplying the `database`. "
@@ -143,7 +143,8 @@ class MySQLConnectionManager(SQLConnectionManager):
 
     @classmethod
     def get_status(cls, cursor):
-        # There's no real way to get this from mysql-connector-python, so just return "OK"
+        # There's no real way to get this from mysql-connector-python.
+        # So just return "OK".
         return "OK"
 
     @classmethod
