@@ -1,4 +1,5 @@
 import unittest
+from unittest import mock
 import dbt.flags as flags
 from dbt.adapters.mysql import MySQLAdapter
 
@@ -15,7 +16,7 @@ class TestMySQLAdapter(unittest.TestCase):
             'outputs': {
                 'test': {
                     'type': 'mysql',
-                    'server': 'localhost',  # @TODO
+                    'server': 'thishostshouldnotexist',
                     'port': 3306,
                     'schema': 'dbt_test_schema',
                     'username': 'dbt',
@@ -46,13 +47,15 @@ class TestMySQLAdapter(unittest.TestCase):
             self._adapter = MySQLAdapter(self.config)
         return self._adapter
 
-    def test_acquire_connection(self):
+    @mock.patch('dbt.adapters.mysql.connections.mysql.connector')
+    def test_acquire_connection(self, connector):
         connection = self.adapter.acquire_connection('dummy')
 
+        connector.connect.assert_not_called()
         connection.handle
-
         self.assertEqual(connection.state, 'open')
         self.assertNotEqual(connection.handle, None)
+        connector.connect.assert_called_once()
 
     def test_cancel_open_connections_empty(self):
         self.assertEqual(len(list(self.adapter.cancel_open_connections())), 0)
