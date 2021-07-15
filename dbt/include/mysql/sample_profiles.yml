@@ -9,7 +9,7 @@ default:
       schema: [schema]
       username: [username]
       password: [password]
-      driver: MySQL ODBC 8.0 ANSI Driver
+      jar: [absolute path JDBC to driver]
     prod:
       type: mysql
       server: [server/host]
@@ -18,4 +18,4 @@ default:
       schema: [schema]
       username: [username]
       password: [password]
-      driver: MySQL ODBC 8.0 ANSI Driver
+      jar: [absolute path JDBC to driver]

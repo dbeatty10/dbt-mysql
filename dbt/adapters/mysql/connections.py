@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 
-import mysql.connector
+import jaydebeapi
 
 import dbt.exceptions
 from dbt.adapters.sql import SQLConnectionManager
@@ -10,6 +10,7 @@ from dbt.contracts.connection import Credentials
 from dbt.logger import GLOBAL_LOGGER as logger
 from dataclasses import dataclass
 from typing import Optional
+from pathlib import Path, PurePath
 
 
 @dataclass
@@ -21,6 +22,7 @@ class MySQLCredentials(Credentials):
     username: Optional[str]
     password: Optional[str]
     charset: Optional[str]
+    jar: str
 
     _ALIASES = {
         "UID": "username",
@@ -57,6 +59,7 @@ class MySQLCredentials(Credentials):
             "database",
             "schema",
             "user",
+            "jar",
         )
 
 
@@ -70,30 +73,45 @@ class MySQLConnectionManager(SQLConnectionManager):
             return connection
 
         credentials = cls.get_credentials(connection.credentials)
-        kwargs = {}
 
-        kwargs["host"] = credentials.server
-        kwargs["user"] = credentials.username
-        kwargs["passwd"] = credentials.password
+        host = credentials.server
 
         if credentials.port:
-            kwargs["port"] = credentials.port
+            host = f"{host}:{credentials.port}"
+
+        jclassname = "com.mysql.cj.jdbc.Driver"
+        url = f"jdbc:mysql://{host}"
+        driver_args = {"user": credentials.username, "password": credentials.password}
+        jars = credentials.jar
+
+        # Convert any relative jar paths to be absolute (specifically for pytest)
+        jar_path = PurePath(credentials.jar)
+
+        # This is a hack since neither Path.resolve() or Path.cwd() worked as
+        # expected/hoped with pytest
+        if not jar_path.is_absolute():
+            project_root = Path(__file__).parents[3]
+            jar_path = project_root / jars
+            jars = str(jar_path)
 
         try:
-            connection.handle = mysql.connector.connect(**kwargs)
+            connection.handle = jaydebeapi.connect(jclassname=jclassname, url=url, driver_args=driver_args, jars=jars)
+            connection.handle.jconn.setAutoCommit(False)
             connection.state = 'open'
-        except mysql.connector.Error:
+
+        except jaydebeapi.Error:
 
             try:
                 logger.debug("Failed connection without supplying the `database`. "
                              "Trying again with `database` included.")
 
                 # Try again with the database included
-                kwargs["database"] = credentials.schema
+                url = f"jdbc:mysql://{host}/{credentials.schema}"
 
-                connection.handle = mysql.connector.connect(**kwargs)
+                connection.handle = jaydebeapi.connect(jclassname=jclassname, url=url, driver_args=driver_args, jars=jars)
+                connection.handle.jconn.setAutoCommit(False)
                 connection.state = 'open'
-            except mysql.connector.Error as e:
+            except jaydebeapi.Error as e:
 
                 logger.debug("Got an error when attempting to open a mysql "
                              "connection: '{}'"
@@ -118,12 +136,12 @@ class MySQLConnectionManager(SQLConnectionManager):
         try:
             yield
 
-        except mysql.connector.DatabaseError as e:
+        except jaydebeapi.DatabaseError as e:
             logger.debug('MySQL error: {}'.format(str(e)))
 
             try:
                 self.rollback_if_open()
-            except mysql.connector.Error:
+            except jaydebeapi.Error:
                 logger.debug("Failed to release connection!")
                 pass
 
