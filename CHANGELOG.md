@@ -1,5 +1,10 @@
 ## Unreleased (TBD)
-- Continuous integration using CircleCI ([#60](https://github.com/dbeatty10/dbt-mysql/pull/60))
+
+### Under the hood
+- Continuous integration using CircleCI ([#8](https://github.com/dbeatty10/dbt-mysql/issues/8), [#60](https://github.com/dbeatty10/dbt-mysql/pull/60))
+
+### Fixes
+- Execute incremental upsert queries separately ([#62](https://github.com/dbeatty10/dbt-mysql/issues/62), [#69](https://github.com/dbeatty10/dbt-mysql/pull/69))
 
 ## dbt-mysql 0.19.0 (February 3, 2021)
 - Latest versions of dbt (0.19.0) and dbt-adapter-tests (4.0) ([#53](https://github.com/dbeatty10/dbt-mysql/pull/53))
