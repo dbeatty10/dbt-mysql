@@ -5,6 +5,7 @@ default:
       type: mysql
       server: [server/host]
       port: [port]  # optional
+      database: [schema] # optional, should be same as schema
       schema: [schema]
       username: [username]
       password: [password]
@@ -13,6 +14,7 @@ default:
       type: mysql
       server: [server/host]
       port: [port]  # optional
+      database: [schema] # optional, should be same as schema
       schema: [schema]
       username: [username]
       password: [password]

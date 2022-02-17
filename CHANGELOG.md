@@ -1,3 +1,6 @@
+## Unreleased (TBD)
+- Continuous integration using CircleCI ([#60](https://github.com/dbeatty10/dbt-mysql/pull/60))
+
 ## dbt-mysql 0.19.0 (February 3, 2021)
 - Latest versions of dbt (0.19.0) and dbt-adapter-tests (4.0) ([#53](https://github.com/dbeatty10/dbt-mysql/pull/53))
 

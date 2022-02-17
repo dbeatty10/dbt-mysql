@@ -1,0 +1,5 @@
+dbt-core==0.19.0
+mysql-connector-python==8.0.23
+
+# dbt's 3rd level dependency broken, so locking said dependency "agate" to working version 1.6.1
+agate==1.6.1
