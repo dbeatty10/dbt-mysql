@@ -1,6 +1,5 @@
 from concurrent.futures import Future
-from dataclasses import dataclass
-from typing import Optional, List, Dict, Any, Union, Iterable
+from typing import Optional, List, Dict, Any, Iterable
 import agate
 
 import dbt
@@ -60,7 +59,8 @@ class MySQLAdapter(SQLAdapter):
         for row in results:
             if len(row) != 4:
                 raise dbt.exceptions.RuntimeException(
-                    f'Invalid value from "mysql__list_relations_without_caching({kwargs})", '
+                    "Invalid value from "
+                    f'"mysql__list_relations_without_caching({kwargs})", '
                     f'got {len(row)} values, expected 4'
                 )
             _, name, _schema, relation_type = row
@@ -117,6 +117,7 @@ class MySQLAdapter(SQLAdapter):
 
     def get_catalog(self, manifest):
         schema_map = self._get_catalog_schemas(manifest)
+
         if len(schema_map) > 1:
             dbt.exceptions.raise_compiler_error(
                 f'Expected only one database in get_catalog, found '
@@ -193,7 +194,7 @@ class MySQLAdapter(SQLAdapter):
         elif location == 'prepend':
             return f"concat({value}, '{add_to}')"
         else:
-            raise RuntimeException(
+            raise dbt.exceptions.RuntimeException(
                 f'Got an unexpected location value of "{location}"'
             )
 
@@ -215,7 +216,9 @@ class MySQLAdapter(SQLAdapter):
         alias_b = "B"
         columns_csv_a = ', '.join([f"{alias_a}.{name}" for name in names])
         columns_csv_b = ', '.join([f"{alias_b}.{name}" for name in names])
-        join_condition = ' AND '.join([f"{alias_a}.{name} = {alias_b}.{name}" for name in names])
+        join_condition = " AND ".join(
+            [f"{alias_a}.{name} = {alias_b}.{name}" for name in names]
+        )
         first_column = names[0]
 
         # MySQL doesn't have an EXCEPT or MINUS operator, so we need to simulate it
