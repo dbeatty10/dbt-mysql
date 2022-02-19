@@ -1,6 +1,9 @@
 ## Unreleased (TBD)
 
-## dbt-mysql 0.19.0.1rc1 (February 16, 2021)
+## dbt-mysql 0.19.0.1 (February 19, 2022)
+- Optional `ssl_disabled` property ([#67](https://github.com/dbeatty10/dbt-mysql/pull/67))
+
+## dbt-mysql 0.19.0.1rc1 (February 16, 2022)
 
 ### Under the hood
 - Continuous integration using CircleCI ([#8](https://github.com/dbeatty10/dbt-mysql/issues/8), [#60](https://github.com/dbeatty10/dbt-mysql/pull/60))
