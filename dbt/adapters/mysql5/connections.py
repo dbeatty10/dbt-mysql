@@ -21,6 +21,7 @@ class MySQLCredentials(Credentials):
     username: Optional[str]
     password: Optional[str]
     charset: Optional[str]
+    ssl_disabled: Optional[bool]
 
     _ALIASES = {
         "UID": "username",
@@ -75,6 +76,9 @@ class MySQLConnectionManager(SQLConnectionManager):
         kwargs["host"] = credentials.server
         kwargs["user"] = credentials.username
         kwargs["passwd"] = credentials.password
+
+        if credentials.ssl_disabled:
+            kwargs["ssl_disabled"] = credentials.ssl_disabled
 
         if credentials.port:
             kwargs["port"] = credentials.port

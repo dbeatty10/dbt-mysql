@@ -97,6 +97,7 @@ your_profile_name:
       schema: analytics
       username: your_mysql_username
       password: your_mysql_password
+      ssl_disabled: True
 ```
 
 | Option          | Description                                                                         | Required?                                                          | Example                                        |
@@ -107,6 +108,7 @@ your_profile_name:
 | schema          | Specify the schema (database) to build models into                                  | Required                                                           | `analytics`                                    |
 | username        | The username to use to connect to the server                                        | Required                                                           | `dbt_admin`                                    |
 | password        | The password to use for authenticating to the server                                | Required                                                           | `correct-horse-battery-staple`                 |
+| ssl_disabled    | Set to enable or disable TLS connectivity to mysql5.x                               | Optional                                                           | `True` or `False`                              |
 
 ### Notes
 
