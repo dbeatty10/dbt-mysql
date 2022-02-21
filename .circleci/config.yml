@@ -36,7 +36,6 @@ jobs:
     environment:
       DBT_INVOCATION_ENV: circle
       DBT_MYSQL_SERVER_NAME: mysql-server-5-7
-      DBT_MYSQL_PORT: 3306
     docker:
       - image: fishtownanalytics/test-container:9
       - image: mysql:5.7

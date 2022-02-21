@@ -23,7 +23,6 @@ pytest test/mysql.dbtspec
 
 Create the following environment variables (e.g., `export {VARIABLE}={value}` in a bash shell or via a tool like [`direnv`](https://direnv.net/)):
     * `DBT_MYSQL_SERVER_NAME`
-    * `DBT_MYSQL_PORT`
     * `DBT_MYSQL_USERNAME`
     * `DBT_MYSQL_PASSWORD`
 
