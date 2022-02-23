@@ -1,4 +1,5 @@
 ## Unreleased (TBD)
+- Integration tests for MySQL 5.7 ([#70](https://github.com/dbeatty10/dbt-mysql/issues/70), [#71](https://github.com/dbeatty10/dbt-mysql/pull/71))
 
 ## dbt-mysql 0.19.0.1 (February 19, 2022)
 - Optional `ssl_disabled` property ([#67](https://github.com/dbeatty10/dbt-mysql/pull/67))

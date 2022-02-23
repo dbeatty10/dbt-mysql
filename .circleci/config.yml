@@ -10,24 +10,46 @@ jobs:
       - checkout
       - run: tox -e flake8,unit
 
-  integration:
+  integration-8-0:
     environment:
       DBT_INVOCATION_ENV: circle
-      DBT_MYSQL_SERVER_NAME: mysql_server
+      DBT_MYSQL_SERVER_NAME: mysql-server-8-0
     docker:
       - image: fishtownanalytics/test-container:9
       - image: mysql:8.0
         environment:
           MYSQL_ROOT_PASSWORD: dbt
-        name: mysql_server
+        name: mysql-server-8-0
     steps:
       - checkout
       - run:
           name: Wait for MySQL
-          command: dockerize -wait tcp://mysql_server:3306 -timeout 5m -wait-retry-interval 5s
+          command: dockerize -wait tcp://mysql-server-8-0:3306 -timeout 5m -wait-retry-interval 5s
       - run:
           name: Run integration tests
-          command: tox -e integration-mysql
+          command: tox -e integration-mysql-8.0
+          no_output_timeout: 1h
+      - store_artifacts:
+          path: ./logs
+
+  integration-5-7:
+    environment:
+      DBT_INVOCATION_ENV: circle
+      DBT_MYSQL_SERVER_NAME: mysql-server-5-7
+    docker:
+      - image: fishtownanalytics/test-container:9
+      - image: mysql:5.7
+        environment:
+          MYSQL_ROOT_PASSWORD: dbt
+        name: mysql-server-5-7
+    steps:
+      - checkout
+      - run:
+          name: Wait for MySQL
+          command: dockerize -wait tcp://mysql-server-5-7:3306 -timeout 5m -wait-retry-interval 5s
+      - run:
+          name: Run integration tests
+          command: tox -e integration-mysql-5.7
           no_output_timeout: 1h
       - store_artifacts:
           path: ./logs
@@ -37,6 +59,9 @@ workflows:
   test-everything:
     jobs:
       - unit
-      - integration:
+      - integration-8-0:
+          requires:
+            - unit
+      - integration-5-7:
           requires:
             - unit
