@@ -87,3 +87,6 @@ workflows:
       - integration-5-7:
           requires:
             - unit
+      - integration-mariadb-10-5:
+          requires:
+            - unit
