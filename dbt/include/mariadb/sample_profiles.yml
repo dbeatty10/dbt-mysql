@@ -1,0 +1,21 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: mariadb
+      server: [server/host]
+      port: [port]  # optional
+      database: [schema] # optional, should be same as schema
+      schema: [schema]
+      username: [username]
+      password: [password]
+      driver: MySQL ODBC 8.0 ANSI Driver
+    prod:
+      type: mariadb
+      server: [server/host]
+      port: [port]  # optional
+      database: [schema] # optional, should be same as schema
+      schema: [schema]
+      username: [username]
+      password: [password]
+      driver: MySQL ODBC 8.0 ANSI Driver

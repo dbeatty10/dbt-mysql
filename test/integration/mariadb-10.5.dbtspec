@@ -1,6 +1,6 @@
 
 target:
-  type: mysql
+  type: mariadb
   port: 3306
   database: dbt_test_{{ var('_dbt_random_suffix') }}
   schema: dbt_test_{{ var('_dbt_random_suffix') }}
