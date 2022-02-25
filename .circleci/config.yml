@@ -41,8 +41,9 @@ jobs:
       - image: mysql:5.7
         environment:
           MYSQL_ROOT_PASSWORD: dbt
-        command: [--explicit-defaults-for-timestamp=ON, sql_mode="ALLOW_INVALID_DATES\,ONLY_FULL_GROUP_BY\,STRICT_TRANS_TABLES\,NO_ZERO_IN_DATE\,ERROR_FOR_DIVISION_BY_ZERO\,NO_AUTO_CREATE_USER\,NO_ENGINE_SUBSTITUTION"]
+        command: [--explicit-defaults-for-timestamp=ON]
         name: mysql-server-5-7
+
 
     steps:
       - checkout
