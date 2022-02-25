@@ -41,6 +41,7 @@ jobs:
       - image: mysql:5.7
         environment:
           MYSQL_ROOT_PASSWORD: dbt
+        command: [--explicit-defaults-for-timestamp=ON]
         name: mysql-server-5-7
     steps:
       - checkout
@@ -63,6 +64,7 @@ jobs:
       - image: mariadb:10.5
         environment:
           MYSQL_ROOT_PASSWORD: dbt
+        command: [--explicit-defaults-for-timestamp=ON]
         name: mariadb-server-10-5
     steps:
       - checkout
