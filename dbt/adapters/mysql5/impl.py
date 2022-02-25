@@ -60,7 +60,7 @@ class MySQLAdapter(SQLAdapter):
             if len(row) != 4:
                 raise dbt.exceptions.RuntimeException(
                     "Invalid value from "
-                    f'"mysql__list_relations_without_caching({kwargs})", '
+                    f'"mysql5__list_relations_without_caching({kwargs})", '
                     f'got {len(row)} values, expected 4'
                 )
             _, name, _schema, relation_type = row
@@ -139,7 +139,7 @@ class MySQLAdapter(SQLAdapter):
     ) -> agate.Table:
         if len(schemas) != 1:
             dbt.exceptions.raise_compiler_error(
-                f'Expected only one schema in mysql _get_one_catalog, found '
+                f'Expected only one schema in mysql5 _get_one_catalog, found '
                 f'{schemas}'
             )
 
