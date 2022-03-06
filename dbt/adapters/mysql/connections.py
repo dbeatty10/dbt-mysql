@@ -20,7 +20,7 @@ class MySQLCredentials(Credentials):
     schema: str
     username: Optional[str]
     password: Optional[str]
-    charset: Optional[str]
+    charset: Optional[str] = None
 
     _ALIASES = {
         "UID": "username",

@@ -1,4 +1,5 @@
 from concurrent.futures import Future
+from dataclasses import asdict
 from typing import Optional, List, Dict, Any, Iterable
 import agate
 
@@ -84,7 +85,7 @@ class MariaDBAdapter(SQLAdapter):
 
         for column in columns:
             # convert MariaDBColumns into catalog dicts
-            as_dict = column.to_dict()
+            as_dict = asdict(column)
             as_dict['column_name'] = as_dict.pop('column', None)
             as_dict['column_type'] = as_dict.pop('dtype')
             as_dict['table_database'] = None
