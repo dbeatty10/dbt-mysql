@@ -12,11 +12,11 @@ from dataclasses import dataclass
 from typing import Optional
 
 
-@dataclass
+@dataclass(init=False)
 class MariaDBCredentials(Credentials):
     server: str
     port: Optional[int]
-    database: Optional[str]
+    database: Optional[str] = None
     schema: str
     username: Optional[str]
     password: Optional[str]
@@ -30,6 +30,11 @@ class MariaDBCredentials(Credentials):
         "host": "server",
     }
 
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+            self.database = None
+
     def __post_init__(self):
         # Database and schema are treated as the same thing
         if (
@@ -42,7 +47,6 @@ class MariaDBCredentials(Credentials):
                 f"On MariaDB, database must be omitted or have the same value as"
                 f" schema."
             )
-        self.database = None
 
     @property
     def type(self):
