@@ -1,5 +1,6 @@
 ## Unreleased (TBD)
 
+## dbt-mysql 0.19.1 (March 6, 2022)
 ### Under the hood
 - Integration tests for MySQL 5.7 ([#70](https://github.com/dbeatty10/dbt-mysql/issues/70), [#71](https://github.com/dbeatty10/dbt-mysql/pull/71))
 - Integration tests for MariaDB 10.5 ([#72](https://github.com/dbeatty10/dbt-mysql/pull/72))
