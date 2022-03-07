@@ -53,8 +53,8 @@ setup(
         ],
     },
     install_requires=[
-        "dbt-core==0.19.0",
-        "mysql-connector-python~=8.0.22",
+        "dbt-core==0.19.1",
+        "mysql-connector-python>=8.0.0,<8.1",
         # dbt's 3rd level dependency broken, so restricting said dependency "agate" to working versions
         "agate>=1.6,<1.6.2",
     ],

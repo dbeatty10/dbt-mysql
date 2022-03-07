@@ -12,15 +12,15 @@ from dataclasses import dataclass
 from typing import Optional
 
 
-@dataclass
+@dataclass(init=False)
 class MySQLCredentials(Credentials):
     server: str
-    port: Optional[int]
-    database: Optional[str]
+    port: Optional[int] = None
+    database: Optional[str] = None
     schema: str
-    username: Optional[str]
-    password: Optional[str]
-    charset: Optional[str]
+    username: Optional[str] = None
+    password: Optional[str] = None
+    charset: Optional[str] = None
 
     _ALIASES = {
         "UID": "username",
@@ -28,6 +28,11 @@ class MySQLCredentials(Credentials):
         "PWD": "password",
         "host": "server",
     }
+
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+            self.database = None
 
     def __post_init__(self):
         # mysql classifies database and schema as the same thing
@@ -41,7 +46,6 @@ class MySQLCredentials(Credentials):
                 f"On MySQL, database must be omitted or have the same value as"
                 f" schema."
             )
-        self.database = None
 
     @property
     def type(self):
