@@ -15,11 +15,11 @@ from typing import Optional
 @dataclass(init=False)
 class MySQLCredentials(Credentials):
     server: str
-    port: Optional[int]
+    port: Optional[int] = None
     database: Optional[str] = None
     schema: str
-    username: Optional[str]
-    password: Optional[str]
+    username: Optional[str] = None
+    password: Optional[str] = None
     charset: Optional[str] = None
 
     _ALIASES = {
