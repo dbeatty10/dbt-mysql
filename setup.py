@@ -2,42 +2,41 @@
 import os
 import sys
 
-from setuptools import setup
-
-
 if sys.version_info < (3, 6, 2):
     print('Error: dbt-mysql does not support this version of Python.')
     print('Please upgrade to Python 3.6.2 or higher.')
     sys.exit(1)
 
 
-this_directory = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(this_directory, 'README.md')) as f:
-    long_description = f.read()
+from setuptools import setup
+try:
+    from setuptools import find_namespace_packages
+except ImportError:
+    # the user has a downlevel version of setuptools.
+    print('Error: dbt-mysql requires setuptools v40.1.0 or higher.')
+    print('Please upgrade setuptools with "pip install --upgrade setuptools" '
+          'and try again')
+    sys.exit(1)
 
 
 package_name = "dbt-mysql"
 package_version = "0.19.1"
 description = """The MySQL adapter plugin for dbt (data build tool)"""
 
+this_directory = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_directory, 'README.md')) as f:
+    long_description = f.read()
 
 setup(
     name=package_name,
     version=package_version,
-
     description=description,
     long_description=long_description,
     long_description_content_type='text/markdown',
-
     author="Doug Beatty",
     author_email="doug.beatty@gmail.com",
     url="https://github.com/dbeatty10/dbt-mysql",
-    packages=[
-        'dbt.adapters.mysql',
-        'dbt.include.mysql',
-        'dbt.adapters.mysql5',
-        'dbt.include.mysql5',
-    ],
+    packages=find_namespace_packages(include=['dbt', 'dbt.*']),
     package_data={
         'dbt.include.mysql': [
             'macros/*.sql',
@@ -51,13 +50,18 @@ setup(
             'dbt_project.yml',
             'sample_profiles.yml',
         ],
+        'dbt.include.mariadb': [
+            'macros/*.sql',
+            'macros/materializations/**/*.sql',
+            'dbt_project.yml',
+            'sample_profiles.yml',
+        ],
     },
     install_requires=[
-        "dbt-core==0.19.2",
+        'dbt-core=={}'.format(package_version),
         "mysql-connector-python>=8.0.0,<8.1",
-        # dbt's 3rd level dependency broken, so restricting said dependency "agate" to working versions
-        "agate>=1.6,<1.6.2",
     ],
+    zip_safe=False,
     classifiers=[
         'Development Status :: 3 - Alpha',
 
