@@ -1,4 +1,5 @@
 ## Unreleased (TBD)
+- Support dbt v0.19.2 ([#81](https://github.com/dbeatty10/dbt-mysql/pull/81))
 
 ## dbt-mysql 0.19.1 (March 6, 2022)
 ### Under the hood
@@ -6,7 +7,7 @@
 - Integration tests for MariaDB 10.5 ([#72](https://github.com/dbeatty10/dbt-mysql/pull/72))
 - Support for MariaDB 10.5 ([#32](https://github.com/dbeatty10/dbt-mysql/issues/32), [#73](https://github.com/dbeatty10/dbt-mysql/pull/73))
 - Enable snapshot integration tests for MySQL 5.7 and MariaDB 10.5 ([#75](https://github.com/dbeatty10/dbt-mysql/issues/75), [#76](https://github.com/dbeatty10/dbt-mysql/pull/76))
-- Support 0.19.1 ([#80](https://github.com/dbeatty10/dbt-mysql/pull/80))
+- Support dbt v0.19.1 ([#80](https://github.com/dbeatty10/dbt-mysql/pull/80))
 
 ## dbt-mysql 0.19.0.1 (February 19, 2022)
 - Optional `ssl_disabled` property ([#67](https://github.com/dbeatty10/dbt-mysql/pull/67))
