@@ -41,16 +41,6 @@ If you use any bash special characters in your password (like `$`), then you wil
 #### MySQL 8.0
 `docker run --name mysql8.0 --net dev-network -v /Users/YOUR_USERNAME/Develop/mysql_data/8.0:/var/lib/mysql -p 3306:3306 -d -e MYSQL_ROOT_PASSWORD=$DBT_MYSQL_PASSWORD mysql:8.0`
 
-#### MySQL 5.6
-
-Contents of `/Users/YOUR_USERNAME/Develop/mysql_data/5.6/my.cnf`:
-```
-[mysqld]
-explicit_defaults_for_timestamp = true
-```
-
-`docker run --name mysql5.6 --net dev-network -v /Users/YOUR_USERNAME/Develop/mysql_data/5.6:/var/lib/mysql -v /Users/YOUR_USERNAME/Develop/mysql_data/5.6/my.cnf:/etc/my.cnf -p 3308:3306 -d -e MYSQL_ROOT_PASSWORD=$DBT_MYSQL_PASSWORD mysql:5.6`
-
 #### MySQL 5.7
 
 Contents of `/Users/YOUR_USERNAME/Develop/mysql_data/5.7/my.cnf`:
@@ -66,7 +56,7 @@ sql_mode = "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ALLOW_INVALID
 
 Run the test specs in this repository:
 ```
-pytest -v test/integration/mysql-5.6.dbtspec && \
+pytest -v test/integration/mariadb-10.5.dbtspec && \
 pytest -v test/integration/mysql-5.7.dbtspec && \
 pytest -v test/integration/mysql-8.0.dbtspec
 ```
