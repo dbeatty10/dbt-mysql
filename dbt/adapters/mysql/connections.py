@@ -51,6 +51,10 @@ class MySQLCredentials(Credentials):
     def type(self):
         return "mysql"
 
+    @property
+    def unique_field(self):
+        return self.schema
+
     def _connection_keys(self):
         """
         Returns an iterator of keys to pretty-print in 'dbt debug'

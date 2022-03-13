@@ -20,8 +20,8 @@ except ImportError:
 
 
 package_name = "dbt-mysql"
-package_version = "0.20.2"
-description = """The MySQL adapter plugin for dbt (data build tool)"""
+package_version = "0.21.1"
+description = """The MySQL adapter plugin for dbt"""
 
 this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'README.md')) as f:
