@@ -1,4 +1,5 @@
 ## Unreleased (TBD)
+- Support dbt v1.0 ([#90](https://github.com/dbeatty10/dbt-mysql/pull/90))
 
 ## dbt-mysql 0.21.1 (March 13, 2022)
 - Support dbt v0.21.1 ([#89](https://github.com/dbeatty10/dbt-mysql/pull/89))
