@@ -1,15 +1,15 @@
 {% macro mysql__get_test_sql(main_sql, fail_calc, warn_if, error_if, limit) -%}
-    SELECT
+    select
       {{ fail_calc }} as failures,
-      CASE
-      	WHEN {{ fail_calc }} {{ warn_if | replace("!=","<>") }} THEN 'true'
-      	ELSE 'false'
-      END AS should_warn,
-      CASE
-      	WHEN {{ fail_calc }} {{ error_if | replace("!=","<>") }} THEN 'true'
-      	ELSE 'false'
-      END AS should_error
-    FROM (
+      case
+        when {{ fail_calc }} {{ warn_if | replace("!=","<>") }} then 'true'
+        else 'false'
+      end as should_warn,
+      case
+        when {{ fail_calc }} {{ error_if | replace("!=","<>") }} then 'true'
+        else 'false'
+      end as should_error
+    from (
       {{ main_sql }}
       {{ "limit " ~ limit if limit != none }}
     ) dbt_internal_test
