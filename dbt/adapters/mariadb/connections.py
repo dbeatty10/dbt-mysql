@@ -8,9 +8,10 @@ from dbt.contracts.connection import AdapterResponse
 from dbt.contracts.connection import Connection
 from dbt.contracts.connection import Credentials
 from dbt.events import AdapterLogger
-logger = AdapterLogger("mysql")
 from dataclasses import dataclass
 from typing import Optional
+
+logger = AdapterLogger("mysql")
 
 
 @dataclass(init=False)
