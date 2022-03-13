@@ -20,7 +20,7 @@ except ImportError:
 
 
 package_name = "dbt-mysql"
-package_version = "0.19.1"
+package_version = "0.19.2"
 description = """The MySQL adapter plugin for dbt (data build tool)"""
 
 this_directory = os.path.abspath(os.path.dirname(__file__))
