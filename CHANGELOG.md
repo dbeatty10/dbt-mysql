@@ -1,4 +1,6 @@
 ## Unreleased (TBD)
+
+## dbt-mysql 0.20.1 (March 13, 2022)
 - Remove integration tests and docs for MySQL 5.6 ([#74](https://github.com/dbeatty10/dbt-mysql/issues/74), [#86](https://github.com/dbeatty10/dbt-mysql/pull/86))
 - Support dbt v0.20.1 ([#87](https://github.com/dbeatty10/dbt-mysql/pull/87))
 
