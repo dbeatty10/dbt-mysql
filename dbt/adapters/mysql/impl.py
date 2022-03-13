@@ -13,8 +13,10 @@ from dbt.adapters.mysql import MySQLRelation
 from dbt.adapters.mysql import MySQLColumn
 from dbt.adapters.base import BaseRelation
 from dbt.clients.agate_helper import DEFAULT_TYPE_TESTER
-from dbt.logger import GLOBAL_LOGGER as logger
+from dbt.events import AdapterLogger
 from dbt.utils import executor
+
+logger = AdapterLogger("mysql")
 
 LIST_SCHEMAS_MACRO_NAME = 'list_schemas'
 LIST_RELATIONS_MACRO_NAME = 'list_relations_without_caching'
