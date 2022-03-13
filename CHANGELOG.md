@@ -1,4 +1,6 @@
 ## Unreleased (TBD)
+
+## dbt-mysql 0.20.0 (March 13, 2022)
 - Support dbt v0.20.0 ([#83](https://github.com/dbeatty10/dbt-mysql/pull/83))
 - Report status as `SUCCESS` instead of `Unknown cursor state/status` ([#84](https://github.com/dbeatty10/dbt-mysql/pull/84))
 
