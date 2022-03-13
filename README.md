@@ -6,7 +6,6 @@ This is an experimental plugin:
 - We have not tested it extensively
 - Storage engines other than the default of InnoDB are untested
 - Only tested with [dbt-adapter-tests](https://github.com/dbt-labs/dbt-adapter-tests) with the following:
-  - MySQL 5.6
   - MySQL 5.7
   - MySQL 8.0
   - MariaDB 10.5
@@ -19,10 +18,7 @@ Table of Contents
 
    * [Installation](#installation)
    * [Supported features](#supported-features)
-      * [MySQL 8.0](#mysql-80)
-      * [MySQL 5.6 and 5.7](#mysql-56-and-57)
-         * [MySQL 5.6 configuration gotchas](#mysql-56-configuration-gotchas)
-         * [MySQL 5.7 configuration gotchas](#mysql-57-configuration-gotchas)
+      * [MySQL 5.7 configuration gotchas](#mysql-57-configuration-gotchas)
    * [Configuring your profile](#configuring-your-profile)
    * [Notes](#notes)
    * [Running Tests](#running-tests)
@@ -37,7 +33,7 @@ $ pip install dbt-mysql
 
 ### Supported features
 
-| MariaDB 10.5 | MySQL 5.6 / 5.7 | MySQL 8.0 | Feature                     |
+| MariaDB 10.5 | MySQL 5.7 | MySQL 8.0 | Feature                     |
 |:---------:|:---------:|:---:|-----------------------------|
 |     ✅     |     ✅     |  ✅  | Table materialization       |
 |     ✅     |     ✅     |  ✅  | View materialization        |
@@ -51,21 +47,9 @@ $ pip install dbt-mysql
 
 Notes:
 - Ephemeral materializations rely upon [Common Table Expressions](https://en.wikipedia.org/wiki/Hierarchical_and_recursive_queries_in_SQL) (CTEs), which are not supported until MySQL 8.0
-- MySQL 5.6 and 5.7 have some configuration gotchas that affect snapshots (see below).
+- MySQL 5.7 has some configuration gotchas that affect snapshots (see below).
 
-##### MySQL 5.6 configuration gotchas
-
-dbt snapshots might not work properly due to [automatic initialization and updating for `TIMESTAMP`](https://dev.mysql.com/doc/refman/5.6/en/timestamp-initialization.html) if:
-- the output of `SHOW VARIABLES LIKE 'sql_mode'` includes `NO_ZERO_DATE`
-- the output of `SHOW GLOBAL VARIABLES LIKE 'explicit_defaults_for_timestamp'` has a value of `OFF`
-
-A solution is to include the following in a `*.cnf` file:
-```
-[mysqld]
-explicit_defaults_for_timestamp = true
-```
-
-##### MySQL 5.7 configuration gotchas
+#### MySQL 5.7 configuration gotchas
 
 dbt snapshots might not work properly due to [automatic initialization and updating for `TIMESTAMP`](https://dev.mysql.com/doc/refman/5.7/en/timestamp-initialization.html) if:
 - the output of `SHOW VARIABLES LIKE 'sql_mode'` includes `NO_ZERO_DATE`
