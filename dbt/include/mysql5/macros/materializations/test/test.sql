@@ -1,4 +1,4 @@
-{% macro mysql__get_test_sql(main_sql, fail_calc, warn_if, error_if, limit) -%}
+{% macro mysql5__get_test_sql(main_sql, fail_calc, warn_if, error_if, limit) -%}
     SELECT
       {{ fail_calc }} as failures,
       CASE
