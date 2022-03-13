@@ -10,7 +10,7 @@ target:
 sequences:
 
   # List of sequences:
-  # https://github.com/fishtown-analytics/dbt-adapter-tests/tree/master/pytest_dbt_adapter/sequences
+  # https://github.com/dbt-labs/dbt-adapter-tests/tree/main/pytest_dbt_adapter/sequences
 
   test_dbt_empty: empty
   test_dbt_base: base
