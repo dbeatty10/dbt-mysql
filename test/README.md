@@ -17,7 +17,7 @@ pytest test/mysql.dbtspec
 ## Full example
 
 ### Prerequisites
-- [`pytest-dbt-adapter`](https://github.com/fishtown-analytics/dbt-adapter-tests) package
+- [`pytest-dbt-adapter`](https://github.com/dbt-labs/dbt-adapter-tests) package
 
 ### Environment variables
 

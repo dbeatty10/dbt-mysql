@@ -5,12 +5,12 @@ This plugin ports [dbt](https://getdbt.com) functionality to MySQL and MariaDB.
 This is an experimental plugin:
 - We have not tested it extensively
 - Storage engines other than the default of InnoDB are untested
-- Only tested with [dbt-adapter-tests](https://github.com/fishtown-analytics/dbt-adapter-tests) with the following:
+- Only tested with [dbt-adapter-tests](https://github.com/dbt-labs/dbt-adapter-tests) with the following:
   - MySQL 5.6
   - MySQL 5.7
   - MySQL 8.0
   - MariaDB 10.5
-- Compatiblity with other [dbt packages](https://hub.getdbt.com/) (like [dbt_utils](https://hub.getdbt.com/fishtown-analytics/dbt_utils/latest/)) is also untested
+- Compatiblity with other [dbt packages](https://hub.getdbt.com/) (like [dbt_utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/)) is also untested
 
 Please read these docs carefully and use at your own risk. [Issues](https://github.com/dbeatty10/dbt-mysql/issues/new) and [PRs](https://github.com/dbeatty10/dbt-mysql/blob/main/CONTRIBUTING.rst#contributing) welcome!
 
@@ -151,4 +151,4 @@ See [test/README.md](test/README.md) for details on running the integration test
 
 ### Credits
 
-dbt-mysql borrows from [dbt-spark](https://github.com/fishtown-analytics/dbt-spark) and [dbt-sqlite](https://github.com/codeforkjeff/dbt-sqlite) since Spark and SQLite also use two-part relation names.
+dbt-mysql borrows from [dbt-spark](https://github.com/dbt-labs/dbt-spark) and [dbt-sqlite](https://github.com/codeforkjeff/dbt-sqlite) since Spark and SQLite also use two-part relation names.
