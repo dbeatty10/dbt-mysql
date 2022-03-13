@@ -150,17 +150,17 @@ class MySQLConnectionManager(SQLConnectionManager):
             raise dbt.exceptions.RuntimeException(e) from e
 
     @classmethod
-    def get_status(cls, cursor):
-        # There's no real way to get this from mysql-connector-python.
-        # So just return "OK".
-        return "OK"
-
-    @classmethod
     def get_response(cls, cursor) -> AdapterResponse:
-        code = "Unknown cursor state/status"
+        code = "SUCCESS"
+        num_rows = 0
 
+        if cursor is not None and cursor.rowcount is not None:
+            num_rows = cursor.rowcount
+
+        # There's no real way to get the status from the mysql-connector-python driver.
+        # So just return the default value.
         return AdapterResponse(
-            _message="{} {}".format(code, cursor.rowcount),
-            rows_affected=cursor.rowcount,
+            _message="{} {}".format(code, num_rows),
+            rows_affected=num_rows,
             code=code
         )
