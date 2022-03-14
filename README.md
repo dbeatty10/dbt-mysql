@@ -23,6 +23,7 @@ Table of Contents
    * [Notes](#notes)
    * [Running Tests](#running-tests)
    * [Reporting bugs and contributing code](#reporting-bugs-and-contributing-code)
+   * [Demo of Jaffle Shop](#demo-of-jaffle-shop)
 
 ### Installation
 This plugin can be installed via pip:
@@ -128,6 +129,12 @@ Additionally, many DBMS have relation names with three parts whereas MySQL has o
 ### Running Tests
 
 See [test/README.md](test/README.md) for details on running the integration tests.
+
+### Demo of Jaffle Shop
+
+The dbt team has made a jaffle shop demo here: https://github.com/dbt-labs/jaffle_shop
+
+You can follow along that tutorial and see the included jaffle_shop directory for walking through it with mysql, the MYSQL_README.md in that directory will walk you through the setup.
 
 ### Reporting bugs and contributing code
 

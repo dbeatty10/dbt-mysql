@@ -12,3 +12,5 @@ dbt-integration-tests
 test/integration/.user.yml
 .DS_Store
 .vscode
+jaffle_shop/target/
+jaffle_shop/logs/
