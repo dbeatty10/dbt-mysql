@@ -1,2 +1,3 @@
+# Install postgres first to get a latest dbt-core version
 dbt-postgres
 dbt-mysql
