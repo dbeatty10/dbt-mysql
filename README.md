@@ -134,7 +134,7 @@ See [test/README.md](test/README.md) for details on running the integration test
 
 The dbt team has made a jaffle shop demo here: https://github.com/dbt-labs/jaffle_shop
 
-You can follow along that tutorial and see the included jaffle_shop directory for walking through it with mysql, the MYSQL_README.md in that directory will walk you through the setup.
+You can follow along that tutorial and see the included [jaffle_shop directory](https://github.com/avaitla/dbt-mysql/blob/main/jaffle_shop/README.md) for walking through it with mysql.
 
 ### Reporting bugs and contributing code
 
