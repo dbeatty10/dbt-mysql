@@ -54,11 +54,19 @@
     1. Drop the existing relation
     2. Rename the new relation to existing relation
   #}
-  {% call statement('drop_relation') %}
-    drop {{ to_relation.type }} if exists {{ to_relation }} cascade
+  {% call statement('create_table_as') %}
+      create table if not exists {{ to_relation }} (id int primary key);
   {% endcall %}
   {% call statement('rename_relation') %}
-    rename table {{ from_relation }} to {{ to_relation }}
+    rename table {{ to_relation }} to {{ from_relation.schema }}.dbt_temporary,
+                 {{ from_relation }} to {{ to_relation }},
+                 {{ from_relation.schema }}.dbt_temporary to {{ from_relation }};
+  {% endcall %}
+  {% call statement('drop_relation') %}
+      drop table if exists {{ to_relation }} cascade;
+  {% endcall %}
+  {% call statement('drop_relation') %}
+      drop view if exists {{ to_relation }} cascade;
   {% endcall %}
 {% endmacro %}
 
