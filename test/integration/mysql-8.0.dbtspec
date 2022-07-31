@@ -1,7 +1,7 @@
 
 target:
   type: mysql
-  port: 3306
+  port: "{{ env_var('DBT_MYSQL_80_PORT', '3306') | as_number }}"
   database: dbt_test_{{ var('_dbt_random_suffix') }}
   schema: dbt_test_{{ var('_dbt_random_suffix') }}
   server: "{{ env_var('DBT_MYSQL_SERVER_NAME', 'localhost') }}"

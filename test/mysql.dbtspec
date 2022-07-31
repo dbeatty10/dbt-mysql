@@ -1,9 +1,10 @@
 
 target:
   type: mysql
+  port: "{{ env_var('DBT_MYSQL_80_PORT', '3306') | as_number }}"
   server: "{{ env_var('DBT_MYSQL_SERVER_NAME', 'localhost') }}"
-  username: "{{ env_var('DBT_MYSQL_USERNAME', 'dbt_username') }}"
-  password: "{{ env_var('DBT_MYSQL_PASSWORD', 'dbt_password') }}"
+  username: "{{ env_var('DBT_MYSQL_USERNAME', 'root') }}"
+  password: "{{ env_var('DBT_MYSQL_PASSWORD', 'dbt') }}"
   schema: dbt_test_{{ var('_dbt_random_suffix') }}
 
 sequences:
