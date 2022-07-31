@@ -27,8 +27,8 @@ Table of Contents
 ### Installation
 This plugin can be installed via pip:
 
-```bash
-$ pip install dbt-mysql
+```shell
+$ python -m pip install dbt-mysql
 ```
 
 ### Supported features

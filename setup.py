@@ -16,7 +16,7 @@ try:
 except ImportError:
     # the user has a downlevel version of setuptools.
     print('Error: dbt requires setuptools v40.1.0 or higher.')
-    print('Please upgrade setuptools with "pip install --upgrade setuptools" '
+    print('Please upgrade setuptools with "python -m pip install --upgrade setuptools" '
           'and try again')
     sys.exit(1)
 
