@@ -1,5 +1,8 @@
 ## Unreleased (TBD)
+### Features
 - Support dbt v1.1 ([#100](https://github.com/dbeatty10/dbt-mysql/pull/100))
+### Under the hood
+- docker compose MySQL and MariaDB database services for local testing ([#9](https://github.com/dbeatty10/dbt-mysql/issues/9), [#104](https://github.com/dbeatty10/dbt-mysql/pull/104))
 
 ## dbt-mysql 1.0.0 (March 13, 2022)
 - Support dbt v1.0 ([#90](https://github.com/dbeatty10/dbt-mysql/pull/90))
