@@ -68,7 +68,8 @@ Ready to contribute? `Here's <https://jarv.is/notes/how-to-pull-request-fork-git
 
     $ python3 -m venv env
     $ source env/bin/activate
-    $ pip install -r requirements.txt -r requirements-dev.txt -r requirements-editable.txt
+    $ python3 -m pip install --upgrade pip
+    $ python3 -m pip install -r requirements.txt -r requirements-dev.txt -r requirements-editable.txt
 
 4. Create a branch for local development::
 
