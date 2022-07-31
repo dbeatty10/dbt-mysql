@@ -22,11 +22,42 @@ pytest test/mysql.dbtspec
 ### Environment variables
 
 Create the following environment variables (e.g., `export {VARIABLE}={value}` in a bash shell or via a tool like [`direnv`](https://direnv.net/)):
-    * `DBT_MYSQL_SERVER_NAME`
-    * `DBT_MYSQL_USERNAME`
-    * `DBT_MYSQL_PASSWORD`
+* `DBT_MYSQL_SERVER_NAME`
+* `DBT_MYSQL_USERNAME`
+* `DBT_MYSQL_PASSWORD`
+* `DBT_MARIADB_105_PORT`
+* `DBT_MYSQL_57_PORT`
+* `DBT_MYSQL_80_PORT`
+
+`.env.example` has a listing of environment variables and values. You can use it with Docker by configuring a `.env` file with appropriate variables:
+
+```shell
+cp .env.example .env
+$EDITOR .env
+```
+
+By default, [Docker will automatically load environment variables](https://docs.docker.com/compose/env-file/) from a file named `.env`.
 
 ### Docker
+
+#### Easiest
+
+This command will launch local databases for testing:
+```shell
+docker-compose up -d
+```
+
+Skip to down below and follow the instructions to ["Run tests"](#run-tests).
+
+When finished using the containers:
+```shell
+docker-compose down
+```
+
+#### Harder
+
+<details>
+  <summary>More complicated docker setup commands</summary>
 
 [Here](https://medium.com/@crmcmullen/how-to-run-mysql-in-a-docker-container-on-macos-with-persistent-local-data-58b89aec496a) is one guide on "How to Run MySQL in a Docker Container on macOS with Persistent Local Data".
 
@@ -52,11 +83,21 @@ sql_mode = "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ALLOW_INVALID
 
 `docker run --name mysql5.7 --net dev-network -v /Users/YOUR_USERNAME/Develop/mysql_data/5.7:/var/lib/mysql -v /Users/YOUR_USERNAME/Develop/mysql_data/5.7/my.cnf:/etc/my.cnf -p 3307:3306 -d -e MYSQL_ROOT_PASSWORD=$DBT_MYSQL_PASSWORD mysql:5.7`
 
+</details>
+
 ### Run tests
 
 Run the test specs in this repository:
-```
+```shell
 pytest -v test/integration/mariadb-10.5.dbtspec && \
 pytest -v test/integration/mysql-5.7.dbtspec && \
 pytest -v test/integration/mysql-8.0.dbtspec
+```
+
+Or run all the tests via tox:
+```shell
+tox -e flake8,unit && \
+tox -e integration-mariadb-10.5 && \
+tox -e integration-mysql-5.7 && \
+tox -e integration-mysql-8.0
 ```

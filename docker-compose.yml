@@ -1,0 +1,29 @@
+version: "3.5"
+services:
+  mysql-server-8-0:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DBT_MYSQL_PASSWORD}
+    ports:
+      - "${DBT_MYSQL_80_PORT}:3306"
+
+  mysql-server-5-7:
+    platform: linux/x86_64
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DBT_MYSQL_PASSWORD}
+    command: [--explicit-defaults-for-timestamp=ON]
+    ports:
+      - "${DBT_MYSQL_57_PORT}:3306"
+
+  mariadb-server-10-5:
+    image: mariadb:10.5
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DBT_MYSQL_PASSWORD}
+    command: [--explicit-defaults-for-timestamp=ON]
+    ports:
+      - "${DBT_MARIADB_105_PORT}:3306"
+
+networks:
+  default:
+    name: dbt-net
