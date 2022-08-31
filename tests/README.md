@@ -11,7 +11,7 @@ Here are the steps to run the integration tests:
 
 Assuming the applicable `pytest-dbt-adapter` package is installed and environment variables are set:
 ```bash
-pytest test/mysql.dbtspec
+PYTHONPATH=. pytest tests/functional/adapter/basic/mysql_test.py
 ```
 
 ## Full example
@@ -89,6 +89,10 @@ sql_mode = "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ALLOW_INVALID
 
 Run the test specs in this repository:
 ```shell
+PYTHONPATH=. pytest -v tests/functional/adapter/basic/mysql_80.py && \
+PYTHONPATH=. pytest -v tests/functional/adapter/basic/mysql_57.py && \
+PYTHONPATH=. pytest -v tests/functional/adapter/basic/maria_105.py
+```
 pytest -v test/integration/mariadb-10.5.dbtspec && \
 pytest -v test/integration/mysql-5.7.dbtspec && \
 pytest -v test/integration/mysql-8.0.dbtspec
