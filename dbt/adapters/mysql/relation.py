@@ -26,7 +26,11 @@ class MySQLRelation(BaseRelation):
 
     def __post_init__(self):
         if self.database != self.schema and self.database:
-            raise RuntimeException(f'Cannot set database {self.database} in mysql!')
+            raise RuntimeException(
+                f"Cannot set `database` to '{self.database}' in mysql!"
+                "You can either unset `database`, or make it match `schema`, "
+                f"currently set to '{self.schema}'"
+            )
 
     def render(self):
         if self.include_policy.database and self.include_policy.schema:
