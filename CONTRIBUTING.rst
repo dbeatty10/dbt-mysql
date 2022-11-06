@@ -70,6 +70,7 @@ Ready to contribute? `Here's <https://jarv.is/notes/how-to-pull-request-fork-git
     $ source env/bin/activate
     $ python3 -m pip install --upgrade pip
     $ python3 -m pip install -r requirements.txt -r requirements-dev.txt -r requirements-editable.txt
+    $ source env/bin/activate
 
 4. Create a branch for local development::
 
@@ -81,7 +82,7 @@ Ready to contribute? `Here's <https://jarv.is/notes/how-to-pull-request-fork-git
 
     $ python -m pytest -v test/unit
 
-   Instructions for running integration tests in `test/integration/README.md`.
+   Instructions for running integration tests in `test/README.md`.
 
 6. Commit your changes and push your branch to GitHub::
 
