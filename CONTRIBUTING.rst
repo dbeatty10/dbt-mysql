@@ -80,7 +80,7 @@ Ready to contribute? `Here's <https://jarv.is/notes/how-to-pull-request-fork-git
 
 5. Run tests::
 
-    $ python -m pytest -v test/unit
+    $ python -m pytest -v tests/unit
 
    Instructions for running integration tests in `test/README.md`.
 
