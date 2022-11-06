@@ -82,7 +82,7 @@ Ready to contribute? `Here's <https://jarv.is/notes/how-to-pull-request-fork-git
 
     $ python -m pytest -v tests/unit
 
-   Instructions for running integration tests in `test/README.md`.
+   Instructions for running integration tests in `tests/README.md`.
 
 6. Commit your changes and push your branch to GitHub::
 
