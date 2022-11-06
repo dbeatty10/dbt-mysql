@@ -1,8 +1,18 @@
 ## Unreleased (TBD)
+
 ### Features
 - Support dbt v1.1 ([#100](https://github.com/dbeatty10/dbt-mysql/pull/100))
+
+### Documentation
+- Include supported Python versions ([#115](https://github.com/dbeatty10/dbt-mysql/issues/115), [#116](https://github.com/dbeatty10/dbt-mysql/pull/116))
+
 ### Under the hood
 - docker compose MySQL and MariaDB database services for local testing ([#9](https://github.com/dbeatty10/dbt-mysql/issues/9), [#104](https://github.com/dbeatty10/dbt-mysql/pull/104))
+- New adapter testing framework ([#105](https://github.com/dbeatty10/dbt-mysql/issues/105), [#109](https://github.com/dbeatty10/dbt-mysql/pull/109))
+
+### Contributors
+- [@the-timoye](https://github.com/the-timoye) ([#116](https://github.com/dbeatty10/dbt-mysql/pull/116))
+- [@shiyuhang0](https://github.com/shiyuhang0) ([#109](https://github.com/dbeatty10/dbt-mysql/pull/109))
 
 ## dbt-mysql 1.0.0 (March 13, 2022)
 - Support dbt v1.0 ([#90](https://github.com/dbeatty10/dbt-mysql/pull/90))
