@@ -2,6 +2,7 @@
 
 ### Features
 - Support dbt v1.1 ([#100](https://github.com/dbeatty10/dbt-mysql/pull/100))
+- More clear exception for invalid `database` config ([#110](https://github.com/dbeatty10/dbt-mysql/issues/110), [#111](https://github.com/dbeatty10/dbt-mysql/pull/111))
 
 ### Documentation
 - Include supported Python versions ([#115](https://github.com/dbeatty10/dbt-mysql/issues/115), [#116](https://github.com/dbeatty10/dbt-mysql/pull/116))
@@ -11,6 +12,7 @@
 - New adapter testing framework ([#105](https://github.com/dbeatty10/dbt-mysql/issues/105), [#109](https://github.com/dbeatty10/dbt-mysql/pull/109))
 
 ### Contributors
+- [@lyderichti59](https://github.com/lyderichti59) ([#111](https://github.com/dbeatty10/dbt-mysql/pull/111))
 - [@the-timoye](https://github.com/the-timoye) ([#116](https://github.com/dbeatty10/dbt-mysql/pull/116))
 - [@shiyuhang0](https://github.com/shiyuhang0) ([#109](https://github.com/dbeatty10/dbt-mysql/pull/109))
 
