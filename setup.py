@@ -3,9 +3,9 @@ import os
 import sys
 import re
 
-if sys.version_info < (3, 7) or sys.version_info >= (3, 10):
+if sys.version_info < (3, 7) or sys.version_info >= (3, 11):
     print('Error: dbt-mysql does not support this version of Python.')
-    print('Please install Python 3.7 or higher but less than 3.10.')
+    print('Please install Python 3.7 or higher but less than 3.11.')
     sys.exit(1)
 
 
@@ -92,6 +92,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
-    python_requires=">=3.7,<3.10",
+    python_requires=">=3.7,<3.11",
 )

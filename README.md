@@ -10,7 +10,7 @@ This is an experimental plugin:
   - MySQL 8.0
   - MariaDB 10.5
 - Compatiblity with other [dbt packages](https://hub.getdbt.com/) (like [dbt_utils](https://hub.getdbt.com/dbt-labs/dbt_utils/latest/)) is also untested
-- Supported Python Versions are: 3.6, 3.7, 3.8 & 3.9
+- Supported Python Versions are: 3.6, 3.7, 3.8, 3.9 & 3.10
 
 Please read these docs carefully and use at your own risk. [Issues](https://github.com/dbeatty10/dbt-mysql/issues/new) and [PRs](https://github.com/dbeatty10/dbt-mysql/blob/main/CONTRIBUTING.rst#contributing) welcome!
 
