@@ -24,8 +24,10 @@
   1. `git push`
   1. Merge back into `main` branch
   1. Create `{minor-version}.latest` branch
+    - Update the branch names in `requirements-dev.txt` from `@{previous-version}.latest` (or `@main`) to `@{minor-version}.latest`
   1. Bump the version in `main` to be the next minor alpha. Example:
     - Minor releases: `bumpversion --no-tag --new-version 1.6.0a1 num`
+    - Update the branch names in `requirements-dev.txt` from `@{previous-version}.latest` to `@{minor-version}.latest` (or `@main`)
 
 #### PyPI
 
