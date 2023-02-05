@@ -101,3 +101,8 @@ tox -e integration-mariadb-10.5 && \
 tox -e integration-mysql-5.7 && \
 tox -e integration-mysql-8.0
 ```
+
+Run a single test
+```shell
+pytest -v --profile mysql tests/functional/adapter/test_basic.py::TestEmptyMySQL::test_empty
+```
