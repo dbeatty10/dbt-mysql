@@ -9,15 +9,15 @@ Here are the steps to run the integration tests:
 
 ## Simple example
 
-Assuming the applicable `pytest-dbt-adapter` package is installed and environment variables are set:
+Assuming the applicable `dbt-tests-adapter` package is installed and environment variables are set:
 ```bash
-PYTHONPATH=. pytest tests/functional/adapter/basic/mysql_test.py
+PYTHONPATH=. pytest tests/functional/adapter/test_basic.py
 ```
 
 ## Full example
 
 ### Prerequisites
-- [`pytest-dbt-adapter`](https://github.com/dbt-labs/dbt-adapter-tests) package
+- [`dbt-tests-adapter`](https://github.com/dbt-labs/dbt-core/tree/main/tests/adapter) package
 
 ### Environment variables
 

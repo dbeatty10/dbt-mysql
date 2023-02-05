@@ -5,7 +5,7 @@ This plugin ports [dbt](https://getdbt.com) functionality to MySQL and MariaDB.
 This is an experimental plugin:
 - We have not tested it extensively
 - Storage engines other than the default of InnoDB are untested
-- Only tested with [dbt-adapter-tests](https://github.com/dbt-labs/dbt-adapter-tests) with the following:
+- Only tested with [dbt-tests-adapter](https://github.com/dbt-labs/dbt-core/tree/main/tests/adapter) with the following:
   - MySQL 5.7
   - MySQL 8.0
   - MariaDB 10.5
