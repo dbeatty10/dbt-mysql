@@ -1,10 +1,11 @@
-### Release Procedure
+# Release Procedure
 
 1. [Bump version](#bump-version)
 1. [PyPI](#pypi)
 1. [GitHub](#github)
+1. [Post-release](#post-release)
 
-#### Bump version
+## Bump version
 
 1. Open a branch for the release
     - `git checkout -b releases/1.5.0`
@@ -23,13 +24,8 @@
   1. Commit with message `Release dbt-mysql v<desired-version>`
   1. `git push`
   1. Merge back into `main` branch
-  1. Create `{minor-version}.latest` branch
-    - Update the branch names in `requirements-dev.txt` from `@{previous-version}.latest` (or `@main`) to `@{minor-version}.latest`
-  1. Bump the version in `main` to be the next minor alpha. Example:
-    - Minor releases: `bumpversion --no-tag --new-version 1.6.0a1 num`
-    - Update the branch names in `requirements-dev.txt` from `@{previous-version}.latest` to `@{minor-version}.latest` (or `@main`)
 
-#### PyPI
+## PyPI
 
 1. Build source distribution
     - `python setup.py sdist bdist_wheel`
@@ -42,14 +38,29 @@
 
 PyPI recognizes [pre-release versioning conventions](https://packaging.python.org/guides/distributing-packages-using-setuptools/#pre-release-versioning) and will label "pre-releases" as-such.
 
-#### GitHub
+## GitHub
 
 1. Click the [Create a new release](https://github.com/dbeatty10/dbt-mysql/releases/new) link on the project homepage in GitHub
 1. Click the "Choose a tag" drop-down
-    1. Type `v{semantic_version}` (e.g., `v1.5.0rc2`) and click "+ Create a new tag"
+    1. Type `v{semantic_version}` (e.g., `v1.5.0rc2`) and click "+ Create a new tag: {version} on publish"
 1. Update the "Target" to be the name of the release branch
 1. Type `dbt-mysql {semantic_version}` as the "release title" (e.g. `dbt-mysql 1.5.0rc2`)
 1. Leave the description blank
 1. For pre-releases:
     - Tick the "This is a pre-release" checkbox
 1. Click the "Publish release" button
+
+## Post-release
+  1. Create `{minor-version}.latest` branch. Example:
+    - `git checkout -b 1.5.latest`
+    - Update the branch names in `requirements-dev.txt` from `@{previous-version}.latest` (or `@main`) to `@{minor-version}.latest`
+    - `git push`
+  1. Bump the version in `main` to be the next minor alpha. Example:
+    - `git checkout main`
+    - `git pull`
+    - `git checkout -b bump-1.6.0a1`
+    - Minor releases:
+        `bumpversion --no-tag --new-version 1.6.0a1 num`
+    - Update the branch names in `requirements-dev.txt` from `@{previous-version}.latest` to `@{minor-version}.latest` (or `@main`)
+    - Commit with message `Bump dbt-mysql 1.6.0a1`
+    - `git push`
