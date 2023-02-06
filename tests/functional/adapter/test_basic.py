@@ -9,8 +9,12 @@ from dbt.tests.adapter.basic.test_empty import BaseEmpty
 from dbt.tests.adapter.basic.test_ephemeral import BaseEphemeral
 from dbt.tests.adapter.basic.test_incremental import BaseIncremental
 from dbt.tests.adapter.basic.test_generic_tests import BaseGenericTests
-from dbt.tests.adapter.basic.test_snapshot_check_cols import BaseSnapshotCheckCols
-from dbt.tests.adapter.basic.test_snapshot_timestamp import BaseSnapshotTimestamp
+from dbt.tests.adapter.basic.test_snapshot_check_cols import (
+    BaseSnapshotCheckCols,
+)
+from dbt.tests.adapter.basic.test_snapshot_timestamp import (
+    BaseSnapshotTimestamp,
+)
 from dbt.tests.adapter.basic.test_adapter_methods import BaseAdapterMethod
 from dbt.tests.util import run_dbt, check_relations_equal
 
@@ -47,8 +51,6 @@ class TestGenericTestsMySQL(BaseGenericTests):
     pass
 
 
-# TODO
-@pytest.mark.skip(reason="known failure to fix")
 class TestSnapshotCheckColsMySQL(BaseSnapshotCheckCols):
     pass
 
