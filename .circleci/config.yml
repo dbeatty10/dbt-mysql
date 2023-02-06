@@ -9,6 +9,14 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install python dependencies
+          command: |
+            python -m pip install --user --upgrade pip
+            python -m pip install -r dev-requirements.txt
+            python -m pip --version
+            pre-commit --version
+            dbt --version
+      - run:
           name: pre-commit hooks
           command: pre-commit run --all-files --show-diff-on-failure
 
