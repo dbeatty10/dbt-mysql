@@ -1,27 +1,14 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@2.0.3
-
 jobs:
   code-quality:
     environment:
       DBT_INVOCATION_ENV: circle
-    executor: python/default
+    docker:
+      - image: fishtownanalytics/test-container:10
     steps:
       - checkout
-      - run:
-          name: Install python dependencies
-          command: |
-            python3 --version
-            python3 -m pip install --user --upgrade pip
-            python3 -m pip install -r requirements-dev.txt
-            python3 -m pip --version
-            /bin/bash -c 'pre-commit --version'
-            /bin/bash -c 'dbt --version'
-      - run:
-          name: pre-commit hooks
-          command: /bin/bash -c 'pre-commit run --all-files --show-diff-on-failure'
+      - run: tox -e code-quality
 
   unit:
     environment:
