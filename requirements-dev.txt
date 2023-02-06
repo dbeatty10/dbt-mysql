@@ -17,3 +17,4 @@ pytest-xdist>=2.1.0,<3
 flaky>=3.5.3,<4
 pytest-dotenv
 pre-commit~=2.20.0
+black~=22.8.0
