@@ -1,16 +1,19 @@
 version: 2.1
 
+orbs:
+  python: circleci/python@2.0.3
+
 jobs:
   code-quality:
     environment:
       DBT_INVOCATION_ENV: circle
-    docker:
-      - image: fishtownanalytics/test-container:10
+    executor: python/default
     steps:
       - checkout
       - run:
           name: Install python dependencies
           command: |
+            python3 --version
             python3 -m pip install --user --upgrade pip
             python3 -m pip install -r requirements-dev.txt
             python3 -m pip --version
