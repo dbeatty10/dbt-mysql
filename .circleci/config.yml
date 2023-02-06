@@ -17,11 +17,11 @@ jobs:
             python3 -m pip install --user --upgrade pip
             python3 -m pip install -r requirements-dev.txt
             python3 -m pip --version
-            pre-commit --version
-            dbt --version
+            /bin/bash -c 'pre-commit --version'
+            /bin/bash -c 'dbt --version'
       - run:
           name: pre-commit hooks
-          command: pre-commit run --all-files --show-diff-on-failure
+          command: /bin/bash -c 'pre-commit run --all-files --show-diff-on-failure'
 
   unit:
     environment:
