@@ -12,7 +12,7 @@ jobs:
           name: Install python dependencies
           command: |
             python -m pip install --user --upgrade pip
-            python -m pip install -r dev-requirements.txt
+            python -m pip install -r requirements-dev.txt
             python -m pip --version
             pre-commit --version
             dbt --version
