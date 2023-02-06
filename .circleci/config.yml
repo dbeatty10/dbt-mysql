@@ -93,6 +93,7 @@ workflows:
   version: 2
   test-everything:
     jobs:
+      - code-quality
       - unit
       - integration-8-0:
           requires:
