@@ -11,4 +11,5 @@ from dbt.include import mariadb
 Plugin = AdapterPlugin(
     adapter=MariaDBAdapter,
     credentials=MariaDBCredentials,
-    include_path=mariadb.PACKAGE_PATH)
+    include_path=mariadb.PACKAGE_PATH,
+)

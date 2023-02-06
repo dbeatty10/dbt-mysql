@@ -28,7 +28,7 @@ class TestSingularTestsMySQL(BaseSingularTests):
 
 
 # Ephemeral materializations not supported for MySQL 5.7
-@pytest.mark.skip_profile('mysql5')
+@pytest.mark.skip_profile("mysql5")
 class TestSingularTestsEphemeralMySQL(BaseSingularTestsEphemeral):
     pass
 
@@ -38,7 +38,7 @@ class TestEmptyMySQL(BaseEmpty):
 
 
 # Ephemeral materializations not supported for MySQL 5.7
-@pytest.mark.skip_profile('mysql5')
+@pytest.mark.skip_profile("mysql5")
 class TestEphemeralMySQL(BaseEphemeral):
     pass
 

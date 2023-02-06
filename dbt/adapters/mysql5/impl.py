@@ -18,8 +18,8 @@ from dbt.utils import executor
 
 logger = AdapterLogger("mysql")
 
-LIST_SCHEMAS_MACRO_NAME = 'list_schemas'
-LIST_RELATIONS_MACRO_NAME = 'list_relations_without_caching'
+LIST_SCHEMAS_MACRO_NAME = "list_schemas"
+LIST_RELATIONS_MACRO_NAME = "list_relations_without_caching"
 
 
 class MySQLAdapter(SQLAdapter):
@@ -29,28 +29,23 @@ class MySQLAdapter(SQLAdapter):
 
     @classmethod
     def date_function(cls):
-        return 'current_date()'
+        return "current_date()"
 
     @classmethod
-    def convert_datetime_type(
-            cls, agate_table: agate.Table, col_idx: int
-    ) -> str:
+    def convert_datetime_type(cls, agate_table: agate.Table, col_idx: int) -> str:
         return "timestamp"
 
     def quote(self, identifier):
-        return '`{}`'.format(identifier)
+        return "`{}`".format(identifier)
 
     def list_relations_without_caching(
         self, schema_relation: MySQLRelation
     ) -> List[MySQLRelation]:
-        kwargs = {'schema_relation': schema_relation}
+        kwargs = {"schema_relation": schema_relation}
         try:
-            results = self.execute_macro(
-                LIST_RELATIONS_MACRO_NAME,
-                kwargs=kwargs
-            )
+            results = self.execute_macro(LIST_RELATIONS_MACRO_NAME, kwargs=kwargs)
         except dbt.exceptions.RuntimeException as e:
-            errmsg = getattr(e, 'msg', '')
+            errmsg = getattr(e, "msg", "")
             if f"MySQL database '{schema_relation}' not found" in errmsg:
                 return []
             else:
@@ -64,13 +59,11 @@ class MySQLAdapter(SQLAdapter):
                 raise dbt.exceptions.RuntimeException(
                     "Invalid value from "
                     f'"mysql5__list_relations_without_caching({kwargs})", '
-                    f'got {len(row)} values, expected 4'
+                    f"got {len(row)} values, expected 4"
                 )
             _, name, _schema, relation_type = row
             relation = self.Relation.create(
-                schema=_schema,
-                identifier=name,
-                type=relation_type
+                schema=_schema, identifier=name, type=relation_type
             )
             relations.append(relation)
 
@@ -88,9 +81,9 @@ class MySQLAdapter(SQLAdapter):
         for column in columns:
             # convert MySQLColumns into catalog dicts
             as_dict = asdict(column)
-            as_dict['column_name'] = as_dict.pop('column', None)
-            as_dict['column_type'] = as_dict.pop('dtype')
-            as_dict['table_database'] = None
+            as_dict["column_name"] = as_dict.pop("column", None)
+            as_dict["column_type"] = as_dict.pop("dtype")
+            as_dict["table_database"] = None
             yield as_dict
 
     def get_relation(
@@ -102,48 +95,58 @@ class MySQLAdapter(SQLAdapter):
         return super().get_relation(database, schema, identifier)
 
     def parse_show_columns(
-            self,
-            relation: Relation,
-            raw_rows: List[agate.Row]
+        self, relation: Relation, raw_rows: List[agate.Row]
     ) -> List[MySQLColumn]:
-        return [MySQLColumn(
-            table_database=None,
-            table_schema=relation.schema,
-            table_name=relation.name,
-            table_type=relation.type,
-            table_owner=None,
-            table_stats=None,
-            column=column.column,
-            column_index=idx,
-            dtype=column.dtype,
-        ) for idx, column in enumerate(raw_rows)]
+        return [
+            MySQLColumn(
+                table_database=None,
+                table_schema=relation.schema,
+                table_name=relation.name,
+                table_type=relation.type,
+                table_owner=None,
+                table_stats=None,
+                column=column.column,
+                column_index=idx,
+                dtype=column.dtype,
+            )
+            for idx, column in enumerate(raw_rows)
+        ]
 
     def get_catalog(self, manifest):
         schema_map = self._get_catalog_schemas(manifest)
         if len(schema_map) > 1:
             dbt.exceptions.raise_compiler_error(
-                f'Expected only one database in get_catalog, found '
-                f'{list(schema_map)}'
+                f"Expected only one database in get_catalog, found "
+                f"{list(schema_map)}"
             )
 
         with executor(self.config) as tpe:
             futures: List[Future[agate.Table]] = []
             for info, schemas in schema_map.items():
                 for schema in schemas:
-                    futures.append(tpe.submit_connected(
-                        self, schema,
-                        self._get_one_catalog, info, [schema], manifest
-                    ))
+                    futures.append(
+                        tpe.submit_connected(
+                            self,
+                            schema,
+                            self._get_one_catalog,
+                            info,
+                            [schema],
+                            manifest,
+                        )
+                    )
             catalogs, exceptions = catch_as_completed(futures)
         return catalogs, exceptions
 
     def _get_one_catalog(
-        self, information_schema, schemas, manifest,
+        self,
+        information_schema,
+        schemas,
+        manifest,
     ) -> agate.Table:
         if len(schemas) != 1:
             dbt.exceptions.raise_compiler_error(
-                f'Expected only one schema in mysql5 _get_one_catalog, found '
-                f'{schemas}'
+                f"Expected only one schema in mysql5 _get_one_catalog, found "
+                f"{schemas}"
             )
 
         database = information_schema.database
@@ -153,14 +156,11 @@ class MySQLAdapter(SQLAdapter):
         for relation in self.list_relations(database, schema):
             logger.debug("Getting table schema for relation {}", relation)
             columns.extend(self._get_columns_for_catalog(relation))
-        return agate.Table.from_object(
-            columns, column_types=DEFAULT_TYPE_TESTER
-        )
+        return agate.Table.from_object(columns, column_types=DEFAULT_TYPE_TESTER)
 
     def check_schema_exists(self, database, schema):
         results = self.execute_macro(
-            LIST_SCHEMAS_MACRO_NAME,
-            kwargs={'database': database}
+            LIST_SCHEMAS_MACRO_NAME, kwargs={"database": database}
         )
 
         exists = True if schema in [row[0] for row in results] else False
@@ -174,13 +174,13 @@ class MySQLAdapter(SQLAdapter):
         clause: str,
         where_clause: Optional[str] = None,
     ) -> str:
-        clause = f'update {dst_name} set {dst_column} = {clause}'
+        clause = f"update {dst_name} set {dst_column} = {clause}"
         if where_clause is not None:
-            clause += f' where {where_clause}'
+            clause += f" where {where_clause}"
         return clause
 
     def timestamp_add_sql(
-        self, add_to: str, number: int = 1, interval: str = 'hour'
+        self, add_to: str, number: int = 1, interval: str = "hour"
     ) -> str:
         # for backwards compatibility, we're compelled to set some sort of
         # default. A lot of searching has lead me to believe that the
@@ -189,11 +189,14 @@ class MySQLAdapter(SQLAdapter):
         return f"date_add({add_to}, interval {number} {interval})"
 
     def string_add_sql(
-        self, add_to: str, value: str, location='append',
+        self,
+        add_to: str,
+        value: str,
+        location="append",
     ) -> str:
-        if location == 'append':
+        if location == "append":
             return f"concat({add_to}, '{value}')"
-        elif location == 'prepend':
+        elif location == "prepend":
             return f"concat({value}, '{add_to}')"
         else:
             raise dbt.exceptions.RuntimeException(
@@ -216,15 +219,15 @@ class MySQLAdapter(SQLAdapter):
 
         alias_a = "A"
         alias_b = "B"
-        columns_csv_a = ', '.join([f"{alias_a}.{name}" for name in names])
-        columns_csv_b = ', '.join([f"{alias_b}.{name}" for name in names])
+        columns_csv_a = ", ".join([f"{alias_a}.{name}" for name in names])
+        columns_csv_b = ", ".join([f"{alias_b}.{name}" for name in names])
         join_condition = " AND ".join(
             [f"{alias_a}.{name} = {alias_b}.{name}" for name in names]
         )
         first_column = names[0]
 
         # MySQL doesn't have an EXCEPT or MINUS operator, so we need to simulate it
-        COLUMNS_EQUAL_SQL = '''
+        COLUMNS_EQUAL_SQL = """
         SELECT
             row_count_diff.difference as row_count_difference,
             diff_count.num_missing as num_mismatched
@@ -259,7 +262,7 @@ class MySQLAdapter(SQLAdapter):
 
                 ) as missing
             ) as diff_count ON row_count_diff.id = diff_count.id
-        '''.strip()
+        """.strip()
 
         sql = COLUMNS_EQUAL_SQL.format(
             alias_a=alias_a,
