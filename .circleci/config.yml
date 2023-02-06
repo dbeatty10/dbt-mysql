@@ -1,6 +1,17 @@
 version: 2.1
 
 jobs:
+  code-quality:
+    environment:
+      DBT_INVOCATION_ENV: circle
+    docker:
+      - image: fishtownanalytics/test-container:10
+    steps:
+      - checkout
+      - run:
+          name: pre-commit hooks
+          command: pre-commit run --all-files --show-diff-on-failure
+
   unit:
     environment:
       DBT_INVOCATION_ENV: circle
@@ -8,7 +19,7 @@ jobs:
       - image: fishtownanalytics/test-container:10
     steps:
       - checkout
-      - run: tox -e flake8,unit
+      - run: tox -e unit
 
   integration-8-0:
     environment:
