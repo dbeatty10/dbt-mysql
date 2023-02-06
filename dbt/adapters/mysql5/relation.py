@@ -22,7 +22,7 @@ class MySQLIncludePolicy(Policy):
 class MySQLRelation(BaseRelation):
     quote_policy: MySQLQuotePolicy = MySQLQuotePolicy()
     include_policy: MySQLIncludePolicy = MySQLIncludePolicy()
-    quote_character: str = '`'
+    quote_character: str = "`"
 
     def __post_init__(self):
         if self.database != self.schema and self.database:

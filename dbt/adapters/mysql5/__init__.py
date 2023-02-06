@@ -9,6 +9,5 @@ from dbt.include import mysql5
 
 
 Plugin = AdapterPlugin(
-    adapter=MySQLAdapter,
-    credentials=MySQLCredentials,
-    include_path=mysql5.PACKAGE_PATH)
+    adapter=MySQLAdapter, credentials=MySQLCredentials, include_path=mysql5.PACKAGE_PATH
+)

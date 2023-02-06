@@ -22,7 +22,7 @@ class MariaDBIncludePolicy(Policy):
 class MariaDBRelation(BaseRelation):
     quote_policy: MariaDBQuotePolicy = MariaDBQuotePolicy()
     include_policy: MariaDBIncludePolicy = MariaDBIncludePolicy()
-    quote_character: str = '`'
+    quote_character: str = "`"
 
     def __post_init__(self):
         if self.database != self.schema and self.database:

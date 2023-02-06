@@ -38,10 +38,7 @@ class MySQLCredentials(Credentials):
 
     def __post_init__(self):
         # mysql classifies database and schema as the same thing
-        if (
-            self.database is not None and
-            self.database != self.schema
-        ):
+        if self.database is not None and self.database != self.schema:
             raise dbt.exceptions.RuntimeException(
                 f"    schema: {self.schema} \n"
                 f"    database: {self.database} \n"
@@ -75,8 +72,8 @@ class MySQLConnectionManager(SQLConnectionManager):
 
     @classmethod
     def open(cls, connection):
-        if connection.state == 'open':
-            logger.debug('Connection is already open, skipping open.')
+        if connection.state == "open":
+            logger.debug("Connection is already open, skipping open.")
             return connection
 
         credentials = cls.get_credentials(connection.credentials)
@@ -92,26 +89,29 @@ class MySQLConnectionManager(SQLConnectionManager):
 
         try:
             connection.handle = mysql.connector.connect(**kwargs)
-            connection.state = 'open'
+            connection.state = "open"
         except mysql.connector.Error:
 
             try:
-                logger.debug("Failed connection without supplying the `database`. "
-                             "Trying again with `database` included.")
+                logger.debug(
+                    "Failed connection without supplying the `database`. "
+                    "Trying again with `database` included."
+                )
 
                 # Try again with the database included
                 kwargs["database"] = credentials.schema
 
                 connection.handle = mysql.connector.connect(**kwargs)
-                connection.state = 'open'
+                connection.state = "open"
             except mysql.connector.Error as e:
 
-                logger.debug("Got an error when attempting to open a mysql "
-                             "connection: '{}'"
-                             .format(e))
+                logger.debug(
+                    "Got an error when attempting to open a mysql "
+                    "connection: '{}'".format(e)
+                )
 
                 connection.handle = None
-                connection.state = 'fail'
+                connection.state = "fail"
 
                 raise dbt.exceptions.FailedToConnectException(str(e))
 
@@ -130,7 +130,7 @@ class MySQLConnectionManager(SQLConnectionManager):
             yield
 
         except mysql.connector.DatabaseError as e:
-            logger.debug('MySQL error: {}'.format(str(e)))
+            logger.debug("MySQL error: {}".format(str(e)))
 
             try:
                 self.rollback_if_open()
@@ -163,7 +163,5 @@ class MySQLConnectionManager(SQLConnectionManager):
         # There's no real way to get the status from the mysql-connector-python driver.
         # So just return the default value.
         return AdapterResponse(
-            _message="{} {}".format(code, num_rows),
-            rows_affected=num_rows,
-            code=code
+            _message="{} {}".format(code, num_rows), rows_affected=num_rows, code=code
         )
