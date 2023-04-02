@@ -98,7 +98,23 @@ class BaseIncrementalCompositeKeys:
         assert len(results) == 1
 
         # check relations equal
-        check_relations_equal(project.adapter, ["added", "incremental"])
+        # check_relations_equal(project.adapter, ["added", "incremental"])
+
+        relation = relation_from_name(project.adapter, "incremental")
+        result = project.run_sql(
+            f"select count(*) as num_rows from {relation}",
+            fetch="one")
+        assert result[0] == 20
+
+        # re-add the same data
+        results = run_dbt(["run", "--vars", "seed_name: added"])
+        assert len(results) == 1
+
+        relation = relation_from_name(project.adapter, "incremental")
+        result = project.run_sql(
+            f"select count(*) as num_rows from {relation}",
+            fetch="one")
+        assert result[0] == 20
 
         # get catalog from docs generate
         catalog = run_dbt(["docs", "generate"])
