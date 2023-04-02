@@ -18,6 +18,8 @@ from dbt.tests.adapter.basic.test_snapshot_timestamp import (
 from dbt.tests.adapter.basic.test_adapter_methods import BaseAdapterMethod
 from dbt.tests.util import run_dbt, check_relations_equal
 
+from incremental_composite import BaseIncrementalCompositeKeys
+
 
 class TestSimpleMaterializationsMySQL(BaseSimpleMaterializations):
     pass
@@ -44,6 +46,10 @@ class TestEphemeralMySQL(BaseEphemeral):
 
 
 class TestIncrementalMySQL(BaseIncremental):
+    pass
+
+
+class TestIncrementalCompositeKeysMySQL(BaseIncrementalCompositeKeys):
     pass
 
 
