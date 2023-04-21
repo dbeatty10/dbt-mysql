@@ -16,6 +16,9 @@
 - [@the-timoye](https://github.com/the-timoye) ([#116](https://github.com/dbeatty10/dbt-mysql/pull/116))
 - [@shiyuhang0](https://github.com/shiyuhang0) ([#109](https://github.com/dbeatty10/dbt-mysql/pull/109))
 
+## dbt-mysql 1.4.6 (April 21, 2023)
+- Support dbt v1.4 ([#TODO](TODO))
+
 ## dbt-mysql 1.0.0 (March 13, 2022)
 - Support dbt v1.0 ([#90](https://github.com/dbeatty10/dbt-mysql/pull/90))
 
