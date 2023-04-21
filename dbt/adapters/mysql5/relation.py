@@ -21,9 +21,9 @@ class MySQLIncludePolicy(Policy):
 @dataclass(frozen=True, eq=False, repr=False)
 class MySQLRelation(BaseRelation):
     quote_policy: MySQLQuotePolicy = field(
-        default_factory=lambda: MySQLQuotePolicy)
+        default_factory=lambda: MySQLQuotePolicy())
     include_policy: MySQLIncludePolicy = field(
-        default_factory=lambda: MySQLIncludePolicy)
+        default_factory=lambda: MySQLIncludePolicy())
     quote_character: str = "`"
 
     def __post_init__(self):

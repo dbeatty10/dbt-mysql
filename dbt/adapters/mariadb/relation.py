@@ -21,9 +21,9 @@ class MariaDBIncludePolicy(Policy):
 @dataclass(frozen=True, eq=False, repr=False)
 class MariaDBRelation(BaseRelation):
     quote_policy: MariaDBQuotePolicy = field(
-        default_factory=lambda: MariaDBQuotePolicy)
+        default_factory=lambda: MariaDBQuotePolicy())
     include_policy: MariaDBIncludePolicy = field(
-        default_factory=lambda: MariaDBIncludePolicy)
+        default_factory=lambda: MariaDBIncludePolicy())
     quote_character: str = "`"
 
     def __post_init__(self):
