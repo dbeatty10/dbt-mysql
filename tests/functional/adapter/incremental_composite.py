@@ -44,28 +44,36 @@ model_incremental = """
 select * from {{ source('raw', 'seed') }}
 """.strip()
 
-config_materialized_incremental = """
+config_materialized_incremental_composite_unique_key = """
   {{ config(materialized="incremental", unique_key=["actor_id", "film_id"]) }}
 """
 
-inc_sql = config_materialized_incremental + model_incremental
+config_materialized_incremental_single_unique_key = """
+  {{ config(materialized="incremental", unique_key="actor_id") }}
+"""
 
 
-class BaseIncrementalCompositeKeys:
+inc_single_sql = config_materialized_incremental_single_unique_key
++ model_incremental
+inc_composite_sql = config_materialized_incremental_composite_unique_key
++ model_incremental
+
+
+class BaseIncrementalCompositeUniqueKey:
     @pytest.fixture(scope="class")
     def project_config_update(self):
-        return {"name": "incremental_with_composite_keys"}
+        return {"name": "incremental_with_composite_unique_key"}
 
     @pytest.fixture(scope="class")
     def models(self):
-        return {"incremental.sql": inc_sql,
+        return {"incremental_with_composite.sql": inc_composite_sql,
                 "schema.yml": schema_base_yml}
 
     @pytest.fixture(scope="class")
     def seeds(self):
         return {"base.csv": seeds_base_csv, "added.csv": seeds_added_csv}
 
-    def test_incremental_with_composite_keys(self, project):
+    def test_incremental_with_composite_key(self, project):
         # seed command
         results = run_dbt(["seed"])
         assert len(results) == 2
@@ -90,7 +98,8 @@ class BaseIncrementalCompositeKeys:
         assert len(results) == 1
 
         # check relations equal
-        check_relations_equal(project.adapter, ["base", "incremental"])
+        check_relations_equal(project.adapter,
+                              ["base", "incremental_with_composite"])
 
         # change seed_name var
         # the "seed_name" var changes the seed identifier in the schema file
@@ -100,7 +109,8 @@ class BaseIncrementalCompositeKeys:
         # check relations equal
         # check_relations_equal(project.adapter, ["added", "incremental"])
 
-        relation = relation_from_name(project.adapter, "incremental")
+        relation = relation_from_name(project.adapter,
+                                      "incremental_with_composite")
         result = project.run_sql(
             f"select count(*) as num_rows from {relation}",
             fetch="one")
@@ -110,7 +120,82 @@ class BaseIncrementalCompositeKeys:
         results = run_dbt(["run", "--vars", "seed_name: added"])
         assert len(results) == 1
 
-        relation = relation_from_name(project.adapter, "incremental")
+        relation = relation_from_name(project.adapter,
+                                      "incremental_with_composite")
+        result = project.run_sql(
+            f"select count(*) as num_rows from {relation}",
+            fetch="one")
+        assert result[0] == 20
+
+        # get catalog from docs generate
+        catalog = run_dbt(["docs", "generate"])
+        assert len(catalog.nodes) == 3
+        assert len(catalog.sources) == 1
+
+
+class BaseIncrementalSingleUniqueKey:
+    @pytest.fixture(scope="class")
+    def project_config_update(self):
+        return {"name": "incremental_with_single_unique_key"}
+
+    @pytest.fixture(scope="class")
+    def models(self):
+        return {"incremental_with_single.sql": inc_composite_sql,
+                "schema.yml": schema_base_yml}
+
+    @pytest.fixture(scope="class")
+    def seeds(self):
+        return {"base.csv": seeds_base_csv, "added.csv": seeds_added_csv}
+
+    def test_incremental_with_single_key(self, project):
+        # seed command
+        results = run_dbt(["seed"])
+        assert len(results) == 2
+
+        # base table rowcount
+        relation = relation_from_name(project.adapter, "base")
+        result = project.run_sql(
+            f"select count(*) as num_rows from {relation}",
+            fetch="one")
+        assert result[0] == 10
+
+        # added table rowcount
+        relation = relation_from_name(project.adapter, "added")
+        result = project.run_sql(
+            f"select count(*) as num_rows from {relation}",
+            fetch="one")
+        assert result[0] == 10
+
+        # run command
+        # the "seed_name" var changes the seed identifier in the schema file
+        results = run_dbt(["run", "--vars", "seed_name: base"])
+        assert len(results) == 1
+
+        # check relations equal
+        check_relations_equal(project.adapter,
+                              ["base", "incremental_with_single"])
+
+        # change seed_name var
+        # the "seed_name" var changes the seed identifier in the schema file
+        results = run_dbt(["run", "--vars", "seed_name: added"])
+        assert len(results) == 1
+
+        # check relations equal
+        # check_relations_equal(project.adapter, ["added", "incremental"])
+
+        relation = relation_from_name(project.adapter,
+                                      "incremental_with_single")
+        result = project.run_sql(
+            f"select count(*) as num_rows from {relation}",
+            fetch="one")
+        assert result[0] == 20
+
+        # re-add the same data
+        results = run_dbt(["run", "--vars", "seed_name: added"])
+        assert len(results) == 1
+
+        relation = relation_from_name(project.adapter,
+                                      "incremental_with_single")
         result = project.run_sql(
             f"select count(*) as num_rows from {relation}",
             fetch="one")
