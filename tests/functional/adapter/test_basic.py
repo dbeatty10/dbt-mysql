@@ -1,5 +1,9 @@
 import pytest
 
+from dbt.tests.adapter.incremental.test_incremental_unique_id import (
+    BaseIncrementalUniqueKey,
+)
+
 from dbt.tests.adapter.basic.test_base import BaseSimpleMaterializations
 from dbt.tests.adapter.basic.test_singular_tests import BaseSingularTests
 from dbt.tests.adapter.basic.test_singular_tests_ephemeral import (
@@ -17,11 +21,6 @@ from dbt.tests.adapter.basic.test_snapshot_timestamp import (
 )
 from dbt.tests.adapter.basic.test_adapter_methods import BaseAdapterMethod
 from dbt.tests.util import run_dbt, check_relations_equal
-
-from incremental_composite import (
-    BaseIncrementalCompositeUniqueKey,
-    BaseIncrementalSingleUniqueKey
-)
 
 
 class TestSimpleMaterializationsMySQL(BaseSimpleMaterializations):
@@ -52,11 +51,7 @@ class TestIncrementalMySQL(BaseIncremental):
     pass
 
 
-class TestIncrementalCompositeUnqKeyMySQL(BaseIncrementalCompositeUniqueKey):
-    pass
-
-
-class TestIncrementalSingleUniqueKeyMySQL(BaseIncrementalSingleUniqueKey):
+class TestIncrementalUniqueKey(BaseIncrementalUniqueKey):
     pass
 
 

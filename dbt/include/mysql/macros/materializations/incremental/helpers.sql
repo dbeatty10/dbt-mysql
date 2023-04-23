@@ -1,10 +1,10 @@
 
 {% macro incremental_delete(tmp_relation, target_relation, unique_key=none, statement_name="pre_main") %}
-    {%- if unique_key is not none -%}
+    {%- if unique_key is not none and unique_key|length -%}
     delete
     from {{ target_relation }}
-    where ({{ unique_key | join(',') }}) in (
-        select {{ unique_key | join(',') }}
+    where ({{ unique_key if unique_key is string else unique_key | join(',') }}) in (
+        select {{ unique_key if unique_key is string else unique_key | join(',') }}
         from {{ tmp_relation }}
     )
     {%- endif %}
