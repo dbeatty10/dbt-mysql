@@ -53,8 +53,8 @@ cfg_mat_inc_sgl_unq_key = """
 """
 
 
-inc_single_sql = cfg_mat_inc_comp_unq_key + model_incremental
-inc_composite_sql = cfg_mat_inc_sgl_unq_key + model_incremental
+inc_single_sql = cfg_mat_inc_sgl_unq_key + model_incremental
+inc_composite_sql = cfg_mat_inc_comp_unq_key + model_incremental
 
 
 class BaseIncrementalCompositeUniqueKey:
