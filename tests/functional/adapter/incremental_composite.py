@@ -44,19 +44,17 @@ model_incremental = """
 select * from {{ source('raw', 'seed') }}
 """.strip()
 
-config_materialized_incremental_composite_unique_key = """
+cfg_mat_inc_comp_unq_key = """
   {{ config(materialized="incremental", unique_key=["actor_id", "film_id"]) }}
 """
 
-config_materialized_incremental_single_unique_key = """
-  {{ config(materialized="incremental", unique_key="actor_id") }}
+cfg_mat_inc_sgl_unq_key = """
+  {{ config(materialized="incremental", unique_key="'actor_id'") }}
 """
 
 
-inc_single_sql = config_materialized_incremental_single_unique_key
-+ model_incremental
-inc_composite_sql = config_materialized_incremental_composite_unique_key
-+ model_incremental
+inc_single_sql = cfg_mat_inc_comp_unq_key + model_incremental
+inc_composite_sql = cfg_mat_inc_sgl_unq_key + model_incremental
 
 
 class BaseIncrementalCompositeUniqueKey:
