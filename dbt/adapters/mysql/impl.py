@@ -118,7 +118,7 @@ class MySQLAdapter(SQLAdapter):
         schema_map = self._get_catalog_schemas(manifest)
 
         if len(schema_map) > 1:
-            dbt.exceptions.raise_compiler_error(
+            raise dbt.exceptions.CompilationError(
                 f"Expected only one database in get_catalog, found "
                 f"{list(schema_map)}"
             )
@@ -147,7 +147,7 @@ class MySQLAdapter(SQLAdapter):
         manifest,
     ) -> agate.Table:
         if len(schemas) != 1:
-            dbt.exceptions.raise_compiler_error(
+            raise dbt.exceptions.CompilationError(
                 f"Expected only one schema in mysql _get_one_catalog, found "
                 f"{schemas}"
             )
