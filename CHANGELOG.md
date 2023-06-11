@@ -1,6 +1,14 @@
 ## Unreleased (TBD)
 
 ### Features
+- Support dbt v1.4 ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
+
+### Contributors
+- [@lpezet](https://github.com/lpezet) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
+
+## dbt-mysql 1.1.0 (Feb 5, 2023)
+
+### Features
 - Support dbt v1.1 ([#100](https://github.com/dbeatty10/dbt-mysql/pull/100))
 - More clear exception for invalid `database` config ([#110](https://github.com/dbeatty10/dbt-mysql/issues/110), [#111](https://github.com/dbeatty10/dbt-mysql/pull/111))
 
