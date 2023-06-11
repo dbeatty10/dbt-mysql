@@ -2,11 +2,13 @@
 
 ### Features
 - Migrate CircleCI to GitHub Actions ([#120](https://github.com/dbeatty10/dbt-mysql/issues/120))
+- Support dbt v1.4 ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
 
 ### Fixes
 - Fix incremental composite keys ([#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
 
 ### Contributors
+- [@lpezet](https://github.com/lpezet) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
 - [@moszutij](https://github.com/moszutij) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146), [#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
 - [@wesen](https://github.com/wesen) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
 - [@mwallace582](https://github.com/mwallace582) ([#162](https://github.com/dbeatty10/dbt-mysql/pull/162))
