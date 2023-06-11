@@ -55,23 +55,23 @@ Ready to contribute? [Here's](https://jarv.is/notes/how-to-pull-request-fork-git
 1. Fork the `dbt-mysql` repo on GitHub.
 2. Clone your fork locally:
     ```shell
-    $ git clone git@github.com:your_name_here/dbt-mysql.git
+    git clone git@github.com:your_name_here/dbt-mysql.git
     ```
 
 3. Installation:
     ```shell
-    $ python3 -m venv env
-    $ source env/bin/activate
-    $ python3 -m pip install --upgrade pip
-    $ python3 -m pip install -r requirements-dev.txt -r requirements-editable.txt
-    $ pre-commit install
-    $ source env/bin/activate
+    python3 -m venv env
+    source env/bin/activate
+    python3 -m pip install --upgrade pip
+    python3 -m pip install -r requirements-dev.txt -r requirements-editable.txt
+    pre-commit install
+    source env/bin/activate
     ```
 
 4. Create a branch for local development:
 
     ```shell
-    $ git checkout -b name-of-your-bugfix-or-feature
+    git checkout -b name-of-your-bugfix-or-feature
     ```
 
    Now you can make your changes locally.
@@ -79,7 +79,7 @@ Ready to contribute? [Here's](https://jarv.is/notes/how-to-pull-request-fork-git
 5. Run tests:
 
     ```shell
-    $ python -m pytest -v tests/unit
+    python -m pytest -v tests/unit
     ```
 
    Instructions for running integration tests in `tests/README.md`.
@@ -87,9 +87,9 @@ Ready to contribute? [Here's](https://jarv.is/notes/how-to-pull-request-fork-git
 6. Commit your changes and push your branch to GitHub:
 
     ```shell
-    $ git add .
-    $ git commit -m "Your detailed description of your changes."
-    $ git push origin name-of-your-bugfix-or-feature
+    git add .
+    git commit -m "Your detailed description of your changes."
+    git push origin name-of-your-bugfix-or-feature
     ```
 
 7. Submit a pull request through the GitHub website.
