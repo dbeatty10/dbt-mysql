@@ -57,10 +57,7 @@ PyPI recognizes [pre-release versioning conventions](https://packaging.python.or
     - `git push`
   1. Bump the version in `main` to be the next minor alpha. Example:
     - `git checkout main`
-    - `git pull`
     - `git checkout -b bump-1.6.0a1`
     - Minor releases:
         `bumpversion --no-tag --new-version 1.6.0a1 num`
     - Update the branch names in `requirements-dev.txt` from `@{previous-version}.latest` to `@{minor-version}.latest` (or `@main`)
-    - Commit with message `Bump dbt-mysql 1.6.0a1`
-    - `git push`
