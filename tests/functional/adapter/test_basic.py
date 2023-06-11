@@ -1,5 +1,9 @@
 import pytest
 
+from dbt.tests.adapter.incremental.test_incremental_unique_id import (
+    BaseIncrementalUniqueKey,
+)
+
 from dbt.tests.adapter.basic.test_base import BaseSimpleMaterializations
 from dbt.tests.adapter.basic.test_singular_tests import BaseSingularTests
 from dbt.tests.adapter.basic.test_singular_tests_ephemeral import (
@@ -44,6 +48,10 @@ class TestEphemeralMySQL(BaseEphemeral):
 
 
 class TestIncrementalMySQL(BaseIncremental):
+    pass
+
+
+class TestIncrementalUniqueKey(BaseIncrementalUniqueKey):
     pass
 
 
