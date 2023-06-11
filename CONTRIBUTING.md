@@ -80,6 +80,7 @@ Ready to contribute? [Here's](https://jarv.is/notes/how-to-pull-request-fork-git
 
     ```shell
     python -m pytest -v tests/unit
+    python -m pytest -v --profile mysql tests/functional
     ```
 
    Instructions for running integration tests in `tests/README.md`.
