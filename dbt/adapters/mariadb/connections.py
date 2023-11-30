@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 
 import mysql.connector
+import mysql.connector.constants
 
 import dbt.exceptions
 from dbt.adapters.sql import SQLConnectionManager
@@ -172,3 +173,9 @@ class MariaDBConnectionManager(SQLConnectionManager):
             rows_affected=num_rows,
             code=code
         )
+
+    @classmethod
+    def data_type_code_to_name(cls, type_code: int) -> str:
+        field_type_values = mysql.connector.constants.FieldType.desc.values()
+        mapping = {code: name for (code, name) in field_type_values}
+        return mapping[type_code]
