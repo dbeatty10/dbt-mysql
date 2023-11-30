@@ -2,6 +2,7 @@
 
 ### Features
 - Support dbt v1.4 ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
+- Support dbt v1.5 ([#159](https://github.com/dbeatty10/dbt-mysql/pull/159))
 
 ### Fixes
 - Fix incremental composite keys ([#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
