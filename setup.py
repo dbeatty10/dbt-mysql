@@ -75,7 +75,7 @@ setup(
     name="dbt-mysql",
     version=_plugin_version(),
     description="The MySQL adapter plugin for dbt",
-    long_description=README.read_text(),
+    long_description=README.read_text(encoding='utf-8'),
     long_description_content_type="text/markdown",
     author="Doug Beatty",
     author_email="doug.beatty@gmail.com",
