@@ -5,6 +5,7 @@
 
 ### Fixes
 - Fix incremental composite keys ([#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
+- Fix UnicodeDecodeErorr on setup.py ([#160](https://github.com/dbeatty10/dbt-mysql/issues/160))
 
 ### Contributors
 - [@lpezet](https://github.com/lpezet) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146), [#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
