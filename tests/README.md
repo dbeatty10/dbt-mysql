@@ -96,10 +96,7 @@ PYTHONPATH=. pytest -v --profile mariadb tests/functional
 
 Or run all the tests via `tox`:
 ```shell
-tox -e flake8,unit && \
-tox -e integration-mariadb-10.5 && \
-tox -e integration-mysql-5.7 && \
-tox -e integration-mysql-8.0
+tox
 ```
 
 Run a single test
