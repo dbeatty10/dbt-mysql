@@ -1,13 +1,7 @@
 # dbt-mysql
 
-<p align="center">
-  <a href="https://github.com/dbeatty10/dbt-mysql/actions/workflows/main.yml">
-    <img src="https://github.com/dbeatty10/dbt-mysql/actions/workflows/main.yml/badge.svg?event=push" alt="Unit Tests Badge"/>
-  </a>
-  <a href="https://github.com/dbeatty10/dbt-mysql/actions/workflows/integration.yml">
-    <img src="https://github.com/dbeatty10/dbt-mysql/actions/workflows/integration.yml/badge.svg?event=push" alt="Integration Tests Badge"/>
-  </a>
-</p>
+[![Tests and Code Checks](https://github.com/dbeatty10/dbt-mysql/actions/workflows/main.yml/badge.svg)](https://github.com/dbeatty10/dbt-mysql/actions/workflows/main.yml)
+[![Integration Tests Badge](https://github.com/dbeatty10/dbt-mysql/actions/workflows/integration.yml/badge.svg)](https://github.com/dbeatty10/dbt-mysql/actions/workflows/integration.yml)
 
 This plugin ports [dbt](https://getdbt.com) functionality to MySQL and MariaDB.
 
