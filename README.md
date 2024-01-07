@@ -1,5 +1,14 @@
 # dbt-mysql
 
+<p align="center">
+  <a href="https://github.com/dbeatty10/dbt-mysql/actions/workflows/main.yml">
+    <img src="https://github.com/dbeatty10/dbt-mysql/actions/workflows/main.yml/badge.svg?event=push" alt="Unit Tests Badge"/>
+  </a>
+  <a href="https://github.com/dbeatty10/dbt-mysql/actions/workflows/integration.yml">
+    <img src="https://github.com/dbeatty10/dbt-mysql/actions/workflows/integration.yml/badge.svg?event=push" alt="Integration Tests Badge"/>
+  </a>
+</p>
+
 This plugin ports [dbt](https://getdbt.com) functionality to MySQL and MariaDB.
 
 This is an experimental plugin:

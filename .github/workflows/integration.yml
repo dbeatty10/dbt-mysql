@@ -225,6 +225,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           msg: |
-            "You do not have permissions to run integration tests the maintainers of this repo "\
+            "You do not have permissions to run integration tests. The maintainers of this repo "\
             "need to label this PR with `ok to test` in order to run integration tests!"
           check_for_duplicate_msg: true
