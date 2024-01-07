@@ -144,8 +144,25 @@ jobs:
       DBT_INVOCATION_ENV: github-actions
 
     services:
-      database:
-        image: ${{ fromJson( "{'mysql5': 'mysql:5.7', 'mysql': 'mysql:8.0', 'mariadb': 'mariadb:10.5'}" )[matrix.adapter] }}
+      mysql:
+        # Conditional workaround https://github.com/actions/runner/issues/822#issuecomment-1524826092
+        image: ${{ ( matrix.adapter == 'mysql' ) && 'mysql:8.0' || '' }}
+        env:
+          MYSQL_ROOT_PASSWORD: dbt
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      mysql5:
+        image: ${{ ( matrix.adapter == 'mysql5' ) && 'mysql:5.7' || '' }}
+        env:
+          MYSQL_ROOT_PASSWORD: dbt
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      mariadb:
+        image: ${{ ( matrix.adapter == 'mariadb' ) && 'mariadb:10.5' || '' }}
         env:
           MYSQL_ROOT_PASSWORD: dbt
         ports:
