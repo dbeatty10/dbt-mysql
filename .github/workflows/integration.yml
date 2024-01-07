@@ -170,6 +170,18 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
+      # GitHub Actions do not support passing command line flags to services
+      # https://github.com/orgs/community/discussions/26688#discussioncomment-3252882
+      - name: Set mariadb database systems variables
+        if: matrix.adapter == 'mariadb'
+        run: |
+          docker exec ${{ job.services.mariadb.id }} sh -c 'MYSQL_PWD=dbt mysql -u root --execute "SET GLOBAL explicit_defaults_for_timestamp = ON;"'
+
+      - name: Set mysql5 database systems variables
+        if: matrix.adapter == 'mysql5'
+        run: |
+          docker exec ${{ job.services.mysql5.id }} sh -c 'MYSQL_PWD=dbt mysql -u root --execute "SET GLOBAL explicit_defaults_for_timestamp = ON;"'
+
       - name: Check out the repository
         if: github.event_name != 'pull_request'
         uses: actions/checkout@v3
