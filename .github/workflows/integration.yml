@@ -145,7 +145,7 @@ jobs:
 
     services:
       database:
-        image: ${{ fromJson( '{"mysql5": "mysql:5.7", "mysql": "mysql:8.0", "mariadb": "mariadb:10.5"}' )[matrix.adapter] }}
+        image: ${{ fromJson( "{'mysql5': 'mysql:5.7', 'mysql': 'mysql:8.0', 'mariadb': 'mariadb:10.5'}" )[matrix.adapter] }}
         env:
           MYSQL_ROOT_PASSWORD: dbt
         ports:
