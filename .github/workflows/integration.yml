@@ -142,11 +142,10 @@ jobs:
       TOXENV: integration-${{ matrix.adapter }}
       PYTEST_ADDOPTS: "-v --color=yes -n4 --csv integration_results.csv"
       DBT_INVOCATION_ENV: github-actions
-      MYSQL_IMAGE_MAP: '{"mysql5": "mysql:5.7", "mysql": "mysql:8.0", "mariadb": "mariadb:10.5"}'
 
     services:
       database:
-        image: ${{fromJson(env.MYSQL_IMAGE_MAP)[matrix.adapter]}}
+        image: ${{ fromJson( '{"mysql5": "mysql:5.7", "mysql": "mysql:8.0", "mariadb": "mariadb:10.5"}' )[matrix.adapter] }}
         env:
           MYSQL_ROOT_PASSWORD: dbt
         ports:
