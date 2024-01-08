@@ -1,5 +1,8 @@
 # dbt-mysql
 
+[![Tests and Code Checks](https://github.com/dbeatty10/dbt-mysql/actions/workflows/main.yml/badge.svg)](https://github.com/dbeatty10/dbt-mysql/actions/workflows/main.yml)
+[![Integration Tests Badge](https://github.com/dbeatty10/dbt-mysql/actions/workflows/integration.yml/badge.svg)](https://github.com/dbeatty10/dbt-mysql/actions/workflows/integration.yml)
+
 This plugin ports [dbt](https://getdbt.com) functionality to MySQL and MariaDB.
 
 This is an experimental plugin:
@@ -128,7 +131,7 @@ Additionally, many DBMS have relation names with three parts whereas MySQL has o
 
 ### Running Tests
 
-See [test/README.md](test/README.md) for details on running the integration tests.
+See [tests/README.md](tests/README.md) for details on running the integration tests.
 
 ### Reporting bugs and contributing code
 

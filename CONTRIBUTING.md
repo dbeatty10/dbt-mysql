@@ -63,7 +63,7 @@ Ready to contribute? [Here's](https://jarv.is/notes/how-to-pull-request-fork-git
     python3 -m venv env
     source env/bin/activate
     python3 -m pip install --upgrade pip
-    python3 -m pip install -r requirements-dev.txt -r requirements-editable.txt
+    python3 -m pip install -e . -r dev-requirements.txt
     pre-commit install
     source env/bin/activate
     ```
