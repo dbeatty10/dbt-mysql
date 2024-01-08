@@ -17,7 +17,22 @@ PYTHONPATH=. pytest tests/functional/adapter/test_basic.py
 ## Full example
 
 ### Prerequisites
-- [`dbt-tests-adapter`](https://github.com/dbt-labs/dbt-core/tree/main/tests/adapter) package
+
+#### Dependencies
+
+`pip install -r ./dev-requirements.txt`
+
+#### Python Version
+
+Python 3.8 and 3.9 are supported test targets and may need to be installed before tests can run.
+
+##### Ubuntu
+
+```
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+sudo apt-get install python3.8 python3.8-distutils python3.9 python3.9-distutils
+```
 
 ### Environment variables
 
@@ -87,11 +102,10 @@ sql_mode = "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ALLOW_INVALID
 
 ### Run tests
 
-Run the test specs in this repository:
+Run all the tests via `make`:
 ```shell
-PYTHONPATH=. pytest -v --profile mysql tests/functional && \
-PYTHONPATH=. pytest -v --profile mysql5 tests/functional && \
-PYTHONPATH=. pytest -v --profile mariadb tests/functional
+make unit
+make integration
 ```
 
 Or run all the tests via `tox`:
@@ -99,7 +113,14 @@ Or run all the tests via `tox`:
 tox
 ```
 
-Run a single test
+Or run the test specs directly
+```shell
+PYTHONPATH=. pytest -v --profile mysql tests/functional && \
+PYTHONPATH=. pytest -v --profile mysql5 tests/functional && \
+PYTHONPATH=. pytest -v --profile mariadb tests/functional
+```
+
+Or run a single test
 ```shell
 pytest -v --profile mysql tests/functional/adapter/test_basic.py::TestEmptyMySQL::test_empty
 ```
