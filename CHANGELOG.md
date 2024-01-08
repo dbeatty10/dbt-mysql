@@ -2,6 +2,7 @@
 
 ### Features
 - Support dbt v1.4 ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
+- Migrate CircleCI to GitHub Actions ([#120](https://github.com/dbeatty10/dbt-mysql/issues/120))
 
 ### Fixes
 - Fix incremental composite keys ([#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
@@ -10,6 +11,7 @@
 - [@lpezet](https://github.com/lpezet) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146), [#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
 - [@moszutij](https://github.com/moszutij) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146), [#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
 - [@wesen](https://github.com/wesen) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
+- [@mwallace582](https://github.com/mwallace582) ([#162](https://github.com/dbeatty10/dbt-mysql/pull/162))
 
 
 ## dbt-mysql 1.1.0 (Feb 5, 2023)
