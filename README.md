@@ -131,7 +131,7 @@ Additionally, many DBMS have relation names with three parts whereas MySQL has o
 
 ### Running Tests
 
-See [test/README.md](test/README.md) for details on running the integration tests.
+See [tests/README.md](tests/README.md) for details on running the integration tests.
 
 ### Reporting bugs and contributing code
 
