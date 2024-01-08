@@ -107,6 +107,7 @@ jobs:
               - 'dbt/adapters/mariadb/**'
               - 'tests/**'
               - 'dev-requirements.txt'
+
       - name: Generate integration test matrix
         id: generate-matrix
         uses: actions/github-script@v6
@@ -118,6 +119,7 @@ jobs:
             const matrix = script({ context })
             console.log(matrix)
             return matrix
+
   test:
     name: ${{ matrix.adapter }} / python ${{ matrix.python-version }} / ${{ matrix.os }}
 
@@ -144,25 +146,8 @@ jobs:
       DBT_INVOCATION_ENV: github-actions
 
     services:
-      mysql:
-        # Conditional workaround https://github.com/actions/runner/issues/822#issuecomment-1524826092
-        image: ${{ ( matrix.adapter == 'mysql' ) && 'mysql:8.0' || '' }}
-        env:
-          MYSQL_ROOT_PASSWORD: dbt
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      mysql5:
-        image: ${{ ( matrix.adapter == 'mysql5' ) && 'mysql:5.7' || '' }}
-        env:
-          MYSQL_ROOT_PASSWORD: dbt
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      mariadb:
-        image: ${{ ( matrix.adapter == 'mariadb' ) && 'mariadb:10.5' || '' }}
+      database:
+        image: ${{ matrix.database-image }}
         env:
           MYSQL_ROOT_PASSWORD: dbt
         ports:
@@ -173,14 +158,9 @@ jobs:
       # GitHub Actions do not support passing command line flags to services
       # https://github.com/orgs/community/discussions/26688#discussioncomment-3252882
       - name: Set mariadb database systems variables
-        if: matrix.adapter == 'mariadb'
+        if: ${{ contains(fromJSON('["mysql5", "mariadb"]'), matrix.adapter) }}
         run: |
-          docker exec ${{ job.services.mariadb.id }} sh -c 'MYSQL_PWD=dbt mysql -u root --execute "SET GLOBAL explicit_defaults_for_timestamp = ON;"'
-
-      - name: Set mysql5 database systems variables
-        if: matrix.adapter == 'mysql5'
-        run: |
-          docker exec ${{ job.services.mysql5.id }} sh -c 'MYSQL_PWD=dbt mysql -u root --execute "SET GLOBAL explicit_defaults_for_timestamp = ON;"'
+          docker exec ${{ job.services.database.id }} sh -c 'MYSQL_PWD=dbt mysql -u root --execute "SET GLOBAL explicit_defaults_for_timestamp = ON;"'
 
       - name: Check out the repository
         if: github.event_name != 'pull_request'

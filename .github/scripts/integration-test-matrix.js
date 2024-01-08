@@ -2,6 +2,11 @@ module.exports = ({ context }) => {
   const defaultPythonVersion = "3.8";
   const supportedPythonVersions = ["3.8", "3.9"];
   const supportedAdapters = ["mysql", "mysql5", "mariadb"];
+  const adapterImages = {
+    mysql: "mysql:8.0",
+    mysql5: "mysql:5.7",
+    mariadb: "mariadb:10.5",
+  };
 
   // if PR, generate matrix based on files changed and PR labels
   if (context.eventName.includes("pull_request")) {
@@ -31,6 +36,7 @@ module.exports = ({ context }) => {
             include.push({
               os: "ubuntu-latest",
               adapter,
+              "database-image": adapterImages[adapter],
               "python-version": pythonVersion,
             });
 
@@ -38,6 +44,7 @@ module.exports = ({ context }) => {
               include.push({
                 os: "windows-latest",
                 adapter,
+                "database-image": adapterImages[adapter],
                 "python-version": pythonVersion,
               });
             }
@@ -46,6 +53,7 @@ module.exports = ({ context }) => {
               include.push({
                 os: "macos-latest",
                 adapter,
+                "database-image": adapterImages[adapter],
                 "python-version": pythonVersion,
               });
             }
@@ -70,6 +78,7 @@ module.exports = ({ context }) => {
       include.push({
         os: 'ubuntu-latest',
         adapter: adapter,
+        "database-image": adapterImages[adapter],
         "python-version": pythonVersion,
       });
     }
@@ -82,6 +91,7 @@ module.exports = ({ context }) => {
       include.push({
         os: operatingSystem,
         adapter: adapter,
+        "database-image": adapterImages[adapter],
         "python-version": defaultPythonVersion,
       });
     }
