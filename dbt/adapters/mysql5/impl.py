@@ -32,8 +32,7 @@ class MySQLAdapter(SQLAdapter):
         return "current_date()"
 
     @classmethod
-    def convert_datetime_type(cls, agate_table: agate.Table,
-                              col_idx: int) -> str:
+    def convert_datetime_type(cls, agate_table: agate.Table, col_idx: int) -> str:
         return "timestamp"
 
     def quote(self, identifier):
@@ -44,9 +43,8 @@ class MySQLAdapter(SQLAdapter):
     ) -> List[MySQLRelation]:
         kwargs = {"schema_relation": schema_relation}
         try:
-            results = self.execute_macro(LIST_RELATIONS_MACRO_NAME,
-                                         kwargs=kwargs)
-        except dbt.exceptions.DbtRuntimeError as e:
+            results = self.execute_macro(LIST_RELATIONS_MACRO_NAME, kwargs=kwargs)
+        except dbt.exceptions.RuntimeException as e:
             errmsg = getattr(e, "msg", "")
             if f"MySQL database '{schema_relation}' not found" in errmsg:
                 return []
@@ -58,7 +56,7 @@ class MySQLAdapter(SQLAdapter):
         relations = []
         for row in results:
             if len(row) != 4:
-                raise dbt.exceptions.DbtRuntimeError(
+                raise dbt.exceptions.RuntimeException(
                     "Invalid value from "
                     f'"mysql5__list_relations_without_caching({kwargs})", '
                     f"got {len(row)} values, expected 4"
@@ -91,7 +89,7 @@ class MySQLAdapter(SQLAdapter):
     def get_relation(
         self, database: str, schema: str, identifier: str
     ) -> Optional[BaseRelation]:
-        if not self.Relation.get_default_include_policy().database:
+        if not self.Relation.include_policy.database:
             database = None
 
         return super().get_relation(database, schema, identifier)
@@ -117,7 +115,7 @@ class MySQLAdapter(SQLAdapter):
     def get_catalog(self, manifest):
         schema_map = self._get_catalog_schemas(manifest)
         if len(schema_map) > 1:
-            raise dbt.exceptions.CompilationError(
+            dbt.exceptions.raise_compiler_error(
                 f"Expected only one database in get_catalog, found "
                 f"{list(schema_map)}"
             )
@@ -146,7 +144,7 @@ class MySQLAdapter(SQLAdapter):
         manifest,
     ) -> agate.Table:
         if len(schemas) != 1:
-            raise dbt.exceptions.CompilationError(
+            dbt.exceptions.raise_compiler_error(
                 f"Expected only one schema in mysql5 _get_one_catalog, found "
                 f"{schemas}"
             )
@@ -158,8 +156,7 @@ class MySQLAdapter(SQLAdapter):
         for relation in self.list_relations(database, schema):
             logger.debug("Getting table schema for relation {}", relation)
             columns.extend(self._get_columns_for_catalog(relation))
-        return agate.Table.from_object(columns,
-                                       column_types=DEFAULT_TYPE_TESTER)
+        return agate.Table.from_object(columns, column_types=DEFAULT_TYPE_TESTER)
 
     def check_schema_exists(self, database, schema):
         results = self.execute_macro(
@@ -202,7 +199,7 @@ class MySQLAdapter(SQLAdapter):
         elif location == "prepend":
             return f"concat({value}, '{add_to}')"
         else:
-            raise dbt.exceptions.DbtRuntimeError(
+            raise dbt.exceptions.RuntimeException(
                 f'Got an unexpected location value of "{location}"'
             )
 
@@ -229,8 +226,7 @@ class MySQLAdapter(SQLAdapter):
         )
         first_column = names[0]
 
-        # MySQL doesn't have an EXCEPT or MINUS operator,
-        # so we need to simulate it
+        # MySQL doesn't have an EXCEPT or MINUS operator, so we need to simulate it
         COLUMNS_EQUAL_SQL = """
         SELECT
             row_count_diff.difference as row_count_difference,
