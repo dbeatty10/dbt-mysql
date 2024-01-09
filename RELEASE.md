@@ -10,15 +10,15 @@
 1. Open a branch for the release
     - `git checkout -b releases/1.5.0`
 1. Update [`CHANGELOG.md`](CHANGELOG.md) with the most recent changes
-1. Bump the version using [`bump2version`](https://github.com/c4urself/bump2version/#bump2version):
-    1. Dry run first by running `bumpversion --dry-run --verbose --new-version <desired-version> <part>`. Some examples:
+1. Bump the version using [`bump-my-version`](https://github.com/callowayproject/bump-my-version):
+    1. Dry run first by running `bump-my-version bump --dry-run --verbose --new-version <desired-version> <part>`. Some examples:
         - Release candidates: `--new-version 1.5.0rc1 num`
         - Alpha releases: `--new-version 1.5.0a1 num`
         - Patch releases: `--new-version 1.5.1 patch`
         - Minor releases: `--new-version 1.5.0 minor`
         - Major releases: `--new-version 2.0.0 major`
-    1. Actually modify the files: `bumpversion --no-tag --new-version <desired-version> <part>`. An example:
-        - Minor releases: `bumpversion --no-tag --new-version 1.5.0 minor`
+    1. Actually modify the files: `bump-my-version bump --no-tag --new-version <desired-version> <part>`. An example:
+        - Minor releases: `bump-my-version bump --no-tag --new-version 1.5.0 minor`
   1. Check the diff with `git diff`
   1. Add the files that were changed with `git add --update`
   1. Commit with message `Release dbt-mysql v<desired-version>`
@@ -60,7 +60,7 @@ PyPI recognizes [pre-release versioning conventions](https://packaging.python.or
     - `git pull`
     - `git checkout -b bump-1.6.0a1`
     - Minor releases:
-        `bumpversion --no-tag --new-version 1.6.0a1 num`
+        `bump-my-version bump --no-tag --new-version 1.6.0a1 num`
     - Update the branch names in `dev-requirements.txt` from `@{previous-version}.latest` to `@{minor-version}.latest` (or `@main`)
     - Commit with message `Bump dbt-mysql 1.6.0a1`
     - `git push`
