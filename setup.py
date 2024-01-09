@@ -51,7 +51,7 @@ def _get_dbt_core_version():
 
 
 package_name = "dbt-mysql"
-package_version = "1.4.0a1"
+package_version = "1.5.0a1"
 dbt_core_version = _get_dbt_core_version()
 description = """The MySQL adapter plugin for dbt"""
 
