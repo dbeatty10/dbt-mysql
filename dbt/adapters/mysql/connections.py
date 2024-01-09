@@ -17,7 +17,8 @@ logger = AdapterLogger("mysql")
 
 @dataclass(init=False)
 class MySQLCredentials(Credentials):
-    server: str
+    server: Optional[str] = None
+    unix_socket: Optional[str] = None
     port: Optional[int] = None
     database: Optional[str] = None
     schema: str
@@ -61,6 +62,7 @@ class MySQLCredentials(Credentials):
         """
         return (
             "server",
+            "unix_socket",
             "port",
             "database",
             "schema",
@@ -80,10 +82,14 @@ class MySQLConnectionManager(SQLConnectionManager):
         credentials = cls.get_credentials(connection.credentials)
         kwargs = {}
 
-        kwargs["host"] = credentials.server
         kwargs["user"] = credentials.username
         kwargs["passwd"] = credentials.password
         kwargs["buffered"] = True
+
+        if credentials.server:
+            kwargs["host"] = credentials.server
+        elif credentials.unix_socket:
+            kwargs["unix_socket"] = credentials.unix_socket
 
         if credentials.port:
             kwargs["port"] = credentials.port
