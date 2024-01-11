@@ -1,6 +1,6 @@
 from concurrent.futures import Future
 from dataclasses import asdict
-from typing import Optional, List, Dict, Any, Iterable
+from typing import Optional, List, Dict, Any, Iterable, Tuple
 import agate
 
 import dbt
@@ -12,6 +12,7 @@ from dbt.adapters.mysql import MySQLConnectionManager
 from dbt.adapters.mysql import MySQLRelation
 from dbt.adapters.mysql import MySQLColumn
 from dbt.adapters.base import BaseRelation
+from dbt.contracts.graph.manifest import Manifest
 from dbt.clients.agate_helper import DEFAULT_TYPE_TESTER
 from dbt.events import AdapterLogger
 from dbt.utils import executor
@@ -38,8 +39,8 @@ class MySQLAdapter(SQLAdapter):
     def quote(self, identifier):
         return "`{}`".format(identifier)
 
-    def list_relations_without_caching(
-        self, schema_relation: MySQLRelation
+    def list_relations_without_caching(  # type: ignore[override]
+        self, schema_relation: MySQLRelation  # type: ignore[override]
     ) -> List[MySQLRelation]:
         kwargs = {"schema_relation": schema_relation}
         try:
@@ -67,7 +68,7 @@ class MySQLAdapter(SQLAdapter):
 
         return relations
 
-    def get_columns_in_relation(self, relation: Relation) -> List[MySQLColumn]:
+    def get_columns_in_relation(self, relation: MySQLRelation) -> List[MySQLColumn]:
         rows: List[agate.Row] = super().get_columns_in_relation(relation)
         return self.parse_show_columns(relation, rows)
 
@@ -82,14 +83,16 @@ class MySQLAdapter(SQLAdapter):
             as_dict["table_database"] = None
             yield as_dict
 
-    def get_relation(self, database: str, schema: str, identifier: str) -> Optional[BaseRelation]:
+    def get_relation(
+        self, database: Optional[str], schema: str, identifier: str
+    ) -> Optional[BaseRelation]:
         if not self.Relation.include_policy.database:
             database = None
 
         return super().get_relation(database, schema, identifier)
 
     def parse_show_columns(
-        self, relation: Relation, raw_rows: List[agate.Row]
+        self, relation: MySQLRelation, raw_rows: List[agate.Row]
     ) -> List[MySQLColumn]:
         return [
             MySQLColumn(
@@ -106,7 +109,7 @@ class MySQLAdapter(SQLAdapter):
             for idx, column in enumerate(raw_rows)
         ]
 
-    def get_catalog(self, manifest):
+    def get_catalog(self, manifest: Manifest) -> Tuple[agate.Table, List[Exception]]:
         schema_map = self._get_catalog_schemas(manifest)
 
         if len(schema_map) > 1:
@@ -139,7 +142,7 @@ class MySQLAdapter(SQLAdapter):
     ) -> agate.Table:
         if len(schemas) != 1:
             dbt.exceptions.raise_compiler_error(
-                f"Expected only one schema in mysql _get_one_catalog, found " f"{schemas}"
+                f"Expected only one schema in mysql_get_one_catalog, found " f"{schemas}"
             )
 
         database = information_schema.database
@@ -148,7 +151,7 @@ class MySQLAdapter(SQLAdapter):
         columns: List[Dict[str, Any]] = []
         for relation in self.list_relations(database, schema):
             logger.debug("Getting table schema for relation {}", relation)
-            columns.extend(self._get_columns_for_catalog(relation))
+            columns.extend(self._get_columns_for_catalog(relation))  # type: ignore[arg-type]
         return agate.Table.from_object(columns, column_types=DEFAULT_TYPE_TESTER)
 
     def check_schema_exists(self, database, schema):
@@ -194,9 +197,10 @@ class MySQLAdapter(SQLAdapter):
 
     def get_rows_different_sql(
         self,
-        relation_a: MySQLRelation,
-        relation_b: MySQLRelation,
+        relation_a: MySQLRelation,  # type: ignore[override]
+        relation_b: MySQLRelation,  # type: ignore[override]
         column_names: Optional[List[str]] = None,
+        except_operator: str = "",  # Required to match BaseRelation.get_rows_different_sql()
     ) -> str:
         # This method only really exists for test reasons
         names: List[str]
