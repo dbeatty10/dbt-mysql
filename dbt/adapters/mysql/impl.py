@@ -62,9 +62,7 @@ class MySQLAdapter(SQLAdapter):
                     f"got {len(row)} values, expected 4"
                 )
             _, name, _schema, relation_type = row
-            relation = self.Relation.create(
-                schema=_schema, identifier=name, type=relation_type
-            )
+            relation = self.Relation.create(schema=_schema, identifier=name, type=relation_type)
             relations.append(relation)
 
         return relations
@@ -73,9 +71,7 @@ class MySQLAdapter(SQLAdapter):
         rows: List[agate.Row] = super().get_columns_in_relation(relation)
         return self.parse_show_columns(relation, rows)
 
-    def _get_columns_for_catalog(
-        self, relation: MySQLRelation
-    ) -> Iterable[Dict[str, Any]]:
+    def _get_columns_for_catalog(self, relation: MySQLRelation) -> Iterable[Dict[str, Any]]:
         columns = self.get_columns_in_relation(relation)
 
         for column in columns:
@@ -86,9 +82,7 @@ class MySQLAdapter(SQLAdapter):
             as_dict["table_database"] = None
             yield as_dict
 
-    def get_relation(
-        self, database: str, schema: str, identifier: str
-    ) -> Optional[BaseRelation]:
+    def get_relation(self, database: str, schema: str, identifier: str) -> Optional[BaseRelation]:
         if not self.Relation.include_policy.database:
             database = None
 
@@ -117,8 +111,7 @@ class MySQLAdapter(SQLAdapter):
 
         if len(schema_map) > 1:
             dbt.exceptions.raise_compiler_error(
-                f"Expected only one database in get_catalog, found "
-                f"{list(schema_map)}"
+                f"Expected only one database in get_catalog, found " f"{list(schema_map)}"
             )
 
         with executor(self.config) as tpe:
@@ -146,8 +139,7 @@ class MySQLAdapter(SQLAdapter):
     ) -> agate.Table:
         if len(schemas) != 1:
             dbt.exceptions.raise_compiler_error(
-                f"Expected only one schema in mysql _get_one_catalog, found "
-                f"{schemas}"
+                f"Expected only one schema in mysql _get_one_catalog, found " f"{schemas}"
             )
 
         database = information_schema.database
@@ -160,9 +152,7 @@ class MySQLAdapter(SQLAdapter):
         return agate.Table.from_object(columns, column_types=DEFAULT_TYPE_TESTER)
 
     def check_schema_exists(self, database, schema):
-        results = self.execute_macro(
-            LIST_SCHEMAS_MACRO_NAME, kwargs={"database": database}
-        )
+        results = self.execute_macro(LIST_SCHEMAS_MACRO_NAME, kwargs={"database": database})
 
         exists = True if schema in [row[0] for row in results] else False
         return exists
@@ -180,9 +170,7 @@ class MySQLAdapter(SQLAdapter):
             clause += f" where {where_clause}"
         return clause
 
-    def timestamp_add_sql(
-        self, add_to: str, number: int = 1, interval: str = "hour"
-    ) -> str:
+    def timestamp_add_sql(self, add_to: str, number: int = 1, interval: str = "hour") -> str:
         # for backwards compatibility, we're compelled to set some sort of
         # default. A lot of searching has lead me to believe that the
         # '+ interval' syntax used in postgres/redshift is relatively common
@@ -222,9 +210,7 @@ class MySQLAdapter(SQLAdapter):
         alias_b = "B"
         columns_csv_a = ", ".join([f"{alias_a}.{name}" for name in names])
         columns_csv_b = ", ".join([f"{alias_b}.{name}" for name in names])
-        join_condition = " AND ".join(
-            [f"{alias_a}.{name} = {alias_b}.{name}" for name in names]
-        )
+        join_condition = " AND ".join([f"{alias_a}.{name} = {alias_b}.{name}" for name in names])
         first_column = names[0]
 
         # MySQL doesn't have an EXCEPT or MINUS operator, so we need to simulate it
