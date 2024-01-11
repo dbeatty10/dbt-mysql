@@ -12,6 +12,8 @@ from dbt.adapters.mysql import MySQLConnectionManager
 from dbt.adapters.mysql import MySQLRelation
 from dbt.adapters.mysql import MySQLColumn
 from dbt.adapters.base import BaseRelation
+from dbt.contracts.graph.nodes import ConstraintType
+from dbt.adapters.base.impl import ConstraintSupport
 from dbt.clients.agate_helper import DEFAULT_TYPE_TESTER
 from dbt.events import AdapterLogger
 from dbt.utils import executor
@@ -27,6 +29,19 @@ class MySQLAdapter(SQLAdapter):
     Column = MySQLColumn
     ConnectionManager = MySQLConnectionManager
 
+    CONSTRAINT_SUPPORT = {
+        ConstraintType.check: ConstraintSupport.ENFORCED,
+        ConstraintType.not_null: ConstraintSupport.ENFORCED,
+        ConstraintType.unique: ConstraintSupport.ENFORCED,
+        ConstraintType.primary_key: ConstraintSupport.ENFORCED,
+        # While Foreign Keys are indeed supported, they're not supported in
+        # CREATE TABLE AS SELECT statements, which is what DBT uses.
+        #
+        # It is possible to use a `post-hook` to add a foreign key after the
+        # table is created.
+        ConstraintType.foreign_key: ConstraintSupport.NOT_SUPPORTED,
+    }
+
     @classmethod
     def date_function(cls):
         return "current_date()"
@@ -36,7 +51,8 @@ class MySQLAdapter(SQLAdapter):
                               col_idx: int) -> str:
         return "timestamp"
 
-    def quote(self, identifier):
+    @classmethod
+    def quote(cls, identifier: str) -> str:
         return "`{}`".format(identifier)
 
     def list_relations_without_caching(
@@ -157,7 +173,7 @@ class MySQLAdapter(SQLAdapter):
 
         columns: List[Dict[str, Any]] = []
         for relation in self.list_relations(database, schema):
-            logger.debug("Getting table schema for relation {}", relation)
+            logger.debug("Getting table schema for relation {}", str(relation))
             columns.extend(self._get_columns_for_catalog(relation))
         return agate.Table.from_object(columns,
                                        column_types=DEFAULT_TYPE_TESTER)

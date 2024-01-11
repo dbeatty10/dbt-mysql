@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 
 import mysql.connector
+import mysql.connector.constants
 
 import dbt.exceptions
 from dbt.adapters.sql import SQLConnectionManager
@@ -16,7 +17,8 @@ logger = AdapterLogger("mysql")
 
 @dataclass(init=False)
 class MariaDBCredentials(Credentials):
-    server: str
+    server: Optional[str] = None
+    unix_socket: Optional[str] = None
     port: Optional[int] = None
     database: Optional[str] = None
     schema: str
@@ -61,6 +63,7 @@ class MariaDBCredentials(Credentials):
         """
         return (
             "server",
+            "unix_socket",
             "port",
             "database",
             "schema",
@@ -80,13 +83,17 @@ class MariaDBConnectionManager(SQLConnectionManager):
         credentials = cls.get_credentials(connection.credentials)
         kwargs = {}
 
-        kwargs["host"] = credentials.server
         kwargs["user"] = credentials.username
         kwargs["passwd"] = credentials.password
         kwargs["buffered"] = True
 
         if credentials.ssl_disabled:
             kwargs["ssl_disabled"] = credentials.ssl_disabled
+
+        if credentials.server:
+            kwargs["host"] = credentials.server
+        elif credentials.unix_socket:
+            kwargs["unix_socket"] = credentials.unix_socket
 
         if credentials.port:
             kwargs["port"] = credentials.port
@@ -172,3 +179,9 @@ class MariaDBConnectionManager(SQLConnectionManager):
             rows_affected=num_rows,
             code=code
         )
+
+    @classmethod
+    def data_type_code_to_name(cls, type_code: int) -> str:
+        field_type_values = mysql.connector.constants.FieldType.desc.values()
+        mapping = {code: name for (code, name) in field_type_values}
+        return mapping[type_code]
