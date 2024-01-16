@@ -20,7 +20,7 @@ class MariaDBCredentials(Credentials):
     server: str = ""
     unix_socket: Optional[str] = None
     port: Optional[int] = None
-    database: str = ""
+    database: Optional[str] = None
     schema: str = ""
     username: Optional[str] = None
     password: Optional[str] = None
