@@ -17,11 +17,11 @@ logger = AdapterLogger("mysql")
 
 @dataclass(init=False)
 class MySQLCredentials(Credentials):
-    server: Optional[str] = None
+    server: str = ""
     unix_socket: Optional[str] = None
     port: Optional[int] = None
-    database: Optional[str] = None
-    schema: str
+    database: str = ""
+    schema: str = ""
     username: Optional[str] = None
     password: Optional[str] = None
     charset: Optional[str] = None
@@ -102,7 +102,6 @@ class MySQLConnectionManager(SQLConnectionManager):
             connection.handle = mysql.connector.connect(**kwargs)
             connection.state = "open"
         except mysql.connector.Error:
-
             try:
                 logger.debug(
                     "Failed connection without supplying the `database`. "
@@ -115,10 +114,8 @@ class MySQLConnectionManager(SQLConnectionManager):
                 connection.handle = mysql.connector.connect(**kwargs)
                 connection.state = "open"
             except mysql.connector.Error as e:
-
                 logger.debug(
-                    "Got an error when attempting to open a mysql "
-                    "connection: '{}'".format(e)
+                    "Got an error when attempting to open a mysql " "connection: '{}'".format(e)
                 )
 
                 connection.handle = None
@@ -175,9 +172,7 @@ class MySQLConnectionManager(SQLConnectionManager):
         # the mysql-connector-python driver.
         # So just return the default value.
         return AdapterResponse(
-            _message="{} {}".format(code, num_rows),
-            rows_affected=num_rows,
-            code=code
+            _message="{} {}".format(code, num_rows), rows_affected=num_rows, code=code
         )
 
     @classmethod

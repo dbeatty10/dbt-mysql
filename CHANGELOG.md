@@ -5,6 +5,7 @@
 - Support dbt v1.4 ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
 - Support dbt v1.5 ([#145](https://github.com/dbeatty10/dbt-mysql/issues/145))
 - Support connecting via UNIX sockets ([#164](https://github.com/dbeatty10/dbt-mysql/issues/164))
+- Support Black & MyPy pre-commit hooks ([#138](https://github.com/dbeatty10/dbt-mysql/issues/138))
 
 ### Fixes
 - Fix incremental composite keys ([#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
@@ -13,7 +14,7 @@
 - [@lpezet](https://github.com/lpezet) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
 - [@moszutij](https://github.com/moszutij) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146), [#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
 - [@wesen](https://github.com/wesen) ([#146](https://github.com/dbeatty10/dbt-mysql/pull/146))
-- [@mwallace582](https://github.com/mwallace582) ([#162](https://github.com/dbeatty10/dbt-mysql/pull/162), [#163](https://github.com/dbeatty10/dbt-mysql/pull/163), [#164](https://github.com/dbeatty10/dbt-mysql/issues/164))
+- [@mwallace582](https://github.com/mwallace582) ([#162](https://github.com/dbeatty10/dbt-mysql/pull/162), [#163](https://github.com/dbeatty10/dbt-mysql/pull/163), [#164](https://github.com/dbeatty10/dbt-mysql/issues/164), [#138](https://github.com/dbeatty10/dbt-mysql/issues/138))
 
 
 ## dbt-mysql 1.1.0 (Feb 5, 2023)
