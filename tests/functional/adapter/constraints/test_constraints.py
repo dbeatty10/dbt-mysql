@@ -63,9 +63,7 @@ class TestMySQLTableConstraintsColumnsEqual(
     pass
 
 
-class TestMySQLViewConstraintsColumnsEqual(
-    MySQLColumnEqualSetup, BaseViewConstraintsColumnsEqual
-):
+class TestMySQLViewConstraintsColumnsEqual(MySQLColumnEqualSetup, BaseViewConstraintsColumnsEqual):
     pass
 
 

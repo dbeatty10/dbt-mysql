@@ -10,7 +10,7 @@ from dbt.contracts.connection import Connection
 from dbt.contracts.connection import Credentials
 from dbt.events import AdapterLogger
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Union
 
 logger = AdapterLogger("mysql")
 
@@ -176,7 +176,7 @@ class MariaDBConnectionManager(SQLConnectionManager):
         )
 
     @classmethod
-    def data_type_code_to_name(cls, type_code: int) -> str:
+    def data_type_code_to_name(cls, type_code: Union[int, str]) -> str:
         field_type_values = mysql.connector.constants.FieldType.desc.values()
         mapping = {code: name for (code, name) in field_type_values}
         return mapping[type_code]

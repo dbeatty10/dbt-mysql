@@ -168,8 +168,7 @@ class MySQLAdapter(SQLAdapter):
         for relation in self.list_relations(database, schema):
             logger.debug("Getting table schema for relation {}", str(relation))
             columns.extend(self._get_columns_for_catalog(relation))  # type: ignore[arg-type]
-        return agate.Table.from_object(columns,
-                                       column_types=DEFAULT_TYPE_TESTER)
+        return agate.Table.from_object(columns, column_types=DEFAULT_TYPE_TESTER)
 
     def check_schema_exists(self, database, schema):
         results = self.execute_macro(LIST_SCHEMAS_MACRO_NAME, kwargs={"database": database})
