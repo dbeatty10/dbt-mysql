@@ -7,7 +7,6 @@ import os
 from unittest import mock
 from unittest import TestCase
 
-from hologram import ValidationError
 from dbt.config.project import PartialProject
 
 
@@ -145,13 +144,6 @@ class ContractTestCase(TestCase):
     def assert_symmetric(self, obj, dct, cls=None):
         self.assert_to_dict(obj, dct)
         self.assert_from_dict(obj, dct, cls)
-
-    def assert_fails_validation(self, dct, cls=None):
-        if cls is None:
-            cls = self.ContractType
-
-        with self.assertRaises(ValidationError):
-            cls.from_dict(dct)
 
 
 def generate_name_macros(package):
