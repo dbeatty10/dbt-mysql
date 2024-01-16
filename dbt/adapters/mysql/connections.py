@@ -18,7 +18,7 @@ logger = AdapterLogger("mysql")
 class MySQLCredentials(Credentials):
     server: str = ""
     port: Optional[int] = None
-    database: str = ""
+    database: Optional[str] = None
     schema: str = ""
     username: Optional[str] = None
     password: Optional[str] = None
