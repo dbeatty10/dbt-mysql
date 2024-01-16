@@ -165,7 +165,5 @@ class MySQLConnectionManager(SQLConnectionManager):
         # the mysql-connector-python driver.
         # So just return the default value.
         return AdapterResponse(
-            _message="{} {}".format(code, num_rows),
-            rows_affected=num_rows,
-            code=code
+            _message="{} {}".format(code, num_rows), rows_affected=num_rows, code=code
         )
