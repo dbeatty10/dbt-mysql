@@ -9,7 +9,7 @@ from dbt.include import mariadb
 
 
 Plugin = AdapterPlugin(
-    adapter=MariaDBAdapter,
+    adapter=MariaDBAdapter,  # type: ignore[arg-type]
     credentials=MariaDBCredentials,
     include_path=mariadb.PACKAGE_PATH,
 )
