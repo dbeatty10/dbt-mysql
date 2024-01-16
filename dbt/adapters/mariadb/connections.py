@@ -16,10 +16,10 @@ logger = AdapterLogger("mysql")
 
 @dataclass(init=False)
 class MariaDBCredentials(Credentials):
-    server: str
+    server: str = ""
     port: Optional[int] = None
-    database: Optional[str] = None
-    schema: str
+    database: str = ""
+    schema: str = ""
     username: Optional[str] = None
     password: Optional[str] = None
     charset: Optional[str] = None
@@ -95,7 +95,6 @@ class MariaDBConnectionManager(SQLConnectionManager):
             connection.handle = mysql.connector.connect(**kwargs)
             connection.state = "open"
         except mysql.connector.Error:
-
             try:
                 logger.debug(
                     "Failed connection without supplying the `database`. "
@@ -108,10 +107,8 @@ class MariaDBConnectionManager(SQLConnectionManager):
                 connection.handle = mysql.connector.connect(**kwargs)
                 connection.state = "open"
             except mysql.connector.Error as e:
-
                 logger.debug(
-                    "Got an error when attempting to open a MariaDB "
-                    "connection: '{}'".format(e)
+                    "Got an error when attempting to open a MariaDB " "connection: '{}'".format(e)
                 )
 
                 connection.handle = None

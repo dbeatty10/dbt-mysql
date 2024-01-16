@@ -1,6 +1,6 @@
 from concurrent.futures import Future
 from dataclasses import asdict
-from typing import Optional, List, Dict, Any, Iterable
+from typing import Optional, List, Dict, Any, Iterable, Tuple
 import agate
 
 import dbt
@@ -12,6 +12,7 @@ from dbt.adapters.mysql5 import MySQLConnectionManager
 from dbt.adapters.mysql5 import MySQLRelation
 from dbt.adapters.mysql5 import MySQLColumn
 from dbt.adapters.base import BaseRelation
+from dbt.contracts.graph.manifest import Manifest
 from dbt.clients.agate_helper import DEFAULT_TYPE_TESTER
 from dbt.events import AdapterLogger
 from dbt.utils import executor
@@ -38,8 +39,8 @@ class MySQLAdapter(SQLAdapter):
     def quote(self, identifier):
         return "`{}`".format(identifier)
 
-    def list_relations_without_caching(
-        self, schema_relation: MySQLRelation
+    def list_relations_without_caching(  # type: ignore[override]
+        self, schema_relation: MySQLRelation  # type: ignore[override]
     ) -> List[MySQLRelation]:
         kwargs = {"schema_relation": schema_relation}
         try:
@@ -62,20 +63,16 @@ class MySQLAdapter(SQLAdapter):
                     f"got {len(row)} values, expected 4"
                 )
             _, name, _schema, relation_type = row
-            relation = self.Relation.create(
-                schema=_schema, identifier=name, type=relation_type
-            )
+            relation = self.Relation.create(schema=_schema, identifier=name, type=relation_type)
             relations.append(relation)
 
         return relations
 
-    def get_columns_in_relation(self, relation: Relation) -> List[MySQLColumn]:
+    def get_columns_in_relation(self, relation: MySQLRelation) -> List[MySQLColumn]:
         rows: List[agate.Row] = super().get_columns_in_relation(relation)
         return self.parse_show_columns(relation, rows)
 
-    def _get_columns_for_catalog(
-        self, relation: MySQLRelation
-    ) -> Iterable[Dict[str, Any]]:
+    def _get_columns_for_catalog(self, relation: MySQLRelation) -> Iterable[Dict[str, Any]]:
         columns = self.get_columns_in_relation(relation)
 
         for column in columns:
@@ -87,7 +84,7 @@ class MySQLAdapter(SQLAdapter):
             yield as_dict
 
     def get_relation(
-        self, database: str, schema: str, identifier: str
+        self, database: Optional[str], schema: str, identifier: str
     ) -> Optional[BaseRelation]:
         if not self.Relation.include_policy.database:
             database = None
@@ -95,7 +92,7 @@ class MySQLAdapter(SQLAdapter):
         return super().get_relation(database, schema, identifier)
 
     def parse_show_columns(
-        self, relation: Relation, raw_rows: List[agate.Row]
+        self, relation: MySQLRelation, raw_rows: List[agate.Row]
     ) -> List[MySQLColumn]:
         return [
             MySQLColumn(
@@ -112,12 +109,12 @@ class MySQLAdapter(SQLAdapter):
             for idx, column in enumerate(raw_rows)
         ]
 
-    def get_catalog(self, manifest):
+    def get_catalog(self, manifest: Manifest) -> Tuple[agate.Table, List[Exception]]:
         schema_map = self._get_catalog_schemas(manifest)
+
         if len(schema_map) > 1:
             dbt.exceptions.raise_compiler_error(
-                f"Expected only one database in get_catalog, found "
-                f"{list(schema_map)}"
+                f"Expected only one database in get_catalog, found " f"{list(schema_map)}"
             )
 
         with executor(self.config) as tpe:
@@ -145,8 +142,7 @@ class MySQLAdapter(SQLAdapter):
     ) -> agate.Table:
         if len(schemas) != 1:
             dbt.exceptions.raise_compiler_error(
-                f"Expected only one schema in mysql5 _get_one_catalog, found "
-                f"{schemas}"
+                f"Expected only one schema in mysql5 _get_one_catalog, found " f"{schemas}"
             )
 
         database = information_schema.database
@@ -155,13 +151,11 @@ class MySQLAdapter(SQLAdapter):
         columns: List[Dict[str, Any]] = []
         for relation in self.list_relations(database, schema):
             logger.debug("Getting table schema for relation {}", relation)
-            columns.extend(self._get_columns_for_catalog(relation))
+            columns.extend(self._get_columns_for_catalog(relation))  # type: ignore[arg-type]
         return agate.Table.from_object(columns, column_types=DEFAULT_TYPE_TESTER)
 
     def check_schema_exists(self, database, schema):
-        results = self.execute_macro(
-            LIST_SCHEMAS_MACRO_NAME, kwargs={"database": database}
-        )
+        results = self.execute_macro(LIST_SCHEMAS_MACRO_NAME, kwargs={"database": database})
 
         exists = True if schema in [row[0] for row in results] else False
         return exists
@@ -179,9 +173,7 @@ class MySQLAdapter(SQLAdapter):
             clause += f" where {where_clause}"
         return clause
 
-    def timestamp_add_sql(
-        self, add_to: str, number: int = 1, interval: str = "hour"
-    ) -> str:
+    def timestamp_add_sql(self, add_to: str, number: int = 1, interval: str = "hour") -> str:
         # for backwards compatibility, we're compelled to set some sort of
         # default. A lot of searching has lead me to believe that the
         # '+ interval' syntax used in postgres/redshift is relatively common
@@ -205,9 +197,10 @@ class MySQLAdapter(SQLAdapter):
 
     def get_rows_different_sql(
         self,
-        relation_a: MySQLRelation,
-        relation_b: MySQLRelation,
+        relation_a: MySQLRelation,  # type: ignore[override]
+        relation_b: MySQLRelation,  # type: ignore[override]
         column_names: Optional[List[str]] = None,
+        except_operator: str = "",  # Required to match BaseRelation.get_rows_different_sql()
     ) -> str:
         # This method only really exists for test reasons
         names: List[str]
@@ -221,9 +214,7 @@ class MySQLAdapter(SQLAdapter):
         alias_b = "B"
         columns_csv_a = ", ".join([f"{alias_a}.{name}" for name in names])
         columns_csv_b = ", ".join([f"{alias_b}.{name}" for name in names])
-        join_condition = " AND ".join(
-            [f"{alias_a}.{name} = {alias_b}.{name}" for name in names]
-        )
+        join_condition = " AND ".join([f"{alias_a}.{name} = {alias_b}.{name}" for name in names])
         first_column = names[0]
 
         # MySQL doesn't have an EXCEPT or MINUS operator, so we need to simulate it
