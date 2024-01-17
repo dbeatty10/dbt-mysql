@@ -39,14 +39,29 @@
 
   create {% if temporary: -%}temporary{%- endif %} table
     {{ relation.include(database=False) }}
-    {{ sql }}
+    {% set contract_config = config.get('contract') %}
+    {% if contract_config.enforced %}
+      {{ get_assert_columns_equivalent(sql) }}
+      {{ get_table_columns_and_constraints() }}
+      {%- set sql = get_select_subquery(sql) %}
+      (
+        {{ sql }}
+      )
+    {% else %}
+      {{ sql }}
+    {% endif %}
 {% endmacro %}
 
 {% macro mariadb__create_view_as(relation, sql) -%}
   {%- set sql_header = config.get('sql_header', none) -%}
 
   {{ sql_header if sql_header is not none }}
-  create view {{ relation }} as
+  create view {{ relation }}
+  {% set contract_config = config.get('contract') %}
+  {% if contract_config.enforced %}
+    {{ get_assert_columns_equivalent(sql) }}
+  {%- endif %}
+  as
     {{ sql }}
 {%- endmacro %}
 
@@ -101,3 +116,38 @@
 {% macro mariadb__generate_database_name(custom_database_name=none, node=none) -%}
   {% do return(None) %}
 {%- endmacro %}
+
+{% macro mariadb__get_phony_data_for_type(data_type) %}
+  {#
+    The types that MariaDB supports in CAST statements are NOT the same as the
+    types that are supported in table definitions. This is a bit of a hack to
+    work around the known mismatches.
+  #}
+  {%- if data_type.lower() == 'integer' -%}
+     0
+  {%- elif data_type.lower() == 'text' -%}
+     ''
+  {%- elif data_type.lower() == 'integer unsigned' -%}
+     cast(null as unsigned)
+  {%- elif data_type.lower() == 'integer signed' -%}
+     cast(null as signed)
+  {%- else -%}
+     cast(null as {{ data_type }})
+  {%- endif -%}
+{% endmacro %}
+
+{% macro mariadb__get_empty_schema_sql(columns) %}
+    {%- set col_err = [] -%}
+    select
+    {% for i in columns %}
+      {%- set col = columns[i] -%}
+      {%- if col['data_type'] is not defined -%}
+        {{ col_err.append(col['name']) }}
+      {%- endif -%}
+      {% set col_name = adapter.quote(col['name']) if col.get('quote') else col['name'] %}
+      {{ mariadb__get_phony_data_for_type(col['data_type']) }} as {{ col_name }}{{ ", " if not loop.last }}
+    {%- endfor -%}
+    {%- if (col_err | length) > 0 -%}
+      {{ exceptions.column_type_missing(column_names=col_err) }}
+    {%- endif -%}
+{% endmacro %}

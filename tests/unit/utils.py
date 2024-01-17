@@ -7,7 +7,6 @@ import os
 from unittest import mock
 from unittest import TestCase
 
-from hologram import ValidationError
 from dbt.config.project import PartialProject
 
 
@@ -44,6 +43,13 @@ def profile_from_dict(profile, profile_name, cli_vars="{}"):
         cli_vars = parse_cli_vars(cli_vars)
 
     renderer = ProfileRenderer(cli_vars)
+
+    # in order to call dbt's internal profile rendering, we need to set the
+    # flags global. This is a bit of a hack, but it's the best way to do it.
+    from dbt.flags import set_from_args
+    from argparse import Namespace
+
+    set_from_args(Namespace(), None)
     return Profile.from_raw_profile_info(
         profile,
         profile_name,
@@ -71,9 +77,7 @@ def project_from_dict(project, profile, packages=None, selectors=None, cli_vars=
     return partial.render(renderer)
 
 
-def config_from_parts_or_dicts(
-    project, profile, packages=None, selectors=None, cli_vars="{}"
-):
+def config_from_parts_or_dicts(project, profile, packages=None, selectors=None, cli_vars={}):
     from dbt.config import Project, Profile, RuntimeConfig
     from copy import deepcopy
 
@@ -140,13 +144,6 @@ class ContractTestCase(TestCase):
     def assert_symmetric(self, obj, dct, cls=None):
         self.assert_to_dict(obj, dct)
         self.assert_from_dict(obj, dct, cls)
-
-    def assert_fails_validation(self, dct, cls=None):
-        if cls is None:
-            cls = self.ContractType
-
-        with self.assertRaises(ValidationError):
-            cls.from_dict(dct)
 
 
 def generate_name_macros(package):

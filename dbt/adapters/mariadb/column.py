@@ -8,6 +8,14 @@ Self = TypeVar("Self", bound="MariaDBColumn")
 
 @dataclass
 class MariaDBColumn(Column):
+    TYPE_LABELS = {
+        "STRING": "TEXT",
+        "VAR_STRING": "TEXT",
+        "LONG": "INTEGER",
+        "LONGLONG": "INTEGER",
+        "INT": "INTEGER",
+        "TIMESTAMP": "DATETIME",
+    }
     table_database: Optional[str] = None
     table_schema: Optional[str] = None
     table_name: Optional[str] = None
