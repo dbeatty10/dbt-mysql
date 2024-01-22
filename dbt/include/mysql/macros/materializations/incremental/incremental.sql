@@ -7,6 +7,9 @@
   {% set existing_relation = load_relation(this) %}
   {% set tmp_relation = make_temp_relation(this) %}
 
+  -- configs
+  {%- set on_schema_change = incremental_validate_on_schema_change(config.get('on_schema_change'), default='ignore') -%}
+
   {{ run_hooks(pre_hooks, inside_transaction=False) }}
 
   -- `BEGIN` happens here:
@@ -30,6 +33,10 @@
       {% do adapter.expand_target_column_types(
              from_relation=tmp_relation,
              to_relation=target_relation) %}
+             
+      {#-- Process schema changes. Returns dict of changes if successful. Use source columns for upserting/merging --#}
+      {% set dest_columns = process_schema_changes(on_schema_change, tmp_relation, existing_relation) %}
+
       {% set build_sql = incremental_delete(tmp_relation, target_relation, unique_key=unique_key, statement_name="pre_main") %}
       {% call statement("pre_main") %}
           {{ build_sql }}
