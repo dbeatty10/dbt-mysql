@@ -6,6 +6,7 @@
 - Support dbt v1.5 ([#145](https://github.com/dbeatty10/dbt-mysql/issues/145))
 - Support connecting via UNIX sockets ([#164](https://github.com/dbeatty10/dbt-mysql/issues/164))
 - Support Black & MyPy pre-commit hooks ([#138](https://github.com/dbeatty10/dbt-mysql/issues/138))
+- Support dbt snapshots if table DDL is evolving ([#171](https://github.com/dbeatty10/dbt-mysql/pull/171))
 
 ### Fixes
 - Fix incremental composite keys ([#144](https://github.com/dbeatty10/dbt-mysql/issues/144))
