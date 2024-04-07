@@ -1,3 +1,14 @@
+{#
+    Add new columns to the table if applicable
+#}
+
+{% macro mariadb__create_columns(relation, columns) %}
+  {% for column in columns %}
+    {% call statement() %}
+      alter table {{ relation }} add column {{ column.quoted() }} {{ column.data_type }};                 
+    {% endcall %}
+  {% endfor %}
+{% endmacro %}
 
 {% macro mariadb__snapshot_string_as_time(timestamp) -%}
     {%- set result = "str_to_date('" ~ timestamp ~ "', '%Y-%m-%d %T')" -%}
@@ -59,7 +70,7 @@
                                    | rejectattr('name', 'equalto', 'DBT_UNIQUE_KEY')
                                    | list %}
 
-      {% do create_columns(target_relation, missing_columns) %}
+      {% do mariadb__create_columns(target_relation, missing_columns) %}
 
       {% set source_columns = adapter.get_columns_in_relation(staging_table)
                                    | rejectattr('name', 'equalto', 'dbt_change_type')
