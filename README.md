@@ -86,17 +86,21 @@ your_profile_name:
       username: your_mysql_username
       password: your_mysql_password
       ssl_disabled: True
+      charset: utf8mb4
+      collation: utf8mb4_0900_ai_ci
 ```
 
 | Option          | Description                                                                         | Required?                                                          | Example                                        |
 | --------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------- |
-| type            | The specific adapter to use                                                         | Required                                                           | `mysql`, `mysql5` or `mariadb`                            |
+| type            | The specific adapter to use                                                         | Required                                                           | `mysql`, `mysql5` or `mariadb`                 |
 | server          | The server (hostname) to connect to                                                 | Required                                                           | `yourorg.mysqlhost.com`                        |
 | port            | The port to use                                                                     | Optional                                                           | `3306`                                         |
 | schema          | Specify the schema (database) to build models into                                  | Required                                                           | `analytics`                                    |
 | username        | The username to use to connect to the server                                        | Required                                                           | `dbt_admin`                                    |
 | password        | The password to use for authenticating to the server                                | Required                                                           | `correct-horse-battery-staple`                 |
 | ssl_disabled    | Set to enable or disable TLS connectivity to mysql5.x                               | Optional                                                           | `True` or `False`                              |
+| charset         | Specify charset to be used by a connection                                          | Optional                                                           | `utf8mb4`                                      |
+| collation       | Set to enable or disable TLS connectivity to mysql5.x                               | Optional                                                           | `utf8mb4_0900_ai_ci`                           |
 
 ### Notes
 
