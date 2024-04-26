@@ -68,7 +68,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "dbt-core~={}".format(dbt_core_version),
-        "mysql-connector-python==8.1",
+        "mysql-connector-python>=8.0.0",
     ],
     zip_safe=False,
     classifiers=[
