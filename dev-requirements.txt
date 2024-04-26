@@ -8,6 +8,7 @@ git+https://github.com/dbt-labs/dbt-core.git@1.5.latest#egg=dbt-tests-adapter&su
 black~=22.12
 bumpversion~=0.6.0
 ddtrace~=2.3
+jsonschema<=4.17
 flake8~=6.1
 flaky~=3.7
 freezegun~=1.3
