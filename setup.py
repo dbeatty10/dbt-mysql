@@ -24,7 +24,7 @@ except ImportError:
 
 # pull long description from README
 this_directory = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(this_directory, "README.md")) as f:
+with open(os.path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 
@@ -68,7 +68,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "dbt-core~={}".format(dbt_core_version),
-        "mysql-connector-python>=8.0.0,<8.1",
+        "mysql-connector-python>=8.0.0",
     ],
     zip_safe=False,
     classifiers=[

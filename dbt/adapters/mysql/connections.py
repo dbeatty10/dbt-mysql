@@ -25,6 +25,7 @@ class MySQLCredentials(Credentials):
     username: Optional[str] = None
     password: Optional[str] = None
     charset: Optional[str] = None
+    collation: Optional[str] = None
 
     _ALIASES = {
         "UID": "username",
@@ -93,6 +94,12 @@ class MySQLConnectionManager(SQLConnectionManager):
 
         if credentials.port:
             kwargs["port"] = credentials.port
+
+        if credentials.charset:
+            kwargs["charset"] = credentials.charset
+
+        if credentials.collation:
+            kwargs["collation"] = credentials.collation
 
         try:
             connection.handle = mysql.connector.connect(**kwargs)
