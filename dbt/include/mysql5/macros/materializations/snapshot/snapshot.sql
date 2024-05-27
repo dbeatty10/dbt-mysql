@@ -5,7 +5,7 @@
 {% macro mysql5__create_columns(relation, columns) %}
   {% for column in columns %}
     {% call statement() %}
-      alter table {{ relation }} add column {{ column.quoted() }} {{ column.data_type }};                 
+      alter table {{ relation }} add column {{ column.quoted() }} {{ column.data_type }};
     {% endcall %}
   {% endfor %}
 {% endmacro %}
@@ -70,7 +70,7 @@
                                    | rejectattr('name', 'equalto', 'DBT_UNIQUE_KEY')
                                    | list %}
 
-      {% do mysql5__create_columns(target_relation, missing_columns) %}
+      {% do create_columns(target_relation, missing_columns) %}
 
       {% set source_columns = adapter.get_columns_in_relation(staging_table)
                                    | rejectattr('name', 'equalto', 'dbt_change_type')
