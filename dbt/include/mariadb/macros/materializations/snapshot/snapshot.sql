@@ -1,3 +1,14 @@
+{#
+    Add new columns to the table if applicable
+#}
+
+{% macro mariadb__create_columns(relation, columns) %}
+  {% for column in columns %}
+    {% call statement() %}
+      alter table {{ relation }} add column {{ column.quoted() }} {{ column.data_type }};
+    {% endcall %}
+  {% endfor %}
+{% endmacro %}
 
 {% macro mariadb__snapshot_string_as_time(timestamp) -%}
     {%- set result = "str_to_date('" ~ timestamp ~ "', '%Y-%m-%d %T')" -%}
